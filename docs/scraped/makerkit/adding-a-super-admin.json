@@ -1,0 +1,10 @@
+{
+  "title": "Adding a Super Admin",
+  "pages": [
+    {
+      "url": "https://makerkit.dev/docs/next-supabase-turbo/admin/adding-super-admin",
+      "title": "Adding a Super Admin to your Next.js Supabase application",
+      "content": "Adding a Super Admin to your Next.js Supabase applicationIn this post, you will learn how to set up a Super Admin in your Next.js Supabase application\n\nThe Super Admin panel allows you to manage users and accounts.To access the super admin panel at /admin, you will need to assign a user as a super admin.To do so, pick the user ID of the user you want to assign as a super admin and run the following SQL query from your Supabase SQL Query editor:UPDATE auth.users SET raw_app_meta_data = raw_app_meta_data || '{\"role\": \"super-admin\"}' WHERE id='<user_id>';Please replace <user_id> with the user ID you want to assign as a super admin."
+    }
+  ]
+}

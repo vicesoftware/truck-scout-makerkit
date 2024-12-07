@@ -65,6 +65,18 @@ This project is built on the MakerKit Supabase SaaS Starter Kit (Turbo Edition),
 - [Technical Documentation](https://makerkit.dev/docs/next-supabase-turbo/introduction)
 - [Flow Diagrams & ERDs](/docs/requirements/rag/)
 
+### Documentation Scrapers
+
+We maintain local copies of external documentation using scrapers to ensure offline access and integration with our development workflow. The scrapers are located in `docs/scrapers/`:
+
+```bash
+# Run the MakerKit documentation scraper
+node docs/scrapers/makerkit-scraper.js
+```
+
+Scraped documentation is saved to the `docs/scraped` directory:
+- MakerKit documentation: `docs/scraped/makerkit/`
+
 ## Getting Started
 
 1. Clone the repository

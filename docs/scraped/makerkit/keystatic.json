@@ -1,0 +1,10 @@
+{
+  "title": "Keystatic",
+  "pages": [
+    {
+      "url": "https://makerkit.dev/docs/next-supabase-turbo/content/keystatic",
+      "title": "Using KeyStatic in Makerkit",
+      "content": "Using KeyStatic in MakerkitKeyStatic is a CMS that stores data in a JSON file or on your Github repository. It's the default CMS implementation in Makerkit.\n\nThis implementation is used when the host app's environment variable is set as:CMS_CLIENT=keystaticAdditionally, the following environment variables may be required:NEXT_PUBLIC_KEYSTATIC_STORAGE_KIND=local # local, cloud, githubKEYSTATIC_PATH_PREFIX=apps/webNEXT_PUBLIC_KEYSTATIC_CONTENT_PATH=./content # apps/web/contentYou can also use Keystatic Cloud or GitHub as the storage kind as remote storage.If KEYSTATIC_STORAGE_KIND is set to cloud, the following environment variables are required:KEYSTATIC_STORAGE_KIND=cloudKEYSTATIC_STORAGE_PROJECT=project-idIf KEYSTATIC_STORAGE_KIND is set to github, the following environment variables are required:NEXT_PUBLIC_KEYSTATIC_STORAGE_KIND=githubNEXT_PUBLIC_KEYSTATIC_STORAGE_REPO=makerkit/next-supabase-saas-kit-turbo-demoNEXT_PUBLIC_KEYSTATIC_CONTENT_PATH=./contentKEYSTATIC_GITHUB_TOKEN=github_**********************************************KEYSTATIC_PATH_PREFIX=apps/webOf course, you need to replace the NEXT_PUBLIC_KEYSTATIC_STORAGE_REPO and KEYSTATIC_GITHUB_TOKEN with your own values.GitHub mode requires the installation of a GitHub app for displaying the admin.Please refer to the Keystatic documentation for more information.If your content folder is not at content, you can set the NEXT_PUBLIC_KEYSTATIC_CONTENT_PATH environment variable to the correct path. For example, if your content folder is at data/content, you can set the NEXT_PUBLIC_KEYSTATIC_CONTENT_PATH environment variable as:NEXT_PUBLIC_KEYSTATIC_CONTENT_PATH=data/contentAdding the Keystatic admin to your appTo add the Keystatic admin to your app, please run the following command:turbo gen keystaticYour app will now have a new route at /keystatic where you can manage your content.Note: your Github token must have permissions to read to the repository (for read-only)."
+    }
+  ]
+}

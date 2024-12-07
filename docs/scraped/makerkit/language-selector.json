@@ -1,0 +1,10 @@
+{
+  "title": "Language Selector",
+  "pages": [
+    {
+      "url": "https://makerkit.dev/docs/next-supabase-turbo/translations/language-selector",
+      "title": "Adding a language selector to your application | Next.js Supabase SaaS Kit",
+      "content": "Adding a language selector to your application | Next.js Supabase SaaS KitLearn how to use the Language selector in your application.\n\nYou can import and use the LanguageSelector component and drop it anywhere in your application to allow users to change the language of the application.import { LanguageSelector } from '@kit/ui/language-selector';<LanguageSelector />This component is automatically populated with the languages that you have defined in the i18n configuration. When a user selects a language, the application will automatically change the language and update the UI.It is already part of the Account settings when more than one language is defined in the i18n configuration. If you want, add it to any other part of your application."
+    }
+  ]
+}

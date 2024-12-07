@@ -1,0 +1,10 @@
+{
+  "title": "Adding new translations",
+  "pages": [
+    {
+      "url": "https://makerkit.dev/docs/next-supabase-turbo/translations/adding-translations",
+      "title": "Adding new translations",
+      "content": "Adding new translationsLearn how to add new translations to your Makerkit project.\n\nMakerkit projects store translations at the application level, specifically in the apps/web/public/locales directory. By default, English translations are provided and can be found at apps/web/public/locales/en.If you're looking to expand your application's language support, follow these two steps:1. Create Language FilesFirst, create a new folder in apps/web/public/locales/[lng], where [lng] represents the appropriate language code. This could be de for German, it for Italian, es for Spanish, ja for Japanese, and so on.2. Update Language SettingsNext, add the new language to the settings file located at apps/web/lib/i18n/i18n.settings.ts:/** * The list of supported languages. * By default, only the default language is supported. * Add more languages here if needed. */export const languages: string[] = [defaultLanguage, 'es'];In the example above, the language es (Spanish) is added to the languages array. Feel free to add as many languages as your application requires.3. Add new namespacesIf you want to add a new namespace (for example, chatbots.json) where you will store translations for chatbots, you can do so by creating a new file in the apps/web/public/locales/[lng] directory. For example, apps/web/public/locales/en/chatbots.json.Then, you register the new namespace in the i18n.settings.ts file:export const defaultI18nNamespaces = [  'common',  'auth',  'account',  'teams',  'billing',  'marketing',  'chatbots',];In the example above, the chatbots namespace is added to the defaultI18nNamespaces array. And that's it! You can now start adding translations to your new namespace."
+    }
+  ]
+}
