@@ -1,0 +1,1114 @@
+# Summary
+Figma - CH Commander Discovery - 20 November 2024
+Overview
+The meeting focused on scoping and refining the CH Commander project, discussing requirements, potential scope cuts, and budget considerations. The conversation aimed to align on priorities, streamline development, and ensure the project stays within budget.
+
+Key Points Discussed
+1. Project Challenges and Context
+Client Frustration: Issues with client satisfaction on other projects were mentioned as a cautionary context.
+Budget and Scope Concerns: Balancing tight budgets while delivering a meaningful MVP was emphasized.
+2. Scope and Features Analysis
+Core Features:
+Focus on replicating essential functionalities of the existing application (e.g., load management, invoicing) with some improvements.
+Activities like detailed view and logging, which don't exist in the current software, were flagged as candidates for scope reduction.
+Simplification:
+Many detailed or redundant views (e.g., activity logs for loads, carrier details) were identified for de-scoping.
+Streamlining CRUD operations for contacts, carriers, and invoices.
+Critical Additions:
+Improvements to user and contact management.
+Basic reporting functionalities (e.g., executive summary dashboards).
+3. Development Approaches
+Markdown Documentation: Discussion about using Markdown-driven design to document entities and workflows for efficient development.
+AI and Tools: Exploring tools like ChatGPT for generating documentation and optimizing workflows.
+Budget Optimizations:
+Deciding on what could be handled manually (e.g., subscription management) versus automated within the software.
+4. Budget and Cost Management
+Estimation Adjustments:
+After cutting non-critical scope, the project is within budget at ~$63,000.
+Potential for additional savings if development is handled in-house.
+Milestone Payments:
+Concerns raised over milestone-based payments, especially tied to client-defined deliverables.
+5. Reporting and Analytics
+Reports were simplified to include only executive summaries and basic dashboards.
+Non-critical reports like cash flow analysis were excluded.
+6. Operational Efficiency
+Alignment on using tools like Stripe for lightweight subscription management.
+Keeping user experience lean and focused on the most impactful features.
+Next Steps
+Finalize scope and create a clear project brief that outlines in-scope and out-of-scope items.
+Generate documentation for features and workflows using Markdown and AI-assisted tools.
+Prepare a short video walkthrough of the scoped features to align all stakeholders.
+Ensure clear communication and invoicing for hours spent on the scoping and adjustments.
+
+# Transcript
+1
+00:00:03,329 --> 00:00:07,779
+Okay. In this video, I'll be going over the flowchart for chcommander.
+
+2
+00:00:08,208 --> 00:00:12,843
+Specifically, I'll be calling out the things that Ryan has deemed as in scope
+
+3
+00:00:12,891 --> 00:00:16,070
+and the things that are not in scope. Um,
+
+4
+00:00:16,090 --> 00:00:20,673
+originally, uh, we were modeling the application out to have essentially a
+
+5
+00:00:20,674 --> 00:00:23,155
+broker platform as well as a carrier platform.
+
+6
+00:00:23,156 --> 00:00:26,718
+You can see that the carrier platform has been descoped for the MVP.
+
+7
+00:00:26,719 --> 00:00:31,431
+Um, everything that you see here in red will be considered out of scope
+
+8
+00:00:31,432 --> 00:00:34,983
+for the purposes of the MVP. This includes some of the net new features
+
+9
+00:00:34,984 --> 00:00:38,566
+we were considering, like an activity log on load details,
+
+10
+00:00:38,567 --> 00:00:42,488
+um, similar functionality on contact details,
+
+11
+00:00:42,489 --> 00:00:44,800
+carrier details, factoring company details,
+
+12
+00:00:44,801 --> 00:00:47,696
+carrier quotes, and some reporting screens,
+
+13
+00:00:48,068 --> 00:00:52,275
+as well as messaging between carriers and brokers in-app and,
+
+14
+00:00:52,276 --> 00:00:55,081
+uh, the carrier portal, as I mentioned. So,
+
+15
+00:00:55,093 --> 00:00:58,143
+orienting yourself to this flowchart if you were to ever look at it.
+
+16
+00:00:59,095 --> 00:01:03,212
+We have some features that were originally going to be shared between brokers and
+
+17
+00:01:03,213 --> 00:01:05,861
+carriers, like profile management, account management,
+
+18
+00:01:05,867 --> 00:01:10,784
+user management, and authentication. Features that are specific to brokers
+
+19
+00:01:11,350 --> 00:01:15,270
+and features that are specific to carriers. Because carriers have been de-scoped,
+
+20
+00:01:15,271 --> 00:01:18,492
+um, the distinction between the three doesn't,
+
+21
+00:01:18,493 --> 00:01:21,574
+uh, matter. So, when you're looking at this flowchart,
+
+22
+00:01:21,575 --> 00:01:23,776
+you can just anticipate that, uh,
+
+23
+00:01:23,796 --> 00:01:26,514
+there is a set of features related to authentication,
+
+24
+00:01:26,521 --> 00:01:31,239
+and for the purposes of the MVP, that authentication is specifically related to it.
+
+25
+00:01:31,240 --> 00:01:33,582
+As we're going through this flowchart, there are certain shapes,
+
+26
+00:01:33,583 --> 00:01:37,525
+uh, that have meaning. I'm going to go over those shapes now.
+
+27
+00:01:37,526 --> 00:01:39,846
+Uh, the rectangle with the,
+
+28
+00:01:39,847 --> 00:01:42,068
+uh, two lines, uh,
+
+29
+00:01:42,088 --> 00:01:46,741
+crossed here are going to be representative of basically a container of things.
+
+30
+00:01:46,742 --> 00:01:49,314
+This could be a screen for a page,
+
+31
+00:01:49,552 --> 00:01:53,656
+an email, or a modal. If you ever see a rectangle without those two
+
+32
+00:01:53,657 --> 00:01:58,380
+lines, that will be representative of something that is on one of those screens.
+
+33
+00:01:58,381 --> 00:02:01,321
+page, email, or modal. This could be an email. It could It could be,
+
+34
+00:02:01,322 --> 00:02:03,932
+um, content. It could be a number of things.
+
+35
+00:02:03,933 --> 00:02:06,532
+Just otherwise, it's, uh, it's something on a page.
+
+36
+00:02:07,277 --> 00:02:09,616
+Whenever we see a diamond on the flowchart,
+
+37
+00:02:09,617 --> 00:02:11,936
+this will be representative of a user action.
+
+38
+00:02:12,680 --> 00:02:15,370
+And whenever you see a rounded rectangle,
+
+39
+00:02:15,371 --> 00:02:17,852
+this will be representative of a condition.
+
+40
+00:02:17,853 --> 00:02:21,634
+Uh, if that thing is true, the thing below it would happen or would
+
+41
+00:02:21,635 --> 00:02:25,657
+show. And any time you see a circle,
+
+42
+00:02:25,658 --> 00:02:29,890
+this will be representative of either an end point in the user journey or
+
+43
+00:02:29,891 --> 00:02:32,322
+a hyperlink. To a different part of the flowchart.
+
+44
+00:02:33,581 --> 00:02:35,724
+So beginning with authentication,
+
+45
+00:02:35,725 --> 00:02:38,706
+just an easy way to orient ourselves onto this legend,
+
+46
+00:02:39,025 --> 00:02:41,488
+we'll kind of start in the middle of it with the login page.
+
+47
+00:02:41,627 --> 00:02:44,229
+This application will not have self-service sign up.
+
+48
+00:02:44,230 --> 00:02:48,632
+Uh, instead users will, tenants will be invited to join their,
+
+49
+00:02:48,633 --> 00:02:52,075
+uh, their own account, uh, by a super admin.
+
+50
+00:02:52,614 --> 00:02:56,968
+Meanwhile, users who already have access can go to a login page where there
+
+51
+00:02:56,969 --> 00:03:00,030
+will be inputs for email and password. If they've forgotten a password,
+
+52
+00:03:00,031 --> 00:03:03,201
+they can still select this action to take them to a forgot password page.
+
+53
+00:03:03,283 --> 00:03:06,383
+Otherwise they can log in and be redirected to the loads list.
+
+54
+00:03:07,266 --> 00:03:10,597
+If the user had forgotten their password, they'd be redirected to a forgot password
+
+55
+00:03:10,598 --> 00:03:14,688
+page where they can input their email, select the reset password action,
+
+56
+00:03:14,931 --> 00:03:17,470
+and they would receive an email for forgotten password.
+
+57
+00:03:17,993 --> 00:03:20,964
+You can see that email up here at the top. The email that they
+
+58
+00:03:20,965 --> 00:03:24,955
+would receive would provide some content about their forgotten password and an action for
+
+59
+00:03:25,017 --> 00:03:29,619
+resetting their password, taking them to a reset password page that has inputs for
+
+60
+00:03:29,620 --> 00:03:32,992
+setting the password in case confirming the password and confirming this,
+
+61
+00:03:33,212 --> 00:03:35,834
+this would then redirect them to the login page where they can log in
+
+62
+00:03:35,835 --> 00:03:38,756
+with their new password. Meanwhile,
+
+63
+00:03:39,096 --> 00:03:41,327
+if users are invited to a tenant's account,
+
+64
+00:03:41,328 --> 00:03:44,600
+uh, they would receive an email for accepting the invite.
+
+65
+00:03:44,840 --> 00:03:49,203
+The action for accepting the invite would take them to set their password and
+
+66
+00:03:49,283 --> 00:03:53,626
+then they can log in. All right.
+
+67
+00:03:55,367 --> 00:04:00,640
+After the user has logged in, they'd be redirected to a loads list view.
+
+68
+00:04:00,641 --> 00:04:02,673
+The loads list page would include a search,
+
+69
+00:04:03,190 --> 00:04:05,683
+a date range, a date range picker or a date picker,
+
+70
+00:04:05,684 --> 00:04:08,455
+uh, the ability to filter the loads list.
+
+71
+00:04:08,456 --> 00:04:12,368
+We are currently anticipating that users should be able to filter the loads list
+
+72
+00:04:12,369 --> 00:04:14,459
+by status, customer, carrier, shipper,
+
+73
+00:04:14,460 --> 00:04:18,925
+or factory and company. Any active filters would display on the page.
+
+74
+00:04:21,282 --> 00:04:23,916
+The loads list itself, as you can see here,
+
+75
+00:04:23,917 --> 00:04:27,398
+the list of loads in each item in the load would contain the details.
+
+76
+00:04:27,399 --> 00:04:30,800
+The details would include potentially the load number.
+
+77
+00:04:30,801 --> 00:04:33,713
+The recorder number potentially. The status,
+
+78
+00:04:33,891 --> 00:04:36,204
+carrier, ship date, delivery date, customer,
+
+79
+00:04:36,205 --> 00:04:38,516
+origin, and destination, just at the list view.
+
+80
+00:04:39,535 --> 00:04:42,718
+At any time a user should be able from the loads list page to
+
+81
+00:04:42,719 --> 00:04:45,250
+create a new load. This would open up a modal,
+
+82
+00:04:45,251 --> 00:04:49,002
+uh, where these inputs on the right side here would display.
+
+83
+00:04:49,003 --> 00:04:51,944
+This includes all the load details, including the load number,
+
+84
+00:04:51,945 --> 00:04:54,376
+who you're billing, dispatchers, sales rep, status,
+
+85
+00:04:54,377 --> 00:04:56,777
+uh, work order, pick up time, delivery time,
+
+86
+00:04:56,778 --> 00:04:59,359
+PO number, etc. Uh,
+
+87
+00:04:59,379 --> 00:05:01,771
+there would be carrier details. sales is sort of, should select for the carrier,
+
+88
+00:05:01,772 --> 00:05:04,432
+driver equipment type, uh, the carrier fee,
+
+89
+00:05:04,433 --> 00:05:07,765
+the currency, the shipper details at the shipper location,
+
+90
+00:05:07,766 --> 00:05:10,066
+date, range, description type, quantity, value,
+
+91
+00:05:10,067 --> 00:05:12,728
+notes, and PO number, and any consignee details.
+
+92
+00:05:12,729 --> 00:05:14,809
+Um, there can be one or many,
+
+93
+00:05:14,810 --> 00:05:16,851
+uh, consignees and shippers,
+
+94
+00:05:16,852 --> 00:05:19,793
+so this would be done in a repeater pattern. Those are all of the
+
+95
+00:05:19,794 --> 00:05:22,695
+inputs that would be required to create a new load.
+
+96
+00:05:24,676 --> 00:05:27,158
+And out of scope would be the details related to,
+
+97
+00:05:27,159 --> 00:05:30,470
+um, a load in a specific load detail screen.
+
+98
+00:05:30,471 --> 00:05:35,072
+This is, um, more or less in its initial state going to model how
+
+99
+00:05:35,073 --> 00:05:38,595
+the current truck stop application works, where if I want to view a load,
+
+100
+00:05:38,596 --> 00:05:41,427
+I just view it from the, uh,
+
+101
+00:05:41,447 --> 00:05:44,549
+the manage modal, where I see all the inputs in a,
+
+102
+00:05:44,550 --> 00:05:47,741
+uh, editable way. In a future state,
+
+103
+00:05:47,742 --> 00:05:50,573
+you would have a details view that would show all of these,
+
+104
+00:05:50,574 --> 00:05:53,856
+uh, details as a read-only value that can be edited,
+
+105
+00:05:54,355 --> 00:05:57,478
+as well as an activity log, where we would be able to see any
+
+106
+00:05:57,479 --> 00:05:59,539
+status update that has occurred,
+
+107
+00:05:59,540 --> 00:06:01,881
+um, on, uh, particular load,
+
+108
+00:06:01,882 --> 00:06:06,384
+such as the, uh, BOL being signed or a carrier
+
+109
+00:06:06,385 --> 00:06:10,027
+update and essentially having a timeline or new speed of everything that has happened.
+
+110
+00:06:12,627 --> 00:06:14,779
+Okay, moving on from load's list,
+
+111
+00:06:14,780 --> 00:06:17,291
+we have contact management. Uh,
+
+112
+00:06:17,311 --> 00:06:20,533
+we've simplified the data model a little bit from how truck stop does these
+
+113
+00:06:20,534 --> 00:06:23,855
+things. If you look at the information architecture,
+
+114
+00:06:23,856 --> 00:06:28,855
+um,
+
+115
+00:06:29,759 --> 00:06:34,540
+specifically the ERD, uh, we have contacts and contacts can
+
+116
+00:06:34,541 --> 00:06:38,780
+be customers, shippers, or consignees and we are modeling it like this because a
+
+117
+00:06:38,781 --> 00:06:41,000
+shipper can sometimes be, uh,
+
+118
+00:06:41,220 --> 00:06:44,440
+in some cases be a customer or in other cases be a consignee.
+
+119
+00:06:44,920 --> 00:06:47,180
+Um, so just modeling this in a way that's flexible.
+
+120
+00:06:47,181 --> 00:06:52,140
+So, um, more or less we have contact management
+
+121
+00:06:52,141 --> 00:06:56,280
+and then a contact can be represented as one or many things and in
+
+122
+00:06:56,281 --> 00:07:00,800
+different loads. So in this contact list we of course
+
+123
+00:07:00,801 --> 00:07:04,487
+have a . Search and filter currently anticipating that we can filter by status,
+
+124
+00:07:04,898 --> 00:07:07,024
+contact type such as customer, consignee,
+
+125
+00:07:07,025 --> 00:07:09,070
+or shipper, and factoring company.
+
+126
+00:07:10,201 --> 00:07:12,528
+The contact list would include the company name,
+
+127
+00:07:12,529 --> 00:07:14,849
+the address, the city, the name, state telephone.
+
+128
+00:07:14,850 --> 00:07:18,276
+We'll go ahead and add contact name in there as well.
+
+129
+00:07:19,908 --> 00:07:21,198
+Go ahead and do contact type.
+
+130
+00:07:25,691 --> 00:07:28,128
+And a user can add a new contact at any time.
+
+131
+00:07:28,129 --> 00:07:31,010
+These are the current inputs required to create a new contact.
+
+132
+00:07:31,011 --> 00:07:34,242
+We have. Things like the name, the contact type, and it's a multi-select here.
+
+133
+00:07:34,243 --> 00:07:36,797
+Um, any internal notes, federal ID,
+
+134
+00:07:36,871 --> 00:07:39,686
+if they're blacklisted, if they're a broker, workers' comp number,
+
+135
+00:07:39,687 --> 00:07:42,087
+or their website, they're mailing address, they're billing address,
+
+136
+00:07:42,088 --> 00:07:44,349
+uh, any contacts, um,
+
+137
+00:07:44,369 --> 00:07:46,730
+whoever the primary contact is going to be,
+
+138
+00:07:46,731 --> 00:07:49,072
+uh, finances, uh,
+
+139
+00:07:49,092 --> 00:07:52,214
+related details and, um,
+
+140
+00:07:52,234 --> 00:07:56,677
+quote settings as well. The details for you for this has been descoped,
+
+141
+00:07:56,678 --> 00:07:59,509
+but otherwise it would provide a new speed of all the activity that has
+
+142
+00:07:59,510 --> 00:08:01,772
+happened related to that particular contact.
+
+143
+00:08:01,773 --> 00:08:06,443
+Um, it would show the related loads associated to that contact and the related
+
+144
+00:08:06,444 --> 00:08:08,545
+invoices associated to that contact.
+
+145
+00:08:08,546 --> 00:08:13,198
+Um, it also show a read-only view of the contact's information with
+
+146
+00:08:13,199 --> 00:08:16,050
+the ability to edit it and the ability to send emails from here.
+
+147
+00:08:18,171 --> 00:08:22,694
+Next is carrier management. So similar to the other list
+
+148
+00:08:22,695 --> 00:08:24,746
+views, we have the ability of searching and filtering,
+
+149
+00:08:24,747 --> 00:08:28,608
+a filtering for carriers. The carrier list would show the company name,
+
+150
+00:08:28,609 --> 00:08:31,540
+the address, city, state, zip, and phone. We'll you in one. the other.
+
+151
+00:08:31,541 --> 00:08:33,720
+the ability of creating a new carrier at any time.
+
+152
+00:08:33,721 --> 00:08:36,520
+These are the details that would be related to creating a carrier.
+
+153
+00:08:36,960 --> 00:08:39,240
+These details include the carrier name, storage address,
+
+154
+00:08:39,360 --> 00:08:42,060
+city, state, zip, uh, DOT, number,
+
+155
+00:08:42,260 --> 00:08:46,100
+any contacts and repeat or fashion, the ability to set a primary contact and
+
+156
+00:08:46,101 --> 00:08:48,820
+the ability to set an accounting contact, uh,
+
+157
+00:08:48,980 --> 00:08:51,880
+finances, uh, this carrier portal is descoped,
+
+158
+00:08:52,340 --> 00:08:54,860
+uh, any insurance-related information,
+
+159
+00:08:54,940 --> 00:08:57,400
+like the liability company, the auto insurance company,
+
+160
+00:08:57,520 --> 00:08:59,720
+the cargo company, uh, et cetera,
+
+161
+00:08:59,880 --> 00:09:02,863
+and their equipment as well. Um, . Being able to set their equipment.
+
+162
+00:09:03,119 --> 00:09:05,204
+The details view of this has been descoped,
+
+163
+00:09:05,301 --> 00:09:07,864
+and similar to the other views, uh, this would be,
+
+164
+00:09:07,865 --> 00:09:09,946
+uh, the ability to,
+
+165
+00:09:09,947 --> 00:09:12,157
+uh, see the activity log, the loads list,
+
+166
+00:09:12,158 --> 00:09:15,870
+the invoice list, and the carrier list. I've made this particular section green because
+
+167
+00:09:15,871 --> 00:09:17,991
+we will still need a driver's list,
+
+168
+00:09:17,992 --> 00:09:20,152
+so this is not descoped. Um,
+
+169
+00:09:20,172 --> 00:09:22,174
+it would just be another, uh, list view,
+
+170
+00:09:22,175 --> 00:09:24,197
+like carrier list, but it would just be for drivers.
+
+171
+00:09:24,734 --> 00:09:26,999
+And drivers can be associated to carriers.
+
+172
+00:09:29,197 --> 00:09:31,360
+All right. Uh, moving on, factoring company,
+
+173
+00:09:31,361 --> 00:09:33,962
+uh, a list view of these,
+
+174
+00:09:33,963 --> 00:09:36,103
+uh, administrative, uh, things such as,
+
+175
+00:09:36,104 --> 00:09:40,666
+uh, search and filter the factory company list would have
+
+176
+00:09:40,667 --> 00:09:42,702
+the company name, address city, state, and zip.
+
+177
+00:09:43,153 --> 00:09:45,679
+And in order to create a new factoring company,
+
+178
+00:09:45,680 --> 00:09:49,932
+we would provide these details. The ability to have one or many contacts and
+
+179
+00:09:49,933 --> 00:09:54,210
+the ability to, uh, manage the finance settings of the factoring company.
+
+180
+00:09:56,181 --> 00:09:58,318
+The details view of the factoring company,
+
+181
+00:09:58,319 --> 00:10:00,659
+uh, has been descoped. Good.
+
+182
+00:10:01,600 --> 00:10:05,820
+This would just include the activity log and then associated loads and voices and
+
+183
+00:10:05,821 --> 00:10:09,840
+carriers. Um, all that information is available,
+
+184
+00:10:09,900 --> 00:10:12,360
+of course, and this is true for all of the entities.
+
+185
+00:10:12,960 --> 00:10:15,780
+In the manage modal, this would just be the ability to,
+
+186
+00:10:15,781 --> 00:10:19,280
+um, see the records associated in an easy place.
+
+187
+00:10:21,100 --> 00:10:24,340
+Alright. Moving on from the administrative,
+
+188
+00:10:24,341 --> 00:10:29,120
+um, entity management. There are two different
+
+189
+00:10:29,121 --> 00:10:31,180
+invoice screens. Essentially, we have,
+
+190
+00:10:31,181 --> 00:10:35,463
+uh, . Our accounts receivable screen and we have our accounts payable screen in
+
+191
+00:10:35,464 --> 00:10:38,585
+truck stop today. I believe this is called like the accounting manager and then
+
+192
+00:10:38,586 --> 00:10:40,706
+the carrier pay manager. Um,
+
+193
+00:10:40,726 --> 00:10:44,106
+so anyway, we have an invoice list view for accounts receivable.
+
+194
+00:10:44,130 --> 00:10:46,730
+We would have the ability of searching searching and filtering,
+
+195
+00:10:46,731 --> 00:10:51,293
+uh, invoices. We would have a list view of those invoices and
+
+196
+00:10:51,294 --> 00:10:54,445
+we would be able to see the associated low number of each invoice,
+
+197
+00:10:54,446 --> 00:10:56,815
+the shipping date, the customer, the carrier,
+
+198
+00:10:56,819 --> 00:11:00,479
+the driver, and the status. The status is either ready to invoice invoice or
+
+199
+00:11:00,480 --> 00:11:04,147
+paid. at any point. We can mark an invoice as paid.
+
+200
+00:11:04,657 --> 00:11:06,893
+We can, uh, if the invoice exists,
+
+201
+00:11:06,894 --> 00:11:09,845
+we can download it. If the invoice does not exist yet,
+
+202
+00:11:09,846 --> 00:11:12,417
+uh, for the load in the list here,
+
+203
+00:11:12,418 --> 00:11:15,839
+we can send the invoice. It opens up a modal where we can put
+
+204
+00:11:15,840 --> 00:11:18,091
+in the email, uh, for, uh,
+
+205
+00:11:18,111 --> 00:11:20,958
+sending the, uh, the invoice and shipping it.
+
+206
+00:11:22,469 --> 00:11:26,847
+And we can do this in bulk as well. In the carrier payer,
+
+207
+00:11:26,848 --> 00:11:30,669
+the carrier invoices, the accounts payable. We do also have search and filter anticipated.
+
+208
+00:11:30,670 --> 00:11:33,621
+We also We'll see you also have the invoice list.
+
+209
+00:11:33,622 --> 00:11:38,121
+Uh, this would be the columns we're anticipating in that list view,
+
+210
+00:11:38,708 --> 00:11:41,426
+load number, carrier, customer, etc. Uh,
+
+211
+00:11:41,446 --> 00:11:46,030
+most importantly is aging. And if the invoice does not
+
+212
+00:11:46,031 --> 00:11:50,593
+exist, we can send the invoice. Um,
+
+213
+00:11:50,613 --> 00:11:53,605
+that might be the invoice received would be actually the,
+
+214
+00:11:53,606 --> 00:11:56,737
+the language. Uh,
+
+215
+00:11:56,757 --> 00:12:00,039
+if the invoice has been received, then we can input the details of the
+
+216
+00:12:00,040 --> 00:12:03,001
+invoice here, like whether or not it matters. They agreed amount.
+
+217
+00:12:03,002 --> 00:12:05,102
+Um,
+
+218
+00:12:05,122 --> 00:12:07,784
+these other invoices, like the load number, carrier details,
+
+219
+00:12:07,785 --> 00:12:11,373
+uh, would be available here. And we can submit this to update the status.
+
+220
+00:12:11,780 --> 00:12:13,948
+The status is either ready to receive, received,
+
+221
+00:12:13,949 --> 00:12:16,370
+or paid. If the invoice has been received,
+
+222
+00:12:16,371 --> 00:12:19,111
+we can download the pay report or un-receive the bill if we've made a
+
+223
+00:12:19,112 --> 00:12:23,354
+mistake here. We can also do a bulk action to receive many invoices.
+
+224
+00:12:23,355 --> 00:12:26,637
+Um,
+
+225
+00:12:26,657 --> 00:12:31,260
+everything related to creating carrier quotes and sending that to carriers and carrier
+
+226
+00:12:31,261 --> 00:12:33,560
+portal has been received. And the scope, so I'm not going to go over
+
+227
+00:12:33,561 --> 00:12:37,900
+that during this video. There would be a billing page where the tenants,
+
+228
+00:12:37,940 --> 00:12:42,580
+the subscriber to the software, would have the ability of seeing potentially their
+
+229
+00:12:42,581 --> 00:12:45,180
+subscription tiers if there are any. Um,
+
+230
+00:12:45,300 --> 00:12:47,820
+if this were to become a self service model,
+
+231
+00:12:47,821 --> 00:12:50,080
+this is modeled here to show that they can,
+
+232
+00:12:50,081 --> 00:12:54,520
+um, subscribe to higher level plans or downgrade.
+
+233
+00:12:55,420 --> 00:12:58,880
+If that were not true, minimally what they would need is a billing table
+
+234
+00:12:58,881 --> 00:13:02,020
+where they'd be able to see previous invoices. .
+
+235
+00:13:02,021 --> 00:13:05,480
+. . and the ability to manage their credit card. Uh,
+
+236
+00:13:05,481 --> 00:13:10,000
+the reports that are going to be included
+
+237
+00:13:10,001 --> 00:13:14,040
+in the MVP are essentially the same reports that are included in TruckStop,
+
+238
+00:13:14,460 --> 00:13:18,380
+uh, currently calling this the executive summary report page.
+
+239
+00:13:18,920 --> 00:13:22,160
+And it just includes things like metrics, cars related to open loads,
+
+240
+00:13:22,420 --> 00:13:24,720
+net margin, gross revenue, truck miles and load volume.
+
+241
+00:13:25,040 --> 00:13:28,220
+It would include a table related to the sales rep leaderboard,
+
+242
+00:13:28,600 --> 00:13:31,220
+show line graphs for revenue over time,
+
+243
+00:13:31,480 --> 00:13:35,632
+and loads over time. . And bar charts for miles by carrier and load
+
+244
+00:13:35,633 --> 00:13:38,033
+volume by carrier. There are additional,
+
+245
+00:13:38,034 --> 00:13:42,170
+uh, reports that would be anticipated in a future state of the application.
+
+246
+00:13:42,242 --> 00:13:44,858
+I won't go over those now, but you can see them here.
+
+247
+00:13:44,859 --> 00:13:48,641
+Um, all of the metric cards, all the tables that would be anticipated in
+
+248
+00:13:48,642 --> 00:13:53,884
+all of the line graphs as well. Okay,
+
+249
+00:13:53,885 --> 00:13:56,156
+um, finishing this off,
+
+250
+00:13:56,157 --> 00:13:58,387
+I go in over user management profile and accounting.
+
+251
+00:13:58,388 --> 00:14:01,580
+Um, a tenant should be able to add one or many users.
+
+252
+00:14:02,240 --> 00:14:06,013
+To their account. So this would be on a user page where there would
+
+253
+00:14:06,014 --> 00:14:10,285
+be search and filter. Um, also the ability to see users on the account.
+
+254
+00:14:10,286 --> 00:14:14,040
+Uh, we'd be able to see the name, email status role and the type,
+
+255
+00:14:14,096 --> 00:14:17,762
+like whether or not they are a sales person, a dispatcher or a tracker.
+
+256
+00:14:18,799 --> 00:14:21,705
+And we would have the ability of inviting a user to our tenant.
+
+257
+00:14:25,043 --> 00:14:29,198
+There would be a profile page where every user within the tenant can manage
+
+258
+00:14:29,199 --> 00:14:31,410
+their own profile. This includes password management,
+
+259
+00:14:31,411 --> 00:14:33,641
+notification. And then,
+
+260
+00:14:33,642 --> 00:14:36,124
+uh, regular input, such as their name and their email.
+
+261
+00:14:37,483 --> 00:14:39,806
+And there would be an account settings level, uh,
+
+262
+00:14:39,826 --> 00:14:42,918
+account settings page that is available to admins.
+
+263
+00:14:42,919 --> 00:14:45,750
+And this would be the ability to update the tenant information,
+
+264
+00:14:45,751 --> 00:14:47,782
+like the company name, street address, city, state,
+
+265
+00:14:47,783 --> 00:14:51,235
+zip, currency and net terms. Okay.
+
+266
+00:14:51,236 --> 00:14:54,738
+Uh, that is it for the scope of CH Commander.
+
+267
+00:14:55,097 --> 00:14:57,590
+Please let me know if you have any questions and I'm happy to help.
+
+268
+00:14:57,591 --> 00:14:58,100
+Thanks.

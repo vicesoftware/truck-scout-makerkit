@@ -1,0 +1,1095 @@
+# Summary
+
+CH Commander Scoping - November 15
+VIEW RECORDING: https://fathom.video/share/Vhc9T4Eq7W7ziTNGR9zyJUNfoZ4dE6mY
+Meeting Purpose
+
+Scope CH Commander project and refine cost estimates for MVP features.
+
+Key Takeaways
+
+  - Reduced scope from 150+ hours to ~63 hours by cutting non-essential features
+  - Agreed on using Auth0 for authentication/authorization (3 days estimated)
+  - Will create short video explaining included/excluded features from flowcharts
+  - Accounts receivable/payable and invoicing likely most complex remaining features
+
+Topics
+
+Project Scope Refinement
+
+  - Reviewed flowcharts to identify core vs. nice-to-have features
+  - Cut details views, email sending, activity logs, and other non-essential items
+  - Kept basic CRUD operations for loads, contacts, carriers, drivers, invoices
+  - Retained executive summary reporting, removed cash flow analysis
+  - Eliminated carrier portal and most billing management features
+
+Authentication Approach
+
+  - Will use Auth0 for authentication instead of custom implementation
+  - Considering passwordless login via email link for simplicity
+  - Estimated 3 days for Auth0 integration
+
+Invoicing and Financial Features
+
+  - Accounts receivable/payable likely most complex remaining features
+  - Kept basic invoice generation, marking paid/unpaid
+  - Added aging and export to Excel capabilities as requested feature
+  - Removed advanced commission tracking/reporting
+
+User Management
+
+  - Kept core user invite, profile, account settings features
+  - Removed advanced filtering and notification management
+  - Will retain basic role/permission assignment capabilities
+
+Reporting
+
+  - Kept executive summary dashboard with key metrics
+  - Removed cash flow analysis and most detailed reports
+  - Will expose data for Excel export to allow custom analysis
+
+Next Steps
+
+  - Cody to create ~5 min video explaining included/excluded features from flowcharts
+  - Ryan to finalize scope document referencing video, original calls, and demo
+  - Review final scope with client to ensure alignment before beginning development
+  - Ryan to begin Auth0 integration as first development task
+
+# Transcript
+CH Commander Scoping - November 15
+VIEW RECORDING - 74 mins (No highlights): https://fathom.video/share/Vhc9T4Eq7W7ziTNGR9zyJUNfoZ4dE6mY
+
+---
+
+0:00 - Cody Miles (brandcave.co)
+  Is that you new office this meeting is being recorded. This is just a coffee shop down the street.
+
+0:06 - Ryan Vice (Vice Software)
+  Oh cool Which one is it?
+
+0:08 - Cody Miles (brandcave.co)
+  Three on nine Is that the one that's around the corner from your office? Yeah, it is. Yeah, it's like a sort of house Yeah Yeah, I've been to that one's really cool.  Yeah, the coffee here is great If you're into being around a bunch of soccer moms, that's a good option to Yeah, yeah, could be a benefit, right?
+
+0:36 - Ryan Vice (Vice Software)
+  I used to go to a gym like that, you know Yeah, yeah, yeah, yeah, how's your week has your week been how's it been catching up some so last week?  It's been it's it's been it was a little bit of a stressful week I don't know if you worked on energy hire at all or not, but they gave us notice I Saw that I saw thing between you and and
+
+1:00 - Cody Miles (brandcave.co)
+  through about them going to a different team, there's such ideas, they're just going to repeat the same things with someone else and then they're going to move on to a different team.  It's not y'all.
+
+1:10 - Ryan Vice (Vice Software)
+  I I didn't need to tell you that, but they're the issue. Yeah, no, it's definitely a challenging project. It's unfortunate because it was a big chunk, but yeah, it's not a highly skilled team when it comes to building software, right?  Um, the good area, I mean, you but, um, you know, is what it is. And, um, then we had another escalation on another project, which it's like geez, man, like really two in one week, but fortunately they didn't show stuff.  So I got them on like critical care, life support. Which one is that one? More hints.
+
+1:50 - Cody Miles (brandcave.co)
+  Oh, okay. So they're pretty upset too.
+
+1:53 - Ryan Vice (Vice Software)
+  Yes, very upset. Like, uh, apparently like we had a, um, switch of, um, dad the while, that and the new dev is not doing as good as the old dev was.
+
+2:06 - Cody Miles (brandcave.co)
+  Yeah.
+
+2:06 - Ryan Vice (Vice Software)
+  Yeah. Close with quality issues and this and the other. And I know sometimes me and Prashant have had some, you know, difficult type conversations where I'm just like, I'll send him.  We had a sprint committed. The dev environment was broken. They were demoing from dev. I told them, don't demo from dev unless you absolutely have to.
+
+2:37 - Cody Miles (brandcave.co)
+  Right.
+
+2:38 - Ryan Vice (Vice Software)
+  Just a complete miss, right? You're asking questions, they're not answering, taking a long time. They've got their cameras off for the 15 millionth time, even though I ask them not to do that because like you ask them a question and you can see that they're thinking it's not as awkward as if you just hear and you've been on the calls with me.  like, are you there?
+
+2:55 - Cody Miles (brandcave.co)
+  Are you still there? know, like all that's right.
+
+2:58 - Ryan Vice (Vice Software)
+  so I sent. or shot the call and said, you might please review this. We can talk about it blah, blah.  He won't he only goes talk to doesn't review the calls. And so then with the more hands one, it was the same thing.  Like they I had a call with Rodrigo and he was pretty like the first 10 minutes he was just kind of going like in this and that and this and that and this.  And then the last 10 minutes after listening, drilling in and making sure he feels that we have a plan in place.  I sent it to Sean and I said, and I even specifically said, Sean, please, it's a 20 minute call.  Just take the time to listen to it. I talked to him, I said, I hadn't listened to the call.  And I'm like, wow, and he's saying like, well, it's not this. It's not that I talked to the team.  I'm like, Sean, you haven't even listened to the call. Like, please take it to listen to the feedback that is coming from the client.
+
+3:52 - Cody Miles (brandcave.co)
+  the customer, yeah.
+
+3:53 - Ryan Vice (Vice Software)
+  Yeah. he's like, well, this team is working on other projects. I know they're good as like, yes, I was like, but this client has been with us for a while.  They've given us a video testimonial. They love what we do and then all of a sudden they don't and they're about to fire us So yeah, we're we're this is not this is not a difficult client You know, yeah, um, you probably never pay attention to it But I have your team on the Cody work channel and you're in your site workspace I give your team.
+
+4:21 - Cody Miles (brandcave.co)
+  I give I give you guys like pick me up jobs all the time and And more recently what you're saying is like what I've been experiencing as well where I'm just like guys like Like I told you to do this on prod and you did not on staging and like I can't like we can't take stage in life It's like old or whatever, know, like just like WordPress work whatever But even small things like this this week it was um And I need you to implement lazy loading and then they did it incorrectly and I was like, this is lazy level like this is easy Yeah, yeah, I don't know.
+
+4:52 - Ryan Vice (Vice Software)
+  I don't know what's going on Um, I think that um It sounds like for Sean was having some cultural issues.  Yes, and people will leave. And so he might be in the middle of a churn. I also think that Prashant has been getting distracted a little bit.  I'm the last person who should criticize anyone for new shiny.
+
+5:13 - Cody Miles (brandcave.co)
+  Yeah.
+
+5:15 - Ryan Vice (Vice Software)
+  I'm like the king of that .
+
+5:16 - Cody Miles (brandcave.co)
+  Yeah.
+
+5:18 - Ryan Vice (Vice Software)
+  I feel like there's a little new shiny going on. you know, Heather's cousin like built this really great concrete company.  He's just killing it, dude, living in a house on 20 acres and just living large and all this .  But then like once he got successful with it, he just started wanting to do anything but so he started going these housing seminars and was trying to learn how to flip houses and they got into this weird like blueberry supplement  and like, it's like, dude, what the hell are you doing?
+
+5:48 - Cody Miles (brandcave.co)
+  Yeah.
+
+5:49 - Ryan Vice (Vice Software)
+  So you figured out what you're you're you know. And so but I'm just as guilty, know, I'm sitting my publisher.  or things saying, I'm thinking about writing a new book, like trying to do a product with equity with John at the same time.
+
+6:09 - Cody Miles (brandcave.co)
+  Anyway, anyway, know, yeah, right, right.
+
+6:11 - Ryan Vice (Vice Software)
+  You know, sure. We have to keep the projects going because that's what's paying the bills.
+
+6:18 - Cody Miles (brandcave.co)
+  Oh, 100%. Like, the way that I'm treating this stuff that the new shine, like a short has to buy my time.  Right. Kind of like, to some extent, it's like we can only play in time that's going to like result in food on the table and roof over your head.  And like if you if you do, if you've done that, can work on the kind of stuff. But if it's not doing those things, like it has to come second.
+
+6:46 - Ryan Vice (Vice Software)
+  And that's a good rule. But the other flip side of it, me that for me that's challenging is like a lot of the stuff I do is also is dev related.  Now you got to play with that in San Diego, know, it's just like hanging out and talking shop with people.  whatever. I have a bit of a knack for that. And so I had like two today, all this work done.  And I had a coffee at 10 that ended up going till noon, but resulting in I being like, yeah, I really want you guys's help with this stuff and blah, blah, blah.  It's a new 70 remember. And then I had another guy who's meeting there at 11 for lunch and he had sent me a message.  He's like, you here and then 1145 another message. The other guy left at noon. was like, Oh, . I'm sorry.  I thought we were noon. And he thought the guy was sitting next to me all the time. And he was super cool.  He bought me lunch. We hung out for like two hours and chatted.
+
+7:38 - Cody Miles (brandcave.co)
+  Yeah.
+
+7:39 - Ryan Vice (Vice Software)
+  Hampton's happy hour tonight. so it was all cool and everything. But he is pretty interested in what we're doing.  So like, am I not gonna go and do that stuff?
+
+7:52 - Cody Miles (brandcave.co)
+  know, I mean, I shouldn't talk to you about being spread thin. I mean, like, I mean, it's it's it's  Like When you're in that well, I don't know if you're in this place, but Rankine's in this place where it's like we have a nut We have just enough and that's not a good place to be in I know I would rather have the team over capacity than adjust it up.
+
+8:13 - Ryan Vice (Vice Software)
+  Yeah, and like that requires like Me stepping out and you know trying to win more business, you know, yeah, I am I had I told Heather a couple of weeks ago.  I was just like oh my god. I was like we're finally like It's just did all the stress kind of Background because we had clap and we had energy higher Our break even is around 70k a month and it was looking like we're gonna be up around 130 to 150 And I'm just like hell.  Yeah, you know, I can I can lose a client It's not gonna be like the end of the world.  I can start paying credit cards down and like Building right and boom boom boom and then clip gives notice a couple weeks later  uh energy higher and then almost uh more hands on what the  is going on here you know um yeah yeah but but I think gj is going to be our anchor client convention three other things she's like yeah this would probably be a separate initiative uh yeah the mobile so I think that we are probably half the cost of their previous team or more yeah yeah they had a bloated team and I think they were charging like hundred dollar an hour type rates and we have a bigger and so like I think that they're like if I think we're going to do good there and I think I made the right fall out full john in from privacy dynamics he's not contracting for me now and uh he's like a Kubernetes badass and so he's all their dev ops and infrastructure um which is stuff I would just gonna have to try and learn on the job you know but now I'm just following him and like trying to keep up and learn the stuff  So, that's pretty good.
+
+10:02 - Cody Miles (brandcave.co)
+  great. That's awesome, man.
+
+10:04 - Ryan Vice (Vice Software)
+  So then, I made a deal with, I got the estimate for, I got the estimate for just the team's estimate, which I haven't validated, CH Commander, to 150-ish.  With my time, at like 10 hours a week and with...
+
+10:25 - Cody Miles (brandcave.co)
+  That's still twice as much as what we're trying to do with that.
+
+10:28 - Ryan Vice (Vice Software)
+  Right. With my time at 10 hours a week or so and with 15 hours a week of product ownership and assuming non-AI-driven workflows.  But if you took my time out and raise time out, so I'll just say, I'll do it on split equity.  Yeah. we're at...
+
+10:51 - Cody Miles (brandcave.co)
+  I would use Ray, though, for this. mean, he's expensive, he's a resource.
+
+10:55 - Ryan Vice (Vice Software)
+  Well, when we were talking about the full CJ...
+
+10:59 - Cody Miles (brandcave.co)
+  Yeah.
+
+11:00 - Ryan Vice (Vice Software)
+  Well, things they wanted, I don't want to try and keep track of all that .
+
+11:03 - Cody Miles (brandcave.co)
+  Well, certainly not you, but like, I love Ray, man, I really love Ray, but I've just never had like a super successful engagement where he was like an incredible PM.
+
+11:16 - Ryan Vice (Vice Software)
+  Right. No, I feel you there. And like, but I did get his right way down.
+
+11:21 - Cody Miles (brandcave.co)
+  Did you, okay.
+
+11:23 - Ryan Vice (Vice Software)
+  Yeah, I negotiated it down a good bit. And and I feel like he does, because he's good for like, he's good for requirements and he's good for product as far as he asks the right questions about where's that data coming from?  Where's it going to? like, how do I test that? Like, he's good with that piece. He has kind of been phoning it in and cause problems on projects and padding hours and like that.  Yeah. when if you manage him close enough. and I had a few hard conversations with him, I think it works well and then the other piece is that it's flexible.
+
+12:08 - Cody Miles (brandcave.co)
+  So I don't have to keep him fed. He's available in a man and it's like a bee. I say that to say there's other fractional PMs.  If he got him down to a rate and it's going to work out, no qualms, right?
+
+12:25 - Ryan Vice (Vice Software)
+  You're going to want to talk him down and I think that's a good time to talk him down. He owns her at a time of dozen right now.
+
+12:36 - Cody Miles (brandcave.co)
+  But one I worked with at a good cycle for a virgin care for kids. Her name is Paul. might remember her.
+
+12:43 - Ryan Vice (Vice Software)
+  She's good.
+
+12:46 - Cody Miles (brandcave.co)
+  She's looking for a fractional word. And then met a guy yesterday here in Austin, his name is Sean. And he's charging like 15 hour a day.  really he's kind of he's kind of a grind like
+
+13:00 - Ryan Vice (Vice Software)
+  He talks too much and he had a really high pitch voice and he's really like I wish he was cool He's he's not but he's a he's solid as a pn The guy with the annoying voice he talks too much, but yeah, and he's the guy who needs to talk to mo That's a tough one yeah, that lead him by saying oh man, I gotta let you know He talks like an , but he's he's cheap as hell Yeah, well, he also used to be a product manager at like a make-up America So I he used to do that and now he just grievances Wow What do you think Holly's around the same cost?
+
+13:47 - Cody Miles (brandcave.co)
+  We have to talk Holly down right like she's like an 80 I don't know But she is in a position right now where she works full-time somewhere, but she hates her job and she would
+
+14:00 - Ryan Vice (Vice Software)
+  pretty much be willing to go anywhere else. Right.
+
+14:03 - Cody Miles (brandcave.co)
+  she was like, she was in a position where she's not like, he's not the graduate in the family. Her husband has like a really successful and the vector business.  Yeah. like her goal is to be part time on anything.
+
+14:17 - Ryan Vice (Vice Software)
+  Yeah. I think I remember there, I think she was good. she like, is she on a level though where she talks like Salesforce, database, interfacing, like, it'll wear like.
+
+14:33 - Cody Miles (brandcave.co)
+  You know, the reason I'm still connected with her is because like basically where she goes, if you recommend these braincave and we come in and eventually do UX work.  And a lot of the projects she's on, I don't know if I could say Salesforce or whatever, but like they're pretty like deep projects and the difficult projects to solve for.
+
+14:54 - Ryan Vice (Vice Software)
+  That sounds good. Yeah. I was definitely overpaying for Ray before I think 110.
+
+15:00 - Cody Miles (brandcave.co)
+   up.
+
+15:00 - Ryan Vice (Vice Software)
+  But yeah, he was flexible and senior, so I was, whatever, but he did kind of take us to the sign unless you show up.
+
+15:07 - Cody Miles (brandcave.co)
+  Well, so that's another thing. I'm starting the verbal lab, the mobile lab redesign on Tuesday with sound search law.  And so I'm talking with Judd yesterday, and I'm like, I mean, could buy some of that seems like, dude, I love, this is Judd, you know, he's giving us a testimonial.  And he was like, I love the team. But apparently, there's a bad taste and bouncer shops mouth or buy software.  And maybe it's because of a critical or 73 project that I don't Anyway, I was like, we need to get Ryan involved on this mobile lab because we're kicking off discovery on Tuesday.
+
+15:43 - Ryan Vice (Vice Software)
+  Right, that's a shame. wonder if is still there, probably didn't help.
+
+15:50 - Cody Miles (brandcave.co)
+  Drew's critical too. Well, that's what I'm picking up from you, Judd.
+
+15:54 - Ryan Vice (Vice Software)
+  I think Drew's gone though, right?
+
+15:56 - Cody Miles (brandcave.co)
+  No.
+
+15:57 - Ryan Vice (Vice Software)
+  Oh, okay. Yeah. Yeah. Yeah, something something went sour there for sure. Um, was, uh, that was a tough one to, um, that was a tough one to manage.  Like we had a lot of the, um, we talked about this in July, it's like, oh, then, yeah, that one was a tough one because it was led, like 4473 was led by Travis, not a product person, not even chibin.
+
+16:25 - Cody Miles (brandcave.co)
+  It doesn't understand technology and you're donating actually a really hard product.
+
+16:30 - Ryan Vice (Vice Software)
+  Yeah. And then like, uh, a lot of it was just a lot of, yeah, that was a tough one.  That was a tough one, but it is what it is. So, but then what my goal is here is to, um, I told them that I would do it like Michael didn't want to have three calls in there.  Yeah, he didn't want me to take overnight. think about it. It's like, it's like, Jesus Christ, dude.
+
+17:04 - Cody Miles (brandcave.co)
+  And so like, he's he's tough, man.
+
+17:06 - Ryan Vice (Vice Software)
+  He is tough, right? And so then so I came back to him and said that we could do it.  That cost if it's paid upfront. And then he came back and it's going to be like 25 at the start 25 after two months and 25 at the end.  I'm like, okay, close enough.
+
+17:25 - Cody Miles (brandcave.co)
+  I hate that for you, actually. Because those are, that's right? for me depending on whether he thinks he was that milestone.
+
+17:34 - Ryan Vice (Vice Software)
+  Well, the last one will be, yeah.
+
+17:37 - Cody Miles (brandcave.co)
+  Well, I mean, yeah, I hope it's true all the way through it, as any people's.
+
+17:44 - Ryan Vice (Vice Software)
+  Yeah, well, 25 upfront in the other 25, you know, by the time I get to like four months out, I'll have a pretty good idea.  Yeah. And I'm not planning on, I'm not planning on using that money. I'm just going to put it in an account and then my goal is like break even or better.
+
+18:12 - Cody Miles (brandcave.co)
+  Yeah.
+
+18:13 - Ryan Vice (Vice Software)
+  So if I can land it at, then I only spent 30 K, which at my cost, you know, is like a decent amount of development.  Um, I think that that's pretty doable. Then I have a, um, portfolio piece of these approaches I'm working on.  That's a bunch of extra work, but I don't think that claim has ever happened. But who knows? Yeah, he's, uh, he's, uh, he's working on some funding project.
+
+18:44 - Cody Miles (brandcave.co)
+  Does that mean that his 75 would become 115?
+
+18:48 - Ryan Vice (Vice Software)
+  Uh, no, like it sounds like he's trying to get millions of dollars of funding for the next phase of.
+
+18:55 - Cody Miles (brandcave.co)
+  Oh, I see. So the 75 is for MVP only as long as we. Really clear guardrails and what it may be is and then that next phase might actually make all of this worth it Right And even if it doesn't it allows me to validate the I Also need to know how much I can build by myself Yeah, you know what I mean?
+
+19:18 - Ryan Vice (Vice Software)
+  Like a lot a lot of this journey with Prashant a lot of it has been around I Can't do I'm not great at HTML CSS.
+
+19:26 - Cody Miles (brandcave.co)
+  I'm not great at this. I'm not great at that. You know what I mean?
+
+19:28 - Ryan Vice (Vice Software)
+  Yeah Yeah, I'll kind of do it all, you know When When things are like, you know if G.J. comes in and turns in their paperwork because something goes wrong.  I gotta be able to pick up some work that Yeah, okay bills, right? So if if I can actually build something like this if I can be done in three months In this 25 grand a month
+
+20:00 - Cody Miles (brandcave.co)
+  Right? Yeah.
+
+20:01 - Ryan Vice (Vice Software)
+  So I'll have an idea of how much work I can take on myself and how far I can move it.  And also, I mean, I was looking at Prashant's estimate. I say Prashant, but like the teams?
+  SCREEN SHARING: Ryan started screen sharing - WATCH: https://fathom.video/share/Vhc9T4Eq7W7ziTNGR9zyJUNfoZ4dE6mY?timestamp=1214.346234
+
+20:15 - Cody Miles (brandcave.co)
+  Yeah.
+
+20:17 - Ryan Vice (Vice Software)
+  I don't know the requirements. I haven't looked at it. I was looking at the brokerage features. I got the API of the brokerage done in two hours during the conference.  And I was a complete participating, right? Yeah.
+
+20:34 - Cody Miles (brandcave.co)
+  don't even remember seeing you being on a computer.
+
+20:36 - Ryan Vice (Vice Software)
+  So it's amazing. Yeah. I was asking questions just in doing it at the same time, you know. And so I feel like if you're on your computer, you have to over participate almost.  You know what I mean?
+
+20:47 - Cody Miles (brandcave.co)
+  Yeah.
+
+20:48 - Ryan Vice (Vice Software)
+  That's the front which wasn't intentional.
+
+20:50 - Cody Miles (brandcave.co)
+  Yeah.
+
+20:50 - Ryan Vice (Vice Software)
+  Yeah. But like if we look at the brokerage stuff, where is the brokerage stuff, brokerage features. Yeah. The load list screen, load  the list detail screen. Okay. let's leave out contact management.
+
+21:05 - Cody Miles (brandcave.co)
+  What a better way to Oh, I just see. Okay.
+
+21:08 - Ryan Vice (Vice Software)
+  It's too much. Uh, so just these features here. 305 hours. That doesn't include our padding buttons.
+
+21:18 - Cody Miles (brandcave.co)
+  Yeah, and all that's just list using detailed views. Uh, maybe they're, I'm not taking a too deep look at this, but maybe they're, they're accounting for like the activity log with the system events.
+
+21:30 - Ryan Vice (Vice Software)
+  Like we're going to cut that for your indie TV log.
+
+21:34 - Cody Miles (brandcave.co)
+  They're, they're putting in 30 something hours there.
+
+21:39 - Ryan Vice (Vice Software)
+  Where do you see activity log?
+
+21:44 - Cody Miles (brandcave.co)
+  Load details, scroll down. Yeah, low detail page activity log. And you can see, I think this row 81.
+
+21:51 - Ryan Vice (Vice Software)
+  Hmm. Right.
+
+21:55 - Cody Miles (brandcave.co)
+  They're putting a lot there and all of that can be cut. and your estimate because it's not part of what exists.
+
+22:02 - Ryan Vice (Vice Software)
+  These here?
+
+22:03 - Cody Miles (brandcave.co)
+  Yeah, in fact, if it's helpful for you, we could go through the flow chart and I can tell you exactly what to cut out.
+
+22:11 - Ryan Vice (Vice Software)
+  Right, but even if you take that out, let's take that out. So we've got 213 hours, and then we do, let's see, 213, we're gonna add to that 30% here and 30% here if I'm not mistaken.  25 and 30, so what's that, 55%? I did that wrong. Okay. So then if we do add it by, so equals this.  This, divided by say it's four developers at 40 hours a week. Is that right? Why did it keep going down?  I don't think that would work, but that's basically three weeks of work. And then if we had a four developer team, that's $40,000 cost.  It would be $30,000 cost or something like that for that one thing. I know I can do that. If I'm building it 125, I'd be at 40 hours easily.
+
+23:55 - Cody Miles (brandcave.co)
+  I'm not taking too deep of a look at this, but I bet you I can tell you what to cut.
+
+24:02 - Ryan Vice (Vice Software)
+  And so let's go through the flow chart first because we can include that visually and then maybe we can cross reference it.  And by the way, I really appreciate your time on this. you you build them for your time?
+
+24:14 - Cody Miles (brandcave.co)
+  Well, I mean, I'm billing you. Hopefully, y'all are billing them. But, you know, if you want to build for this meeting, I can't do.
+
+24:24 - Ryan Vice (Vice Software)
+  Well, I'm saying if we haven't built them yet, we could. They were asked about that design card.
+
+24:30 - Cody Miles (brandcave.co)
+  Yeah, we're under budget. So I could be billing for this one too.
+
+24:34 - Ryan Vice (Vice Software)
+  Why don't you send them an invoice and then that'll make it nice and clean and separate.
+
+24:39 - Cody Miles (brandcave.co)
+  Okay, you want to. You might have already built them for some of my stuff because I mean I send it in every 15 days.
+
+24:47 - Ryan Vice (Vice Software)
+  So I'll double check. Let's see. So that would have, we would have to have a client on our side for that, right?  Well, the way that we've been doing it since you've gotten Cartique involved is I just get him a spreadsheet of our hours And I don't I don't know what he does after that Yeah, so if there's a new client then the client would need to be in here So that's definitely worth checking into She has commander five hours No, this is all me, so yeah We definitely need to make sure that an invoice goes out there.  don't think that if you don't mind just If you remembered to ping Cartique and just say I Don't think you've sent an invoice for this If you haven't I'll just send it I think it'd be easier if you just send it because if I send it they're gonna  Hey, this should be in the 75.
+
+26:03 - Cody Miles (brandcave.co)
+  Yeah.
+
+26:04 - Ryan Vice (Vice Software)
+  And the last time I talked to him, I said, no, that's a separate thing.
+
+26:09 - Cody Miles (brandcave.co)
+  OK, I'll have to send in my hours today, anyway, at the end of today. So I'll just being partaking to like, if you have an old station commander, I'll just fill them myself.
+
+26:18 - Ryan Vice (Vice Software)
+  OK, and so then I'm at this point, you would share your screen and then we would go through it.  Yeah, yep. I'm going to be repetitive and annoying and just say, one last time, the heuristic in the app and it was shown to you.
+
+26:35 - Cody Miles (brandcave.co)
+  Yeah. All right, come on. So again, I met somebody at SaaS Academy who texted me. So I'm like, this would be the only lead to come out of SaaS Academy.  we're fine.
+
+26:45 - Ryan Vice (Vice Software)
+  Take your time and help yourself. Let me run to the restroom real quick.
+
+26:51 - Cody Miles (brandcave.co)
+  I'll be right back. Yeah. OK. All right, I think this guy might be trying to look up a phone.  Like, I don't know why you texted me. We didn't talk that much of the conference, but you're asking me how Austin is and tell me what she wants.
+
+29:31 - Ryan Vice (Vice Software)
+  Bonus.
+
+29:35 - Cody Miles (brandcave.co)
+  All right, so yeah, what is operating them here is we're going to cut everything that is not currently part of their application, and that's how I'm going operate going through this.
+
+29:47 - Ryan Vice (Vice Software)
+  You didn't talk about that?
+  SCREEN SHARING: Cody started screen sharing - WATCH: https://fathom.video/share/Vhc9T4Eq7W7ziTNGR9zyJUNfoZ4dE6mY?timestamp=1788.62714
+
+29:49 - Cody Miles (brandcave.co)
+  Yeah.
+
+29:50 - Ryan Vice (Vice Software)
+  But that they did talk about it, and like if you are aware of integrations, you know?
+
+29:58 - Cody Miles (brandcave.co)
+  I'm aware of the integration. is this app you're using as a pigment app Oh, this app? Yeah, they've got a, you know, they have a browser-based thing, but it's better in their desktop app.
+
+30:14 - Ryan Vice (Vice Software)
+  I always prefer the desktop apps, because for one thing, I don't like having a million browsers with them.
+
+30:20 - Cody Miles (brandcave.co)
+  Yeah.
+
+30:21 - Ryan Vice (Vice Software)
+  Okay.
+
+30:22 - Cody Miles (brandcave.co)
+  Yeah, it's one of and also a thing that just came out with like a presentation tool. They called it Slides.  I haven't used it, but they're really doing some big things right now. I really want them to go away now.  There it goes.
+
+30:43 - Ryan Vice (Vice Software)
+  Okay.
+
+30:47 - Cody Miles (brandcave.co)
+  So, load list, search, range picker, filter, that's all stuff that they have. Load list, view, ability to create a load.  These are all the same inputs that current application has, so it's all the same stuff you would need to support.  In the details view, this is where we can cut a lot of stuff because there is no details through in truck stock app.  It's all done in this one modal. So literally everything here.
+
+31:20 - Ryan Vice (Vice Software)
+  The details view, you set it in that modal, so all of this stuff would be in the modal, right?
+
+31:30 - Cody Miles (brandcave.co)
+  Well, the details view has, of course, a read-only version of the things that are in the modal, but there is also an activity log because the original idea that they were working through, what they wanted was the ability to say, we're going to send a text message notification, you know, to the driver, and we're going to receive a response, or they're going to do an e-signature of a document, and he's going to get a text message, or he's going to sign the thing, or whatever.  All right. All of those events kind of programmatically, you know, being added to some details for the load. And, you know, this is the thing that the original software just totally misses out on.  like, what happened on this load and when, right?
+
+32:13 - Ryan Vice (Vice Software)
+  What about the quotes list? mean, they're doing quotes already right or no. No, it's all three phones calls and stuff, right?
+
+32:20 - Cody Miles (brandcave.co)
+  That's right. They're totally doing it manually. There's no place to manage quotes in the current software.
+
+32:25 - Ryan Vice (Vice Software)
+  So what was the box on the left?
+
+32:26 - Cody Miles (brandcave.co)
+  Uh, this is just like the overview, which should be the re-only of all the values. Uh, and then there's also, sorry.
+
+32:36 - Ryan Vice (Vice Software)
+  It did it. Do they have a way of doing this now?
+
+32:39 - Cody Miles (brandcave.co)
+  It's all in the modal. Whenever you click on any load, it just opens a modal.
+
+32:43 - Ryan Vice (Vice Software)
+  And the modal doesn't show these details.
+
+32:46 - Cody Miles (brandcave.co)
+  It shows all of these details.
+
+32:49 - Ryan Vice (Vice Software)
+  Got it.
+
+32:50 - Cody Miles (brandcave.co)
+  I'll let it all in an edit state.
+
+32:52 - Ryan Vice (Vice Software)
+  Okay. Um, so functions like sending emails through the software at all of it.
+
+33:00 - Cody Miles (brandcave.co)
+  Okay, so that cuts your broker list management or your broker when it's that load management. Contact management is kind of the same thing.  You can get rid of all of the details view. So the pattern here is just like overview, activity log, and then like associated entities like loads and invoices.  This would have otherwise created like a really nice details view where I can say I go into a contact or a customer and I can see all their voices and all their loads.  Current software doesn't have it. You can cut it all. What the truck stock path has is a list of contacts and then the ability to create and manage them.
+
+33:41 - Ryan Vice (Vice Software)
+  That's it. Okay. So just credit on contacts.
+
+33:45 - Cody Miles (brandcave.co)
+  Credit on contacts and basically you have three types of contacts. This is where I made it a little bit more simple than what they did.  I just have one contact entity and then you sign it as a customer and sign in your as a broker and it's multi-select because you can be a customer.
+
+34:00 - Ryan Vice (Vice Software)
+  one point in a shipper of another point or whatever. All right, so I'm going to derail you real quick.  As part of the effort, I don't know if I've shown you my new document-driven design development approach. It revolves around, I start features with Markdown files that talk about the entities and the business rules and just describes what the feature does.  You need that as part of this, just add it to your invoice. That is going to make Yeah, I have all the entities and the descriptions of the entities, so I can just take this out of BigJam and just tell you.  put it into a, do you ever work with MD?
+
+34:46 - Cody Miles (brandcave.co)
+  With what?
+
+34:48 - Ryan Vice (Vice Software)
+  Down MD files.
+
+34:49 - Cody Miles (brandcave.co)
+  Oh, well, I mean, I use notions of like, kind of, not really.
+
+34:53 - Ryan Vice (Vice Software)
+  If you don't mind doing it in a markdown format? And like, you can just, you have
+
+35:00 - Cody Miles (brandcave.co)
+  visual studio code. I did.
+
+35:02 - Ryan Vice (Vice Software)
+  Okay, just I would just use visual studio code. Um, and they have a markdown plugin.
+
+35:11 - Cody Miles (brandcave.co)
+  Yeah.
+
+35:12 - Ryan Vice (Vice Software)
+  And then you just open the markdown on the left side and on the right side, it will show what the formatted version looks like.  Yeah, it doesn't need to be fancy. It's just like that space, uh, star that space is bullet points. And that's kind of, you, I don't think you'd need anything beyond that.  And I can, I have to say the example of the one I did already, which, I think what I'll go ahead and send it to me, but what I think I'll just do is I'm going to export this image.
+
+35:46 - Cody Miles (brandcave.co)
+  I'm going to feed it to chat dbt and have it write it up and markdown. And then I'll just kind of edit it for accuracy.
+
+35:53 - Ryan Vice (Vice Software)
+  You think that'll work?
+
+35:55 - Cody Miles (brandcave.co)
+  I mean, I've done stuff like that before, and it's been fine. Like it misses some things, but like,
+
+36:00 - Ryan Vice (Vice Software)
+  So the time it gets like 80% right. That's awesome. Let me know how to do it myself. But like I want to I want to hear how it goes.
+
+36:09 - Cody Miles (brandcave.co)
+  Yeah, He's in the puzzle. Yeah. Honestly, man, like. My my idea for a product hoop just came out with that.  have hoop on this call, but hoops kind of isn't doing what I want to do. What I want is like a product manager, product donor that would like help you to find entities and create information, architecture and basically listen to your calls and your slack and just be the consequence that can create these things.  Totally done. Yeah.
+
+36:39 - Ryan Vice (Vice Software)
+  Oh, it's definitely not like. I had a talk with the PayPal CTO from through. I really don't know. was talking about and you see how like the into it guy, like it was obviously like I was listening.  whole icon, Larry, this guy's got some good . The PayPal thing and he did this matrix, which was. A.I.  and it was like assist versus his own internal versus external and what you're talking about would be assist. No problem.  You could do it. Own is always harder, right? But like to do assist and you can if you can get assist to work, then agent take workflow.  A.I. workflows are basically just agent managing other agents. So then you just throw another one out here. To get to own, right?
+
+37:32 - Cody Miles (brandcave.co)
+  Right.
+
+37:33 - Ryan Vice (Vice Software)
+  Yeah. So you can get assist first and then once you've got assist figured out, then you can go to own, which is what John and I are looking at doing with the SRE stuff.  So the first step would be recommendations and then you can get feedback from the recommendations, how good the how good the recommendations, and someone's going to say, can I just push a button?
+
+37:54 - Cody Miles (brandcave.co)
+  You're like, yeah. So this hoop thing, what it's doing, in. I've only used it today and I'm going take it off because it's terrible, but it listens to the calls and what it does, it creates tickets for like to do items and it kind of writes out that to do item.  But the problem is like I was on a two hour product call earlier today and it was listening to me demo software and it created like 42 tickets of like things I was just demoing.  But I totally misunderstood like the task to be completed.
+
+38:24 - Ryan Vice (Vice Software)
+  Yeah, I almost feel like you could, it would benefit from like a little bit of cheating. So you would say certain phrases that you use.
+
+38:36 - Cody Miles (brandcave.co)
+  Right.
+
+38:37 - Ryan Vice (Vice Software)
+  Right.
+
+38:38 - Cody Miles (brandcave.co)
+  And so like.
+
+38:39 - Ryan Vice (Vice Software)
+  So an action item is and then. That's an action item for that.
+
+38:44 - Cody Miles (brandcave.co)
+  So you're talking to your assistant.
+
+38:47 - Ryan Vice (Vice Software)
+  Right.
+
+38:48 - Cody Miles (brandcave.co)
+  Right.
+
+38:49 - Ryan Vice (Vice Software)
+  I'm doing with my document driven development. It's you're managing the agent.
+
+38:56 - Cody Miles (brandcave.co)
+  Yeah.
+
+38:57 - Ryan Vice (Vice Software)
+  Right. Right. Right now everybody. wants to make it for us just this magical thing that just works, but I don't think they're that smart yet.
+
+39:04 - Cody Miles (brandcave.co)
+  So you got to manage right? Yeah, definitely not that smart. I mean, now I have, if I were to use the software, I have 42 tickets, I'm going to delete and talking along.
+
+39:14 - Ryan Vice (Vice Software)
+  Well, Zoom was doing that for a while. It's creating the, I had to turn that off because it was creating to do items.  It's creating to do items. I think it was adding them to Salesforce too.
+
+39:26 - Cody Miles (brandcave.co)
+  Oh, interesting. Okay. Yeah.
+
+39:29 - Ryan Vice (Vice Software)
+  Cool. But blowing out my test flips.
+
+39:31 - Cody Miles (brandcave.co)
+  Right. Yeah, and probably not super helpful. Okay. now I have loads, you have contacts and that's actually covering three different entities between customers, consign these and shippers, which is an improvement over the current software and more efficient.  So there's at barrier management, same deal, you can draw if you're going to not What was the improvement? The improvement is using one entity.  It basically replays through the entities. When it comes to carrier management, everything related to carrier details can also be dropped.  And the additional scope with carrier management was the ability to, and then to the portal, somewhere around here, and obviously the portal was like the whole other scope, which we can de-scope all of this.  The only thing is that there's a driver's list here, and this is included in the scope. So you'll want to list view and details with your drivers.  But probably just make it a main navigation thing and make an association to the existing carrier.
+
+40:52 - Ryan Vice (Vice Software)
+  I've got, like, carriers just cried, and in that crud thing, I'm pretty sure I'm going to get those just pre-b's after the first one with their approach I'm using.  I can't imagine.
+
+41:06 - Cody Miles (brandcave.co)
+  It's the same grid. Same modal every time.
+
+41:08 - Ryan Vice (Vice Software)
+  Yeah. Yeah. So like the n plus one is like very affordable. It is what I'm counting on.
+
+41:15 - Cody Miles (brandcave.co)
+  Well, that's mostly what the software is doing, right? So same thing with factory companies, we've totally dropped the details view and that's getting rid of, you know, the overviews, the ability to send emails to factory companies, the activity log, object associations, and it's just coming down to creating the objects and managing the inputs for the records.
+
+41:40 - Ryan Vice (Vice Software)
+  This is great.
+
+41:42 - Cody Miles (brandcave.co)
+  Yeah. So invoices, this is just called something else in the existing software, it's called like out manager or something like that, but it's basically like what are the incoming invoices and those are automatically created when a load is completed.  And you have the ability of what are they PDF. Yeah, let me show you how they currently works.
+
+42:12 - Ryan Vice (Vice Software)
+  It might be, it might be able to make some money off this.
+
+42:19 - Cody Miles (brandcave.co)
+  Good.
+
+42:20 - Ryan Vice (Vice Software)
+  That would be great. Trying to build back up. That's a great project to prove it out. Yeah, I've got like probably, if everything is completely stopped, I've probably got five months for chess.  And I would like to have, I'd like to have a year minimum. Yeah, like if everything doesn't completely stop.  Then your war chest, you know, becomes say you're 50%.
+
+42:58 - Cody Miles (brandcave.co)
+  Now I've got. You know, yeah, I think I have a lot less like because of my run rate because I you know I have to choose I'm around like 40k a month and in expenses and I have to get under it in something and and the more chest so I would only have like two months or runway That's so stressful So stressful I have lower margins and I have lower average order values So it's just it's just um is your  is way easier to sell It is yourself.  Yeah, but like I was telling you when we were in like dude If if I were a software that I'm going to be but if I were software about me just get I already have like 8x of clients that you do You know cuz you don't have to have as many so All right, so county I mean living like an  for a while there You deserved it.  All right, so county manager. So basically you have these you have low codes that get delivered. so now you have the option of what am I doing here?  That's editing the load. You want to get completed, then you can generate the invoice.
+
+44:10 - Ryan Vice (Vice Software)
+  And it's I need export to itself. I was like, oh, okay.
+
+44:44 - Cody Miles (brandcave.co)
+  Amazing. Well, so this invoice, it's like a little customized in the sense that the customer's logo, the thing that's logo is at the top.  otherwise, like literally do the software is here's an invoice. And when it whenever you send it, you Market is paid like manually come in and market is paid and you do have the ability of emailing it through here And then you can write an email and say you here's your job done What was the other thing that is it un-send email invoice?  It's on invoice. So basically you take it from this invoice category and you send it back to completed It's like an undo button But it's I mean, that's like it's just even a stupid way to handle that Yeah, it's just Yeah So then you mark it as paid and then it goes to a paid category Right, so then you can mark it as unpaid and then it goes back to the end.  It's just  stupid So I have a list view of invoices If the invoicing so it exists then you mark it as paid or download the invoice.  It's literally doing change  And then there's the ability to send the invoice.
+
+45:58 - Ryan Vice (Vice Software)
+  So all of that is in scope
+
+46:00 - Cody Miles (brandcave.co)
+  And maybe even that's the most complex part, if you cut everything else, right? You also have the accounts payable side of things.  So whenever a job is completed or a load is completed, you had an agreement of costs on the load.  That's the input you create whenever you create the load, you say it's going to cost me this amount of money from the carrier.  So whenever the job enters into that complete state, now you just have to know that that's going to happen to you.  So in here, you go to, I think it's carrier pay manager, just a weird way to say that. And it just creates all the people that you have to pay.  The only thing here is you just say, I received the bill or I didn't. And now, and this is the important thing that Michael wants to try because like, what's the aging?
+
+46:52 - Ryan Vice (Vice Software)
+  Yeah. And then the features that I agreed to as an additional feature is on the other side with people they need to pay.  which I'm assuming you're going to get to that in a minute here.
+
+47:02 - Cody Miles (brandcave.co)
+  Well, that's what this is. This is the carriers that have to pay for the vectoring company.
+
+47:08 - Ryan Vice (Vice Software)
+  The people that have to pay them then. So the accounts.
+
+47:11 - Cody Miles (brandcave.co)
+  That was what I just showed you.
+
+47:13 - Ryan Vice (Vice Software)
+  that's.
+
+47:16 - Cody Miles (brandcave.co)
+  Yeah. That's what this is. So it's, these are the people that need to pay me. So I'm generating the invoice and I'm sending it.
+
+47:23 - Ryan Vice (Vice Software)
+  So then what they want here. Is open can click the edit on one of them.
+
+47:31 - Cody Miles (brandcave.co)
+  This is actually not even the edit for the invoices to edit for the load.
+
+47:37 - Ryan Vice (Vice Software)
+  Okay. So what I had told them I could do they want to be able to see here. How much they owe.  And like the aging. Yeah. So I told them what I could do is make it so that. On this page here, which is, um, this is.  Carriers that owe them money. It is carriers that are not carriers of the money but customers that owe them money customers that owe them money so when the customers that owe them money I told them that when you click the edit button all the fields that were there I would make it to where you could add those as columns on this yeah You just need to add an agent as a column and you got it Right and is that on one the is that on the edit somewhere?
+
+48:27 - Cody Miles (brandcave.co)
+  It probably isn't Not here. No, there's no concept here of like seeing how If something is overdue or not like they're not man This half course not managing due to its own voices at all How do you see how much like for the first one eight five six seven?  How do you see how much money it is?
+
+48:46 - Ryan Vice (Vice Software)
+  You have to edit the load But it's just going back to that same load management Local So you come here and what I was told them I would do is I would make it to where all of the properties that you can see here There would be a  column editor on the grid and you could add any of those there that you want.
+
+49:05 - Cody Miles (brandcave.co)
+  Sure.
+
+49:06 - Ryan Vice (Vice Software)
+  And I'll give them aging as one that I don't know if aging is on here or not.
+
+49:11 - Cody Miles (brandcave.co)
+  It's not.
+
+49:12 - Ryan Vice (Vice Software)
+  And then have an export to itself.
+
+49:15 - Cody Miles (brandcave.co)
+  Right.
+
+49:16 - Ryan Vice (Vice Software)
+  Okay.
+
+49:17 - Cody Miles (brandcave.co)
+  Yeah. I don't have that on the flowchart, but like if you use AG grid, you've done it.
+
+49:22 - Ryan Vice (Vice Software)
+  Right. Well, it's also making surfacing those properties and all that kind of stuff.
+
+49:28 - Cody Miles (brandcave.co)
+  But help me think through if that's going to satisfy their use case, their use cases.
+
+49:32 - Ryan Vice (Vice Software)
+  Alan wants to get to, they both want Alan wants to get all that data into an Excel that he can manipulate.  And then Michael wants to be able to do by carrier or driver and see what the totals are and what the aging is and all of that.  To me, I feel like if I implemented the feature in the way I'm talking about, it would give them that plus some.
+
+50:00 - Cody Miles (brandcave.co)
+  Absolutely.
+
+50:01 - Ryan Vice (Vice Software)
+  You think that's the simplest way to do it?
+
+50:04 - Cody Miles (brandcave.co)
+  The grouping thing is the thing that secures me because that's an option to say like, you know how in harvest I can I can group time entries by you know time or by person or by client.  That kind of thing is what I'm hearing when you say that.
+
+50:22 - Ryan Vice (Vice Software)
+  No, I'm just saying that the grid you can sort.
+
+50:26 - Cody Miles (brandcave.co)
+  Yeah, that's that's totally yeah, that's easy.
+
+50:30 - Ryan Vice (Vice Software)
+  Yeah, and in the concept is you can you can set it up however you want in the grid and then export all that data to excel.  put whatever columns you want like the edit columns will all just be available there and then we'll make it search that list and pick this one and pick that one and pick and you know and then yeah order to excel and I think that would satisfy their requirement and I don't think that would take a lot of work.
+
+50:56 - Cody Miles (brandcave.co)
+  Yeah. Yeah, that seems right. Yeah, I think really the bulk of your work is actually going to be on, you know, accounts receivable and accounts payable.  I'm kind of make that more clear.
+
+51:08 - Ryan Vice (Vice Software)
+  I was just going to ask you to do that.
+
+51:10 - Cody Miles (brandcave.co)
+  Thank you.
+
+51:15 - Ryan Vice (Vice Software)
+  So I had two, uh, two good ones. Uh, I'm going to go meet one of the guys at a Hampton's happy hour in just a minute here.
+
+51:24 - Cody Miles (brandcave.co)
+  Um, okay. And, um, drop off.
+
+51:28 - Ryan Vice (Vice Software)
+  Well, I'm telling you, You know, my leads are usually your leads. Just give you a sales update.
+
+51:35 - Cody Miles (brandcave.co)
+  Hell, yeah. Hell, yeah.
+
+51:37 - Ryan Vice (Vice Software)
+  Let's go to the, um, okay, check it out.
+
+51:40 - Cody Miles (brandcave.co)
+  Uh, this is all, this is all trashed, all the carrier quotes. So that's not part of it unless you're agreeing to it.
+
+51:48 - Ryan Vice (Vice Software)
+  No, if it's not in there and if it's not that one feature I just described to you, then no.
+
+51:53 - Cody Miles (brandcave.co)
+  No, all right. Um, this is billing management here. So this is like the user being able to manage their subscription and like a pure saffler.  You might cut that, or you might cut at least some of it, like maybe you give the user the tenant the ability to see their billing history, but you know, if you're not doing a premium subscription and you can cut that, I don't know, maybe you give them credit card management, but you could cut that.
+
+52:21 - Ryan Vice (Vice Software)
+  So in the current app, so billing.
+
+52:25 - Cody Miles (brandcave.co)
+  I got from a subscription for like perspective, I don't see that here. I don't know where I would go count, maybe.
+
+52:37 - Ryan Vice (Vice Software)
+  I don't think they actually even manage the subscription billing in here. No billing management here.
+
+52:43 - Cody Miles (brandcave.co)
+  It's trash, dude. I can stop for a trash.
+
+52:50 - Ryan Vice (Vice Software)
+  Yeah, I don't think I don't think that's part of it, right?
+
+52:55 - Cody Miles (brandcave.co)
+  yeah, but I would I could see how I would need to get it. in the ability. Yeah, send an invite.  Yeah. Well, you know, otherwise, what you're doing, right, is you have a new tenant requested demo, you leave them for sales, you get them signed up, and you essentially create an account for them in Stripe and get their credit card and build in manually for a subscription.
+
+53:17 - Ryan Vice (Vice Software)
+  then we just give them access to the software.
+
+53:19 - Cody Miles (brandcave.co)
+  Yeah. Like maybe that's in BP. could.
+
+53:23 - Ryan Vice (Vice Software)
+  Yeah. And then you're not even playing with charging people, you know, they're, you know, use it for free and all this kind of .  So then they. But we would need to have subscription management, right? Well, then that would actually just be checking with Stripe to see if if they have a valid subscription.
+
+53:43 - Cody Miles (brandcave.co)
+  So there would be a Stripe integration there.
+
+53:45 - Ryan Vice (Vice Software)
+  Right.
+
+53:47 - Cody Miles (brandcave.co)
+  But it could be super light. It could just be like that account active.
+
+53:52 - Ryan Vice (Vice Software)
+  Yeah. And so we'll have a Stripe integration and then what about user management management?
+
+53:58 - Cody Miles (brandcave.co)
+  I have user management. So going past some of this back up here, I have user management, let me double check that they have user management because I don't think they do.  No, they do. course they do. But where do you do it? I do.
+
+54:14 - Ryan Vice (Vice Software)
+  Probably don't have a high enough status.
+
+54:17 - Cody Miles (brandcave.co)
+  That might be it. And that might be the reason I don't see billing either. Yeah, users. Here it is.  They do have user management. Apparently I'm an administrator.
+
+54:35 - Ryan Vice (Vice Software)
+  Try add.
+
+54:37 - Cody Miles (brandcave.co)
+  What?
+
+54:38 - Ryan Vice (Vice Software)
+  Try the add button. What's the roles? Maybe advanced.
+
+54:48 - Cody Miles (brandcave.co)
+  That's interesting.
+
+54:50 - Ryan Vice (Vice Software)
+  How do you specify that?
+
+54:52 - Cody Miles (brandcave.co)
+  How do you set the role? You have accounting concept.
+
+54:59 - Ryan Vice (Vice Software)
+  That might be the roles.
+
+55:00 - Cody Miles (brandcave.co)
+  No, what does it mean? That might be it.
+
+55:01 - Ryan Vice (Vice Software)
+  Yeah. Well, how do you make someone administrative?
+
+55:04 - Cody Miles (brandcave.co)
+  Because I see administrator over there. Ha, ha. Whatever. It's maybe OK. We have permissions. Excellent permissions for myself. Like, aha.
+
+55:14 - Ryan Vice (Vice Software)
+  I mean, just so you create the user and then you set the permission. What is the arrow to the exclamation points?
+
+55:24 - Cody Miles (brandcave.co)
+  Emulation. I can log in to the user.
+
+55:28 - Ryan Vice (Vice Software)
+  This thing's down below.
+
+55:29 - Cody Miles (brandcave.co)
+  Like, what's the exclamation point? that? No commission schedules. the fall commission. So there's some commission management here that I don't know anything about.
+
+55:41 - Ryan Vice (Vice Software)
+  Yeah. So then that was something that wasn't shown.
+
+55:44 - Cody Miles (brandcave.co)
+  And we need to probably specifically call out that that's not in this. Yeah. Yeah, that's right. Yeah, I don't even know where you would go to manage commissions in here.  happens when I press this. So there's, when you edit the user, you can create a pay schedule. That's literally all it is.  I can add a new pay schedule, and I either say it's a percent of gross. It's a percent of margin.  It's a base rate margin or some sort of advanced based on a percentage of percentages of different things. But that doesn't seem that complex.  But if you look, I don't think, I don't know if they're using that because when you go to accounting, there is a sales rep commission report.  And if you run it, there's nothing happening. But I guess that's, that's really all it is.
+
+56:48 - Ryan Vice (Vice Software)
+  It's from user management, you set the commission profile, and then from here, you run it to see how much you're supposed to pay So then do you mind if I share real quick and we get  Um, oh wait, did you finish?
+
+57:03 - Cody Miles (brandcave.co)
+  Um, profile, account settings, reviews, uh, messages, that's descoped, um, is not descoped. And then, um, I was, I was going to call out that the last two things here is you're doing a little, what's that?
+
+57:21 - Ryan Vice (Vice Software)
+  is going to be like, uh, off your lock and then just like, okay, I'll do, uh, create an account, which would be back office piece to it, I guess.  Right. It might, it might be better. Now, guess the email is the best flow. So I just set up all zero, which invite only.
+
+57:44 - Cody Miles (brandcave.co)
+  Yeah. Yeah, exactly.
+
+57:47 - Ryan Vice (Vice Software)
+  I'll see. accounts in all zero and then that sends an email to someone and then they come and they log in on the all zero lock and I can make it match the rest of the stuff and then you're in.  Um, honestly, like. Screw a username and password. Would you say passwordless?
+
+58:06 - Cody Miles (brandcave.co)
+  Yeah, I mean, why not?
+
+58:08 - Ryan Vice (Vice Software)
+  know, you don't do anything, right? just the locks there. You say you want to log in, you get an email, you click the link and you're in.
+
+58:18 - Cody Miles (brandcave.co)
+  Yeah.
+
+58:19 - Ryan Vice (Vice Software)
+  But that's the locks. Anyway, whatever, who gives a ?
+
+58:21 - Cody Miles (brandcave.co)
+  Like, but I'll see you where I would own it. Overly. Here's the last thing though. There's two different reports here.  One for cash flow analysis. One for executive summary. These are the things that Allen had passed over. Like, this is all the reports I want.  And literally, he's sent maybe two seconds to be between different reports you can have and sent me a list.  And it was like a bunch of like, oh, this is the same as this one. And this is the same as this one.  And I just kind of try to organize it. Like, literally, all of this is almost non-existent in the current software.
+
+58:50 - Ryan Vice (Vice Software)
+  Color that.
+
+58:51 - Cody Miles (brandcave.co)
+  I mean, you might give some maybe the executive summary only in this because There's this dashboard here and there's like some data.  So, open loads, net margin, revenue, truck miles, low volume, that's all here.
+
+59:18 - Ryan Vice (Vice Software)
+  So then maybe figure out a way to make just that part included.
+
+59:23 - Cody Miles (brandcave.co)
+  Yeah. That's what I have here. But mean, the right though, tables for sales rep leaderboard, revenue over time, load over time, model spike carrier, I think that's some of this stuff.  You have like a sales leaderboard right here.
+
+59:50 - Ryan Vice (Vice Software)
+  All right. All right.
+
+59:51 - Cody Miles (brandcave.co)
+  So that's the reporting pieces. Okay.
+
+59:53 - Ryan Vice (Vice Software)
+  Yeah. Yeah.
+
+59:56 - Cody Miles (brandcave.co)
+  Yeah. But man, I don't know. Yeah.
+
+1:00:00 - Ryan Vice (Vice Software)
+  If you're going to agree to milestone based on my class to pay attention to this and like yes And now that these are the girls are what we're building for you being Yeah, how do we make it in the most efficient way I Mean we can say the things that were covered in these videos We could also say this is our understanding of those things you think you could do well, I I wouldn't say things covered in the videos because I think the things covered in the videos extend way past what you're agreeing to now Because there was a soul talk about Kerry portals and like we talked about that in the video for a long time saying the video calls that We discussed which are linked here the items that exist in the app and we're demoed to us With the exception of this one feature Which which is the one I just you and then maybe  We could if you could do like a five minute video, we just walk through and these are the features And then we can include and say that this is our understanding of that boom put that in there too.  Yeah Well, maybe Maybe I just do a long video going over all of these flow charts and explaining everything and also explaining that what's in red is It also won't be given enough funding or whatever Yeah, those are things that are out of scope and if you could just talk through it and like a shorter video We'll put that link in there.  We'll put the link to the originals. We'll say this and that um, yeah And then I feel like at that point we would have a paper trail that's good enough um Where That they would understand it and then there's the short video you have which I could say Let's watch this together.  You know, this is five minutes long, whatever um, and you're so good at explaining that kind of stuff and um And then I we feel like pretty comfortable that the scope  It has been defined well enough.
+
+1:02:05 - Cody Miles (brandcave.co)
+  Okay. Well, let me try to get that to you on Monday.
+
+1:02:11 - Ryan Vice (Vice Software)
+  Sure. Do you mind if this, uh, this excel sheet real quick?
+
+1:02:15 - Cody Miles (brandcave.co)
+  Yeah, go for it.
+  SCREEN SHARING: Ryan started screen sharing - WATCH: https://fathom.video/share/Vhc9T4Eq7W7ziTNGR9zyJUNfoZ4dE6mY?timestamp=3736.124946
+
+1:02:17 - Ryan Vice (Vice Software)
+  Okay. Cause with you here, it'll be super quick to trim this down. Let me do this.
+
+1:02:29 - Cody Miles (brandcave.co)
+  Make a copy this create a copy of this one. Yeah.
+
+1:02:37 - Ryan Vice (Vice Software)
+  Why am I feeling stupid right now? Where is it? Um, You see it? There we go. Copy of C H commander estimation.  Uh, C H You're. Estimation. Turn. Okay, so then, so the ones that I have that I don't have over here I'm saying are out of So messages, everything related to road 22, that's all out of scope.  Yes, and then authentication. I was just going to do authorization with the lock and I gave myself three days.
+
+1:03:42 - Cody Miles (brandcave.co)
+  should be plenty.
+
+1:03:44 - Ryan Vice (Vice Software)
+  infrastructure. Is anything getting sent by That's not here.
+
+1:03:58 - Cody Miles (brandcave.co)
+  Users. There's some weird stuff in here like carrier filter like why would that be under user management?
+
+1:04:10 - Ryan Vice (Vice Software)
+  Where do you see that?
+
+1:04:12 - Cody Miles (brandcave.co)
+  Row for you. It says advanced filters. Other than that, any sense to be there to use or move out?  That seems out of scope. Or at least in the wrong place. But you certainly have profile, user management, ability to invite a user.
+
+1:04:38 - Ryan Vice (Vice Software)
+  So this should be over here?
+
+1:04:41 - Cody Miles (brandcave.co)
+  Well, that carrier filter I don't understand why it's under anything related to users.
+
+1:04:45 - Ryan Vice (Vice Software)
+  Right, but when it comes to invite a user. Okay. Okay, that looks right. Page profile for user.
+
+1:05:38 - Cody Miles (brandcave.co)
+  Everything under profile, account settings, that's all in scope. In scope right here? Yeah, yeah. All of It's all right.
+
+1:05:58 - Ryan Vice (Vice Software)
+  What is it I'm doing, right?
+
+1:06:00 - Cody Miles (brandcave.co)
+  I got a jump in like five minutes.
+
+1:06:09 - Ryan Vice (Vice Software)
+  Okay, load this screen.
+
+1:06:12 - Cody Miles (brandcave.co)
+  I got all Load this. Drop everything under load details.
+
+1:06:16 - Ryan Vice (Vice Software)
+  Yes, here.
+
+1:06:18 - Cody Miles (brandcave.co)
+  Yeah.
+
+1:06:19 - Ryan Vice (Vice Software)
+  All the way down to here.
+
+1:06:24 - Cody Miles (brandcave.co)
+  Don't remove delete confirmation.
+
+1:06:28 - Ryan Vice (Vice Software)
+  What line you looking at?
+
+1:06:29 - Cody Miles (brandcave.co)
+  Okay, right here. That's 78. Yeah. Everything up until delete confirmation, but then beginning again on the road 81 delete all of that other .
+
+1:06:45 - Ryan Vice (Vice Software)
+  Contact management. All right.
+
+1:07:13 - Cody Miles (brandcave.co)
+  Yeah, like, contact lists, that's all good, but obviously nothing under contact detail, sending an email, manage notifications, but you are going to keep deleting the contact.
+
+1:07:23 - Ryan Vice (Vice Software)
+  So which, which rows?
+
+1:07:26 - Cody Miles (brandcave.co)
+  Can you give me access to this stock? I can kind of do it for you. Try that.
+
+1:07:38 - Ryan Vice (Vice Software)
+  You to share?
+
+1:07:41 - Cody Miles (brandcave.co)
+  Yeah, and do it.
+
+1:07:43 - Ryan Vice (Vice Software)
+  Yeah, this will help with my stress levels as we can.
+  SCREEN SHARING: Cody started screen sharing - WATCH: https://fathom.video/share/Vhc9T4Eq7W7ziTNGR9zyJUNfoZ4dE6mY?timestamp=4065.847893
+
+1:07:49 - Cody Miles (brandcave.co)
+  Okay. Okay. Cool. Okay. So all of that, none of this, what you doing, are you putting in hours in MVP first left that is in scope?
+
+1:08:14 - Ryan Vice (Vice Software)
+  Yeah. So MVP is in scope. So then you would copy one of the other files, MVP columns, and just paste it to when you sum up that part back in.
+
+1:08:25 - Cody Miles (brandcave.co)
+  Can you give me edit access here?
+
+1:08:27 - Ryan Vice (Vice Software)
+  What do I have to do?
+
+1:08:31 - Cody Miles (brandcave.co)
+  I'm not sure.
+
+1:08:34 - Ryan Vice (Vice Software)
+  Anyone's group can open the link, how do I make it to where I share in a non-annoying way? Hold on.
+
+1:08:42 - Cody Miles (brandcave.co)
+  I think you can just go to file and share and then change access.
+
+1:08:46 - Ryan Vice (Vice Software)
+  But not just basic software. Anyone.
+
+1:08:49 - Cody Miles (brandcave.co)
+  I software anyone.
+
+1:08:51 - Ryan Vice (Vice Software)
+  I'm literally in my first software. Okay. Okay.
+
+1:08:55 - Cody Miles (brandcave.co)
+  Let me go ahead and share it. Okay. Hold on. I refresh my screen. I'm good. Okay, so if you're basically putting hours in the MVP stuff, or you're not putting any MVP hours for authentication because you're going to do that all through op0.  Do you think op0 is not cool? Yeah, cool. Then all of this is MVP, except for whatever the hell that is right there, doesn't belong.  Invite user, yes, profile, yes, account settings, broker features, all of this, yes. You would have editing a load, I don't know why that's a separate model, it's like the same thing as creating a load, but sure.  Complete, yes, no for all of this, no for all of this, yes, for all of this, no for all of this.  leading. And then nothing for that. Nothing for that. They have loads list right here, but that was already up here, so they duplicated this.  Oh, no, I understand. I think that's all in the context of the user, guess. Nothing under, well, you do have a carrier list, and you do have the ability to make those in the carrier, but you don't have anything here.  But you do have driver management, and you do have factory company management, but you don't have the details here.  We have. invoice list, carrier invoices, so that's your accounts payable and accounts receivable. Channel pay, advance brokers. They're estimating a lot here.  think they're, well, it makes sense. But there's not a lot of functionality happening. You see people wanted to do billing, right?
+
+1:11:27 - Ryan Vice (Vice Software)
+  Did I?
+
+1:11:29 - Cody Miles (brandcave.co)
+  You don't want the ability to do subscription, upgrade and downgrade, but you do want them to be able to see.  No, were. that, it was, they were going to do manually on their side, Yeah, okay. So then you don't have to do any of that.  You are going to do executive summary, but you're not going to do cash flow.
+
+1:11:54 - Ryan Vice (Vice Software)
+  Okay. And so I set those to 50% the ones that I left in.
+
+1:12:02 - Cody Miles (brandcave.co)
+  Well, sorry, you're not doing cash flow. are doing executive summary. So you only need the hours.
+
+1:12:07 - Ryan Vice (Vice Software)
+  Yeah, but that's 50%. Like just paste on those what you have because the formula is doing 50%.
+
+1:12:13 - Cody Miles (brandcave.co)
+  See, it's four hours. Okay. Well, it's already doing that. It's already doing 50%. Oh, you want to do the full amount.
+
+1:12:22 - Ryan Vice (Vice Software)
+  Yeah, because you had said like it's about 50% of the reporting stuff.
+
+1:12:24 - Cody Miles (brandcave.co)
+  So I just made them all 50%. I understand.
+
+1:12:27 - Ryan Vice (Vice Software)
+  Okay. Supposedly deleted it.
+
+1:12:29 - Cody Miles (brandcave.co)
+  So we don't need that. Yeah, we got that now. Okay. And then load manager. This is carrier portal. So this is all out of scope.  So, yeah, that's it. What is that total? So now you're down to 63. You're in budget.
+
+1:12:47 - Ryan Vice (Vice Software)
+  And that's me paying someone else to do it. Nice. Right. So if I can get it done myself, then I can just pop that in my word chest.
+
+1:12:58 - Cody Miles (brandcave.co)
+  Oh, yeah.
+
+1:12:59 - Ryan Vice (Vice Software)
+  All right. Michael's not full of it, then maybe they'll be more business on the other end of it. I don't know.
+
+1:13:06 - Cody Miles (brandcave.co)
+  Yeah, sounds a little weird to raise millions for both people. If you can do it, yeah, go for it.
+
+1:13:12 - Ryan Vice (Vice Software)
+  He's got some some swagger on that stuff on the business side. And I mean, how often have we seen people who have no idea what they're doing with a bunch of money?
+
+1:13:20 - Cody Miles (brandcave.co)
+  mean, absolutely, absolutely energy higher, maybe. I mean, I got to go, man.
+
+1:13:29 - Ryan Vice (Vice Software)
+  Life is like, get the hell on. Yeah, I apologize to her for my sake.
+
+1:13:33 - Cody Miles (brandcave.co)
+  thank you so much. All right, you See,

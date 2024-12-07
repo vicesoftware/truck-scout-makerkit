@@ -1,0 +1,765 @@
+#Summary
+
+CH Commander - October 21
+VIEW RECORDING: https://fathom.video/share/T9pX-XzQtTgRVTN_T_aRoY2nxe2CjuSs
+Meeting Purpose
+
+Discuss and refine requirements for a new brokerage and factoring software platform, focusing on accounting and factoring functionality.
+
+Key Takeaways
+
+  - The new platform will incorporate key accounting features from the existing ITS system, with improvements and additional functionality
+  - Factoring support will be included, allowing for multiple factoring companies and integration with invoicing processes
+  - User roles and permissions will be crucial for controlling access to sensitive financial data and operations
+  - Next steps involve creating a detailed flow chart and estimating development costs
+
+Topics
+
+Accounting Features
+
+  - Aging reports, daily cash flow, and collections functionality to be included
+  - Carrier pay manager and accounting manager screens to be replicated with improvements
+  - Invoice generation tied to load numbers, with support for factoring company information when applicable
+  - QuickBooks Online (QBO) integration for syncing financial data
+
+Factoring Functionality
+
+  - Support for multiple factoring companies, with ability to assign factors to carriers
+  - Automated invoice generation with factoring company information when applicable
+  - Global list of factoring companies provided by the system, with admin ability to add new factors
+  - Potential for future ACH direct bill functionality, requiring secure storage of routing and account information
+
+User Roles and Permissions
+
+  - Different levels of access for various roles (e.g., admin, accounting, sales)
+  - Company-specific admin roles for managing sensitive financial operations
+  - Granular control over who can add/edit factoring company information
+
+Data Security
+
+  - Need for secure storage of sensitive financial information, especially for potential future ACH functionality
+  - Discussion on how to handle global vs. company-specific data for factoring companies
+
+User Experience Considerations
+
+  - Desire for intuitive interface that allows for easy navigation and data entry
+  - Importance of visual representation for complex financial data and processes
+
+Next Steps
+
+  - Cody to create a detailed flow chart of the entire system based on discussed requirements
+  - Development team to begin initial cost estimation based on current understanding
+  - Schedule follow-up meeting to review refined flow chart and discuss more detailed estimate
+  - Potentially combine flow chart review and estimate presentation in a single meeting, depending on timing
+
+# Transcript
+
+CH Commander - October 21
+VIEW RECORDING - 54 mins (No highlights): https://fathom.video/share/T9pX-XzQtTgRVTN_T_aRoY2nxe2CjuSs
+
+---
+
+0:01 - Cody Miles
+  I don't think you can attach anything in the chat. Okay.
+
+0:09 - Alan K
+  Here's what I'm going to do.
+
+0:12 - Louis Watts (Wix)
+  I think I can email all of you, everyone, right?
+
+0:15 - Alan K
+  Yeah, you can do it right all on the end, if you want.
+
+0:18 - Ryan Vice (Vice Software)
+  All right, I'm going to do that.
+
+0:20 - Cody Miles
+  Great. Let me, once I have it, let me open it up and we'll just paste everything in here and start organizing it.
+
+0:26 - Alan K
+  It's. Yeah.
+
+0:28 - Cody Miles
+  Yeah. So I'm going to dump this here.
+
+0:38 - Alan K
+  So I like some of your stuff by miles, but just take a look at mine. think this is, and keep in mind I'm approaching it from an accounting metric.
+
+0:50 - Ryan Vice (Vice Software)
+  Yeah.
+
+0:50 - Alan K
+  So I'm sure there's other things that maybe Lewis or Michael want to see. So anyway, I just send it out.  It's like I don't know, 13 or 17 or something like that.
+
+1:10 - Louis Watts (Wix)
+  I just waiting for it to come in.
+
+1:16 - Alan K
+  It's pretty robust from a financial point of view.
+
+1:31 - Ryan Vice (Vice Software)
+  Oh, these are the reports. Yeah, this is great.
+
+1:35 - Cody Miles
+  I haven't got me yet. Here it is.
+
+1:38 - Ryan Vice (Vice Software)
+  Well, it tells you the purpose and then some of the key metrics.
+
+1:41 - Alan K
+  One of things that Cody just pointed out that I don't have in here is maybe by mile. So we might want to integrate that into some of the key metrics within the report.
+
+1:52 - Ryan Vice (Vice Software)
+  This is great. It gives you a punch list to work off and make sure we have, you know, we can start developing out their ideas.  reports and then confirming with you and If we're missing Yeah, fair Yeah, there's 21 Okay.
+
+2:10 - Cody Miles
+  Yeah, so are each one of these in your mind a different view with different charts and tables on them?  Um I think you should be able to run the report.
+
+2:23 - Alan K
+  I think a lot of the information is either I wouldn't say it's redundant, but but it's definitely very repetitive in terms of some of the information so But lot of it was coming out of all that Okay So an aging report displays the aging of factored invoices to monitor how long each invoice has been outstanding so that could just be a table Yeah Okay, and then the key metric days would be 30 60 90 invoice amounts.
+
+2:56 - Ryan Vice (Vice Software)
+  Who's the client?
+
+2:57 - Alan K
+  When do we expect to get paid? Yeah Okay.
+
+3:01 - Cody Miles
+  Another one would be the daily cash. So this is daily cash flow, including funds, advanced to clients and payments received from debtors.  So is this more than one table in your mind?
+
+3:17 - Alan K
+  No, it's just one table. Okay.
+
+3:22 - Cody Miles
+  Cool. Do you imagine that's things like aging table and the daily cash table exist on one screen or do you see these in your head as like being on a cash flow analysis tab?
+
+3:33 - Alan K
+  think the list of reports should all be there and then you can either like visually display them or you could click it and then it prints to a PDF and you can, you know, hold a report that way.
+
+3:49 - Ryan Vice (Vice Software)
+  And those are just my thoughts. you have better ways, I'm open.
+
+4:00 - Cody Miles
+  The only thing that I want to do at this juncture is just organize these different tables into like logical groups so that we can kind of create a better user experience around like when I go to the cash flow analysis tab, what are the different tables like probably very likely some of the tables that you've given me here.  What tables exist on that tab and what other tabs might exist like I had planned for does that continue to exist and what does that look like?  Yeah, I think what you have there is good on a summary basis.
+
+4:39 - Alan K
+  Okay.
+
+4:40 - Ryan Vice (Vice Software)
+  And that should be maybe the summary, the summary pages, but then you should be able to get in and pull these reports.
+
+4:49 - Alan K
+  mean, I think most of these are pretty critical to the financial health of the company. Yeah. Yeah.
+
+4:58 - Ryan Vice (Vice Software)
+  when we drill down into it, ultimately.
+
+5:00 - Cody Miles
+  the, you know, an aging table is just, it's just a table, right? Is there anything you're drilling down after that?  No, okay, no, I don't think so.
+
+5:10 - Alan K
+  think if you just show it, I mean, you're going to have a tech, you need to have a tab somewhere, right?  That shows all your own influences. So it's just pulling that data and putting it right there.
+
+5:20 - Cody Miles
+  Yeah. And you can go look at those, right?
+
+5:23 - Alan K
+  I think you should be able to go look at those. Yep.
+
+5:27 - Cody Miles
+  Okay. So currently imagining a cashflow analysis tab that has aging, daily cash, maybe collections.
+
+5:35 - Ryan Vice (Vice Software)
+  Yeah.
+
+5:36 - Cody Miles
+  here a client performance report. It's a great idea. Maybe we had a different tab for that one and we called it, you know, customers.  Yeah.
+
+5:48 - Alan K
+  And keep in mind, the guys that are just using this for their brokerage or their trucking company, they don't really even need the customers to have, right?  Okay, yeah Just I mean, I mean, I guess they would use it When you're factoring a lot of other invoices, that becomes more critical.  That's all I'm Okay, okay So when we're saying client we do mean customer do we mean factory and company wait wait wait wait let's back up a second Hi guys The customer tab what did you say Alan Well, I said that they should be able to look at you know who their customers are Right.  Oh, I thought you said it wasn't important.
+
+6:39 - Michael Zschoche
+  I think it's very important. It depends on if they were Right, they a trucking company or are they a factory company if they're trucking company It's extremely important as a factor.  doesn't really mean that much and the brokerage, right? That'd be another one User well, it depends. I mean some brokerages are billing  directly to the customer, right? And some other ones are dealing to a factor. So I think the customer see, as a brokerage, I'm not a billion customer, which is already built in there.  That's on the receivable end on the payable ends. The customer is linking to the carrier's important, but the reality is that the ITS doesn't make easy for me when I go to pay, is I have to look up every load to see who I'm paying.  Am I set up, which they are. I should be able to search what factors do I need to pay in a group.  Oops, all the carriers that the factory's build me, and then it creates one batch of invoices where I can do one remit at once, because right now I have to do it one by one, and if I have 20 that I do a day, five of them might be by one factor, but it's five different carriers, and it's a pain in the .  So if I sped the criticism, if I could search and saying, what's due today by factor in groups, all the carriers that that factor has invoiced me, that are on the payable dates, that would be really helpful.  Okay. Does that make sense?
+
+8:45 - Alan K
+  That's to me, but.
+
+8:51 - Cody Miles
+  In other words, I should be able to, sorry, Michael, I'm a little bit of this. I think the best way to understand.
+
+9:00 - Michael Zschoche
+  and it is to see it with the sample. So you have access to ITS. If you if you were to go in there and there's a tab that's called accounting and then it says carrier pay manager and then you click on run report okay so on the all the way to the right it says aging and if you click on aging you can do it in from you know from nothing to you know at this particular case we're paying out at 42 days so it'll group them in 42 days.  Now the issue is if I want to pay everybody that I owe in 42 days
+
+10:01 - Louis Watts (Wix)
+  30% of those might be going to one factor.
+
+10:05 - Michael Zschoche
+  There's no way for me to group those and do one payment.
+
+10:12 - Alan K
+  I have to open each one to figure out who I'm paying.
+
+10:17 - Michael Zschoche
+  Because then if you open up the load, you can go in there and then you open the load factor and compare it or not.  What we've done in houses, we have an in-house person that source that for me. So I look up an email and she tells me who to pay and I verify that and she's verified that the amount is correct and it matches all the over and she has all the paperwork and so she's double checked that.  But what I'm saying is that there's a way where I can group that where the things that are important.  Do I have the POD? Do I have the signed rate con? do I have an invoice and if all three things are checked then it should be released for payment but if I can group them so I can make one payment and if I have 30 carriers I'm paying to one factor I can do that a click on the button as opposed to me having to look up every  one and do it 30 times Yeah Allen and the list that you gave me does it include things like the carrier pay manager list and these other accounting screens sales rep commission what which of these are important for us I did not go through those reports I just went off of my head in yeah okay I can go through these report and get you that answer well let's see if we can come to an executive decision on it for now several different
+
+12:00 - Cody Miles
+  Tabs under accounting, there's a county manager here, I don't know exactly what some of these are Michael Lewis from your perspective, is this something we would want a functionality we want to carry forward into the new application?
+
+12:15 - Michael Zschoche
+  Okay, so this is the invoiced when you click on invoiced the tab that says invoiced? Yeah, the answer is the box is really helpful.  The one that I use is invoice. The difference here is I can go in and look at all that stuff and the mark paid is important because I know I paid it, but it doesn't show me an aging on the right hand side that I can sort by, like it does in the carrier pay manager.  So the only thing that I'd add to this is an aging report, an aging tab all the way over to the right so I can sort it.
+
+12:54 - Cody Miles
+  Yeah, okay, do you want the rest of these tabs like delivered, completed, paid? Just invoice. Yes. Yes.
+
+13:04 - Michael Zschoche
+  Oh, and then the other thing also is on the aging. It doesn't show you how much they owe you per invoice.  So that's the only two tabs I'd add. How much they owe you and what the aging is on it.  Okay, cool. And if there's some way which would be really nice since it's all there. If I scroll the bottom and it tells me a total that would be awesome.  And if there's a search number in there, if I can search by customer that it would tell me how much each customer owes me.  Okay. I don't mind doing an extra step to group them by customer if we do a little search thing in there.  So I don't know if that drop down under load numbers says by customer. And you want to. Elect us one customer that's fine, but I want to make it easy where I can do in the agent report And I can send it to the customer and says you owe me three hundred thousand dollars And this is the days you owe me on each one of these invoices.  That would be really nice Yep, kind of you want to be able to batch them So click on them batch them and say okay Pay those or send an email would send an email and just say this is your this is your your your Well, what's does that but he has to create them to send Right, but I think it's really So there's not only one I can't click a button in it Yeah, I think you should be able to do that, but I think the everything thing is is putting the days out Is helpful to the customer.  So when they're past 30 days that it's really  blanket that they're behind Okay, next is the sales rep commission is this something you would want to carry forward in a new new experience What I'm not really more an allen thing.  I mean as we grow I'm not going to be able to keep up with everybody's I think the answer is yes To be honest, we don't use that function very well I Think that if you can do the basic structure of that we may actually enhance it over time Yeah, I wouldn't say you need it out of the gate, but it's definitely a It's not an MVP type thing, but a DVD down the road Well, maybe the short version is is for our immediate uses  It's not very helpful, but if we're going to if we're going to deploy it to third-party users, the answer is yes, and we have to vet it.  Right, right.
+
+16:12 - Cody Miles
+  After that is accounting summary. So it looks like I'm creating, I'm selecting a date range, and what is it doing here?  That's so it's so stupid. Is this a totally useless experience right now? That is a useless report.
+
+16:31 - Alan K
+  Yeah, okay.
+
+16:33 - Cody Miles
+  So we do not carry this. Everything else that I talked about in my reports will cover all of that plus some more.
+
+16:39 - Alan K
+  I've never seen that report anyway, so that helps you. No, that's good. We're on the same page, Michael. That's good.  Accounting export.
+
+16:51 - Cody Miles
+  Let's see here. have a date. Please ensure you made it back up your current.
+
+16:56 - Michael Zschoche
+  I don't want to do that.
+
+16:58 - Cody Miles
+  I don't want to missing anything up for you guys. Yeah, don't. Yeah, don't do that.
+
+17:00 - Michael Zschoche
+  So that exporting experience to the accounting software, I think, means some help and I'm not quite sure how to manage that.  That's something Alan would know better but that's where you would go in to push the data to QBO or Sage or whatever else you're using.  Correct.
+
+17:27 - Louis Watts (Wix)
+  Okay.
+
+17:29 - Cody Miles
+  In that future state of this, Alan, is it still just kind of like a sync action?
+
+17:35 - Alan K
+  Yeah, it needs to be a sync action with QBO reports but the problem is they can't disappear once I sync it.  The software needs to remember the last date. Actually, this doesn't, QuickBooks needs to remember it. So, yes, I just don't want it to disappear.  Okay.
+
+17:57 - Michael Zschoche
+  It doesn't disappear now. The problem is, is Once you export it, you can't re-export it again. Right. Yeah, you want to be able to do that over and over.
+
+18:11 - Cody Miles
+  Looks like there's a history tab here. don't know what this is, but I can see you when exports have happened.
+
+18:21 - Louis Watts (Wix)
+  When you export in that, it saves it as a batch. You can do the historicals to repole what you've got it.  Okay.
+
+18:31 - Cody Miles
+  All right, invoice factoring. Is this something we want to just look like totally different, actually? Yeah, we should.
+
+18:42 - Michael Zschoche
+  So the way this is set up, it only way you can do invoice factoring is if you if you send it, that's a tab for you to send it directly to ITS if they factor you.  It doesn't allow you to send it to anybody else.
+
+19:00 - Louis Watts (Wix)
+  I don't I don't I think that to have early adoption.
+
+19:06 - Michael Zschoche
+  think that we should allow to send it to other factors and not be not be hogs about it.
+
+19:17 - Alan K
+  Okay, tell me about that process. Is that just sending invoices to factors?
+
+19:22 - Michael Zschoche
+  Well, I'm thinking that strategically is a marketing thing. We could say, hey, we're giving this free for six months.  But if you're using a factor, we're going to know, and if you're not using us, then you're going to to start paying us a monthly fee.
+
+19:40 - Cody Miles
+  Does that what do you think of that idea guys?
+
+19:45 - Alan K
+  Yeah, I agree with that 100%.
+
+19:47 - Michael Zschoche
+  Meaning if we own the factoring company and we're providing a we're providing as a free service. if you're not going to use our factoring, then  you, you're going to pay us for the service.
+
+20:00 - Alan K
+  Yeah.
+
+20:05 - Cody Miles
+  And then, in this case, an ITS truck stop is operating as the factory company. They have their own factoring arm, yes.
+
+20:17 - Michael Zschoche
+  Okay. that's what happens when invoice factory.
+
+20:19 - Cody Miles
+  So you're using them, it's easy and it's great, but for us, it's useless because we don't use them.
+
+20:26 - Michael Zschoche
+  Right. Go for it, right?
+
+20:34 - Cody Miles
+  You're not muted, but we can't hear you. Who? Right. Oh.
+
+20:50 - Ryan Vice (Vice Software)
+  Test. Is that working? Yeah. is. Okay. Okay. So you don't want to support other factoring companies, but there would just be.  Yeah, a rule that if they're using you, then they don't get the monthly fee.
+
+21:04 - Michael Zschoche
+  I don't know what that's going to look like, and we'll work that out. But I mean, if it's something going forward and you guys, you know, there's, what I'm just saying is, is that it's an opportunity have added benefit where they can save money and use us and our factoring over somebody else's.  on how all the dynamics of the ownership of this company and how this stuff goes out, then the factoring company may compensate the software company for giving it away.
+
+21:40 - Ryan Vice (Vice Software)
+  Okay, we still need to know, are we supporting full factoring functionality then? Is that something you were planning?
+
+21:50 - Cody Miles
+  Yeah, currently have it modeled so that, yeah, there's one or many factoring companies in the database, and there's a list view and details view than there's object associations.
+
+22:00 - Michael Zschoche
+  Okay, no matter how is that if I'm going to give the software away for the factoring company, my factoring company is going to pay the software company a compensation package of some sort.
+
+22:18 - Ryan Vice (Vice Software)
+  So the other platform doesn't provide a factoring platform, right? No, they do, but they just they force you to only use theirs and their factoring portion doesn't work if you're using a third party.  Right, that's what I'm saying though, but it's not a factoring management software or full refactoring. No. That being planned to be added in is like full like kind of factoring management type experience.
+
+22:50 - Michael Zschoche
+  So if you're a truck, if you're a trucking company and you take the invoice in is to get your stuff factored, you need to create  the invoice, put the factors logo on there and letterhead, all the information. You need to provide the POD and you also need to provide the rate confirmation that's signed and delivered, right?  So you all the staff that bundles it up and then you send it off to the factoring company, the factoring company reviews it.  Oftentimes they will call the factoring company or that they'll call the broker and say, is this correct? They'll say yes.  They'll take those documents and they'll forward it to the broker, which would be commander in our case. I lost audio.  Did anyone else?
+
+23:50 - Ryan Vice (Vice Software)
+  Michael, we lost your audio.
+
+23:58 - Michael Zschoche
+  So what I'm saying is that Right now for my trucking company.
+
+24:02 - Ryan Vice (Vice Software)
+  It's a three-step process.
+
+24:04 - Michael Zschoche
+  gather all the stuff. Hey Mike We lost about a minute or two of your audio there on my way, okay So the way the process works for the for the trucking company is The the trucking company gets the right con It collects the POD and it generates an invoice The factoring company most oftentimes wants the invoice to have their letterhead in Saying pay us the factoring company Okay, and it also has a couple of other documents that says that I've sold all my  to this factoring company So that factoring tab that some trucking stop does all that for you So what we'd want to do is if we use if we get it so they can use third-party  party factoring. We don't want to have to do that outside the system. It can auto generate that stuff. So for every factoring company, it's going to have to have it's going to have to generate an invoice PDF that has the factoring company information on it.
+
+25:22 - Ryan Vice (Vice Software)
+  And it's preloaded and it can be generic.
+
+25:25 - Michael Zschoche
+  It doesn't have to have a fancy logo or anything, but it has all the stuff that they would need.  So the factoring company receives it and all they have to do is look and say this looks good and then they can put forward the email.
+
+25:38 - Ryan Vice (Vice Software)
+  Okay. So with the attachments. But at a high level, this software is also going to provide the factoring company side of the fence as far as being able to do the factoring service, whatever the right.  So basically what would happen is is that
+
+26:00 - Michael Zschoche
+  a high level if they're not, if that carrier is not using DT cap as a factor and they're using that software it's going to put up a block and saying hey you do not have a subscription to this service and you need to pay.
+
+26:19 - Ryan Vice (Vice Software)
+  Right but what I'm trying to get to is there's a whole workflow management piece there and communication and all that a lot of it you described as a manual process where you put the logo on you send the POD someone calls and checks and it sounds like that stuff would come into the software platform and would be features that aren't currently in the truck stop stop that which is what I'm trying to understand if we're doing the experience also.
+
+26:45 - Michael Zschoche
+  The answer is in truck stop it has that feature but it only does it for their own factor. So it handles the communication and all that stuff and tracking like because you would want to know like right it it does it all if you're  thing they're factoring. If you're not using their factoring, it doesn't work and we have to do it outside the system.  Yeah. I'm saying as strategically and on 30,000 foot level, if I offer that service to everybody, they need to pay for it.  Yeah.
+
+27:17 - Ryan Vice (Vice Software)
+  No, that makes sense, but I'm just trying to get my head around the functionality and it almost feels to me like it's two different tools that there is the brokering platform and there's the factoring platform and that they integrate with each other.
+
+27:33 - Michael Zschoche
+  You know, the only difference, as a carrier, the only difference is that this is for the carrier side. We can also do it for the brokering side because it's same because some brokers factor all their stuff.  So This system, if I were to build carrier, the carrier was to build a customer directly, it will generate the invoice and put all the attachments that are necessary to get paid in it.  So like when Watts builds our customers through the brokerage, it goes directly to them and it's got everything they need.  If Kayla at Copper Hill, our carrier does it, it generates the invoice and everything they need to pay the invoice.  The difference is that if they're assigned to a factor, then instead of sending all the invoice and everything to the person that's going to pay, it sends it directly to the factor instead and then the factor has documentation and they upload that stuff into their system and then they push it out.
+
+29:00 - Ryan Vice (Vice Software)
+  then the factor just handles collecting and all that completely outside of the app on their side. Right.
+
+29:06 - Michael Zschoche
+  So basically the receivables will come in. So if I'm a brokerage and I factor on my stuff, I push that stuff out to the factor and then it's going to build in there what my discount rate is and then it's going to tell me how much is supposed to be received in the next 24 to 48 hours and then I would mark that as paid.
+
+29:31 - Cody Miles
+  Right.
+
+29:32 - Ryan Vice (Vice Software)
+  And so essentially the app needs to just support sending to factor.
+
+29:39 - Michael Zschoche
+  So once you receive a customer, you might put them in as a customer, but if they're assigned to a factor, when it goes to billing, you don't build a customer, you build a factor.  And it's just a slightly different invoice processing, sounds like.
+
+29:57 - Ryan Vice (Vice Software)
+  No, it's exactly the same other than the fact that the letter has
+
+30:00 - Michael Zschoche
+  changes. Yeah. Okay.
+
+30:04 - Ryan Vice (Vice Software)
+  Then do do we need all the entities in relationships, Cody? It just feels like contact. Walts, why don't you show them where we assign the factor to a carrier?  In factors or they are on the broker side or the carrier side or neither or both or. I'm going to show you.  Who's got control?
+
+30:37 - Michael Zschoche
+  Yeah. This is me.
+
+30:39 - Cody Miles
+  can give it up. Yeah. Okay.
+
+30:42 - Michael Zschoche
+  So just pick open a load number on the bottom on the left. Just click on one of those numbers.  Go down further than that.
+
+30:49 - Louis Watts (Wix)
+  Be below a sign later. go.
+
+30:54 - Michael Zschoche
+  Okay.
+
+30:55 - Louis Watts (Wix)
+  See where it says.
+
+31:00 - Michael Zschoche
+  Sorry, a few people were talking at the same time.
+
+31:03 - Cody Miles
+  Sorry.
+
+31:05 - Michael Zschoche
+  Michael. Typically, to the right of spice ventures, a little info thing, if you hover over it or something, you should be able to open that up.  Yeah. Right there.
+
+31:17 - Louis Watts (Wix)
+  Right there. Click on it.
+
+31:20 - Michael Zschoche
+  See, it says factoring. And then down below, it says factoring company. This is partner funding.
+
+31:28 - Ryan Vice (Vice Software)
+  Yeah. Yeah, partner funding.
+
+31:29 - Cody Miles
+  Yeah. So that's the drop down.
+
+31:31 - Michael Zschoche
+  So if you can click on the drop down.
+
+31:35 - Cody Miles
+  I can't see this, but there's just a drop down list.
+
+31:39 - Ryan Vice (Vice Software)
+  What's in it?
+
+31:39 - Louis Watts (Wix)
+  No, no, the list. Not that.
+
+31:42 - Michael Zschoche
+  The list. Yeah. Click on the arrow.
+
+31:45 - Louis Watts (Wix)
+  I did that before as well when I was trying to show you guys something. It won't. some reason.
+
+31:49 - Cody Miles
+  As it shows.
+
+31:51 - Ryan Vice (Vice Software)
+  It doesn't show in the browser.
+
+31:53 - Cody Miles
+  Yeah.
+
+31:53 - Michael Zschoche
+  There's like 200 factors in there with all their information already preloaded.
+
+32:00 - Ryan Vice (Vice Software)
+  I thought you said they didn't let you use other factors in here that you had to use theirs. No, you can assign it.  You just can't send them the documentation. So then it would work exactly the same, except the system would support sending the documentation.  Right. And that would essentially just be changing the letterhead and sending it to a different contact, which would be a factoring company.  Right. So Cody, on your side, is that matching up with where you were at?
+
+32:39 - Cody Miles
+  It's matching up with my understanding. We still need the object and object association, because you can have multiple carriers associated to the same factor.  Right. And are the factors able to do any other...
+
+32:55 - Ryan Vice (Vice Software)
+  It is a factor role supported by any of the other system users, so like, carry...
+
+33:00 - Louis Watts (Wix)
+  here's your brokers. Can they also be factors?
+
+33:02 - Michael Zschoche
+  No, no, no, they can they can choose to have no factor.
+
+33:06 - Louis Watts (Wix)
+  And that's that that you means, you know, you pay them directly.
+
+33:10 - Ryan Vice (Vice Software)
+  But what I'm saying, though, is Michael, you were saying your company, you're going to be doing brokering and factoring.  Is that two separate companies? Like, yeah, when all the companies that I have run independently.
+
+33:20 - Louis Watts (Wix)
+  So I treat him as if they don't, they don't have the same owner. Okay, and that would be true for the other folks who are factoring in the system.
+
+33:28 - Ryan Vice (Vice Software)
+  Right. Okay, so then it sounds like the factor is just a separate table with a relationship to carriers. One factor to many carriers or something like that, right?  Cody, is that what you were thinking?
+
+33:43 - Cody Miles
+  Yeah, yeah, it's not currently represented like that in the ERD, but only because we've had this discussion already. I just need to update everything in one.
+
+33:53 - Ryan Vice (Vice Software)
+  so then the factor, the whole factor flow is pretty basic the way we're thinking about it right now. And you all will just take those invoices via email.
+
+34:03 - Cody Miles
+  Is that usually how it goes out through email or something like that?
+
+34:07 - Michael Zschoche
+  Yeah, it gets emailed to an associated email address where they like to receive invoice to pay out to carriers.  Okay.
+
+34:16 - Ryan Vice (Vice Software)
+  right. And then, but are you imagining that there would be more functionality around the factoring in the future in the system or no?
+
+34:25 - Michael Zschoche
+  No, this is it's just how it's build. That's all it is, really. Okay. I think that I think it's important that when the.  Yeah, I think that'll work. And then the associated email address that that thing goes out to is the reply needs to be.  Oh, it doesn't it doesn't matter. You're fine. It's all good. You send the factoring and then it's their problem to force it off to the customer to pay.  Yeah. And the factoring is responsible for.
+
+35:00 - Ryan Vice (Vice Software)
+  Collecting essentially. Yeah, and then they'll pay. They'll pay you earlier. They'll take the responsibility of collecting charge. You can do that.  Right.
+
+35:13 - Cody Miles
+  Let's make sure get everything else. Okay, so let me just so I can show you something real quick.
+
+35:21 - Michael Zschoche
+  If you go under accounting.
+
+35:26 - Ryan Vice (Vice Software)
+  This is carrier pay manager. Can you click on that?
+
+35:31 - Michael Zschoche
+  I'm sorry. That's not where I want to go. Click on the logo again. Commander. And then accounting accounting manager.  Okay, this is very important. Click on invoice. When the system generates an invoice. It can have an invoice number, but the factors and the brokers, they actually pay off the load number.  But they have to have both on the sheet.
+
+36:15 - Alan K
+  So one invoice might have many load numbers.
+
+36:19 - Michael Zschoche
+  Actually, no, they're all one of every load number and every invoice has a separate load number and invoice number.  One invoice per load. One invoice per load and the invoice and the load number, the invoice number is important for for Alan, but the load number is important for everybody else.  So, so when we when carrier takes one of our contracts or our contracts, we give them a load number when the factor or the  The customer bills us directly. They might have an in this number, but we pay off the load number. And that's universal between all brokerages and all carriers.
+
+37:16 - Ryan Vice (Vice Software)
+  I will say that you can do a patch.
+
+37:20 - Louis Watts (Wix)
+  I'll say if I'm invoicing in PG for the day, although they did that day, we'd go under one master invoice number.  And underneath that master invoice, then we would be all the way to the first.
+
+37:37 - Ryan Vice (Vice Software)
+  Currently, how do invoices get into this platform?
+
+37:41 - Cody Miles
+  How do invoices, you know, people trying to get money from us, like from the factor or the carrier? How do we put that in here?
+
+37:48 - Ryan Vice (Vice Software)
+  What is the delivered completed on the right hand of the screen?
+
+37:58 - Louis Watts (Wix)
+  So let me do this.
+
+38:10 - Ryan Vice (Vice Software)
+  All right, your screen now, hold the chart here, go to the chart for more.
+
+38:21 - Louis Watts (Wix)
+  All right, now go back to, yep, it's an angry one, if you want to talk home to accounting, I said accounting up here, accounting manager, and then go to completed, now that populates in there, and if you hit that far right bot, yep, on that, and a voice number will be to the load, do you want to continue, you see yes, can unen voice it, so it's going to take you.  Got it.
+
+38:58 - Cody Miles
+  Okay. Yeah. generate an invoice correct.
+
+39:05 - Michael Zschoche
+  So in the particular case for us is if you're if you're a carrier or brokers as a factor, when it generates the invoice, it doesn't put your company name on it.  It puts the factors information on there. Right. Right. What about invoices that we're meant to pay out?
+
+39:23 - Cody Miles
+  How do they get into the platform? Invoices that we're going to pay out.
+
+39:29 - Michael Zschoche
+  So I carry your sentence and I always for a load.
+
+39:32 - Ryan Vice (Vice Software)
+  Yeah.
+
+39:33 - Louis Watts (Wix)
+  That doesn't go into the platform, I guess.
+
+39:37 - Michael Zschoche
+  No. Okay.
+
+39:38 - Ryan Vice (Vice Software)
+  No, no, no way of capturing those invoices coming to us and putting them in here.
+
+39:44 - Michael Zschoche
+  They just click a button and says invoice received is basically it's all they do. Okay.
+
+39:49 - Ryan Vice (Vice Software)
+  Can you show them that once?
+
+39:57 - Michael Zschoche
+  Yeah, invoice.
+
+39:58 - Ryan Vice (Vice Software)
+  like when Mindy sees an invoice,
+
+40:00 - Michael Zschoche
+  And we've marked it as it's been delivered, and we change it into a payable.
+
+40:10 - Ryan Vice (Vice Software)
+  All right, so that'll be under your pay manager.
+
+40:15 - Louis Watts (Wix)
+  Go to accounting. Carry your pay manager. Wrong.
+
+40:24 - Cody Miles
+  Wrong.
+
+40:26 - Michael Zschoche
+  Yep.
+
+40:28 - Louis Watts (Wix)
+  Run report. So on that right hand side, any invoices that we have received from the carrier goes into the date range that shows us the aging, anything that has not been received.  still says received now. When our accounting receives it, she goes in and clicks that it's been received to make sure that it's received.  You can click on a receive now and we're on the top so you can see what it does.
+
+40:55 - Michael Zschoche
+  So this is just the carrier bill match the agreement.
+
+40:57 - Cody Miles
+  Okay.
+
+41:00 - Louis Watts (Wix)
+  And it goes through there, and then it asks you for the date you received your invoice, so that starts your aging report.
+
+41:06 - Michael Zschoche
+  Okay.
+
+41:35 - Cody Miles
+  Cool. All right, lots of accounting things that need to get into this new platform. So Alan had sent Michael a list of things he wanted to see.  I think these are things in addition to that. You are all agreeing to this.
+
+41:51 - Michael Zschoche
+  Whatever Alan wants sounds like a good idea to me and the best case scenario for me is after you guys make it if there's anything missing will add it.  Yeah.
+
+42:00 - Cody Miles
+  Okay, but we need something like the carrier pay manager, the accounting manager, potentially a post MVP as the sales rep commission report.  We do also need the ability of syncing with QBO or whatever the user is going to be using. I didn't see the functionality for invoice factoring, but I think I did it.  They have carrier listed as where they've listed themselves as you guys are the factor. So that's an added functionality to the system that we use as a sample, right?
+
+42:37 - Michael Zschoche
+  I mean, they have it, but we just can't show it to you because we're not a, we're not a customer of their factoring services.
+
+42:44 - Louis Watts (Wix)
+  My understanding is that there's a list of factors and then they select those as being associated with a load and then at controls where the payment invoice, whatever it's called in the system is synced.
+
+43:00 - Ryan Vice (Vice Software)
+  But I don't understand is how the factors get into the system and if the factors or a global list is for all users or if it's each person has their own factors they work with, et cetera.
+
+43:11 - Michael Zschoche
+  So basically, the ITS provides list of factors to a sign and all the data related to that stuff if they know what it is, it's in there, but it's editable.  So if we get a new factor, like my factor in company would be new. They don't know me from Adam, they would be able to add into the system and it's a save dropdown.
+
+43:35 - Ryan Vice (Vice Software)
+  Okay. And when they, when factoring company gets added in, is that visible by all users?
+
+43:43 - Louis Watts (Wix)
+  Uh, and it's admin.
+
+43:46 - Michael Zschoche
+  Uh, so admin, well, I'm saying is the billing process is admin, but, uh, I mean, uh, for all carriers, uh, or all brokers, sorry, would all the brokers all
+
+44:00 - Ryan Vice (Vice Software)
+  or you see all the factors.
+
+44:04 - Louis Watts (Wix)
+  That's a kind of an unknown question.
+
+44:07 - Michael Zschoche
+  I don't know that all brokers need to see that because the admin is gonna create the account in the system.  And so what I'd like it to do is as soon as you assign a factor to it, then the invoicing things functionality is automatically triggered.
+
+44:26 - Louis Watts (Wix)
+  Yeah, and the admin is per broker.
+
+44:30 - Ryan Vice (Vice Software)
+  So each broker would have an admin and those admins are taking care of adding the factors which are essentially just name of company and email address at this point.
+
+44:39 - Michael Zschoche
+  I don't, I think that the access to the brokers of what they can do in the system is gonna be as per companies because a lot of companies, you have a salesman, they don't want them to touch the books.
+
+44:57 - Louis Watts (Wix)
+  Because if there's a mistake, they build the wrong people.
+
+45:00 - Ryan Vice (Vice Software)
+  Right, right. So you would have different roles at the company, but I'm saying there would be one role Which would be responsible for adding the factors That are used by that Broker and the other brokerage would not see that that would be specific to them.
+
+45:16 - Michael Zschoche
+  I Don't know that it's a secret Okay I'm just saying is I think the ability be like if you're a broker and we say we want brokers to fill in all the Back back end stuff on the billing and all that like some some brokers They're the salespeople But they take all the documentation they give it to an admin person the admin does it Some some brokerages are small and they have the brokers fill all that stuff in so it needs to be optional Yeah, no as far as who does it that's one concern, the one I was focusing on was with the factors What role create some and who are
+
+46:00 - Ryan Vice (Vice Software)
+  like what's the scope? Who all can see them? So if your company adds a factor to the list of factors and say another company adds the same factor, are they selecting that from the global list that your company added the factors?  Yes. Yes. Okay. So everyone can see all the factors. Well, not everyone, but people who are able to add factors are able to see the list of all factors in the system.
+
+46:30 - Louis Watts (Wix)
+  Yes.
+
+46:31 - Ryan Vice (Vice Software)
+  Okay. And I'm wondering if we need to like in HubSpot, when I add a company, it will show me if it knows about that company.  And if it does, it'll pre-populate a bunch of stuff. But I kind of get my own copy of the company, so to speak, because I can go in and add different contacts and change the names of things stuff like that.  It almost feels like we would maybe want to do a similar pattern here. I'm not sure. do you think, Cody?  Yeah. That'd be cool.
+
+47:00 - Cody Miles
+  Yeah. The risk we run is like, if we're relying on user inputted data to serve up that global list of factors, it's going to be rife with problems.
+
+47:12 - Louis Watts (Wix)
+  So, minimally, I mean, either it's specific to each tenant.
+
+47:17 - Cody Miles
+  I mean, what we might consider, Ryan, is just that there are some factors that are available in all accounts, but then the user has the ability of adding their own, but like that, global list of factors is provided by the company.  What if I think you're on the right track, Cody?
+
+47:33 - Michael Zschoche
+  I think the reality is that if it's not in the dropdown, then the admin or accounting admin needs to add the factors to the list that everybody can use.
+
+47:44 - Ryan Vice (Vice Software)
+  Yeah, accounting admin, what level is the accounting admin worked at? Are they at a care, I'm sorry, a broker level or what level is it they at?
+
+47:55 - Michael Zschoche
+  They're out of, that are a billing and accounting level.
+
+47:59 - Ryan Vice (Vice Software)
+  But within a brokerage?
+
+48:01 - Cody Miles
+  Yeah, well, Anna Carrier.
+
+48:06 - Michael Zschoche
+  I think what I'm saying, I think what I'm hearing from Cody is, and I agree with them, that I don't think that anybody should be able to add that factors information into the system.  Because if it's wrong, if it's wrong, then it's a problem. Because in addition to that, and this is another thing that just brought me a thing is, what security do we need to do if we want to, like we cheated in the notes section, we put everybody's ACH an account number into it?  But in what fashion can we, what security is necessary for us to store routing and accounting information, and that needs to be secured against everybody else?
+
+49:00 - Ryan Vice (Vice Software)
+  We can definitely come up with some secure options there, but we might be pivoting a little off the topic.  I'm just trying to get my head around the factor piece there because I feel like the rest of it is pretty well understood.  Correct me if I'm wrong, Cody. rest of entities are pretty straightforward, right? then this one's a little more unique.  But we do have a number of options for how we can deal with the factors, Michael. If you've ever used any kind of tracking for your diet software, you know, you can pick food that they've already put in there that's vetted by them, or you can add your own and you can select, I want to make this recipe available to all the other users, and then there's all these different levels of...
+
+49:46 - Michael Zschoche
+  I don't need that.
+
+49:48 - Ryan Vice (Vice Software)
+  I just need to...
+
+49:50 - Michael Zschoche
+  If I'm gonna store... So most of the factors that may send you an invoice, they tell you, they give you your route, their route.  and accounting information, but I'm thinking further ahead that if we want to add on an ACH direct bill functionality to this, how do we store that information?  Yeah, so I'm taking the Tesla model that I'm collecting data that I'm not going to use today, but I may add another function where I need it and I want to collect it now.  Yeah, we can store it securely.
+
+50:29 - Ryan Vice (Vice Software)
+  That would be a problem.
+
+50:35 - Louis Watts (Wix)
+  Cody, where are we at on the level of understanding?
+
+50:37 - Ryan Vice (Vice Software)
+  you think you've got enough to get us to, like, this is the MVP scope or is there still some questions you have?
+
+50:48 - Cody Miles
+  Yeah, I mean, ultimately what I think should probably be the next step is I know you need to get an estimate by end of week, but I should take a first step at taking all this detail and trying to create a  first duration of the entire flow chart. We could propagate that with the group and just make sure you know maybe we have at least an 80% confidence level and then you can bake that in like with an 80% confidence in the estimate, right?  Yeah, I think that sounds reasonable. Does that sound like a reasonable to you, Michael?
+
+51:18 - Ryan Vice (Vice Software)
+  just need to...
+
+51:19 - Michael Zschoche
+  I actually think you guys are more at 90% and then the last 10% if that's extra shift than it's extra shift.  Yeah, so I think you guys got a really good handle on it. So I think by and large in terms of the scope of the project that we're asking for, I think that you have a really good command of what we're looking for and I'm perfectly okay saying this is the deliverables and these are the things we agree on.  If there's anything after that then we're happy to pay the extra.
+
+51:50 - Ryan Vice (Vice Software)
+  Okay, we probably want to get a little bit more finer resolution but what we can do is we can have the team start putting together an estimate based on what we have.  here. At the same time, Cody can work on kind of dialing in the resolution of this little bit to where we have a little bit more clarity on our side.  So we're not like being like, what about this? What about that as much? And then so we can get you some numbers by the end of the week and then maybe shortly after that we'll get you some more nailed down numbers.  It's just from our side, we like to make sure it feels really good.
+
+52:27 - Michael Zschoche
+  But we want to be respectful of y'all's time and everything at the same time. No, I understand.
+
+52:31 - Ryan Vice (Vice Software)
+  Alan and Lewis, do you think it's pretty reasonable?
+
+52:33 - Michael Zschoche
+  got most of it kind of nailed down. Absolutely, I think.
+
+52:37 - Louis Watts (Wix)
+  I think personally, once it's actually in a system, when all this information is put into a system that I can put around with this, it'll make more sense to me.  You guys speak a lot of techy terms. Sorry about that. I can follow it.
+
+52:59 - Cody Miles
+  I just I'm more of a visual person.
+
+53:00 - Louis Watts (Wix)
+  And so I hear and understand what it will do, but until I see it on the push buttons and mess around with it.  Yeah, what I'm using.
+
+53:09 - Michael Zschoche
+  Yeah, the wireframe. Hey, guys, I got to jump to another column.
+
+53:11 - Ryan Vice (Vice Software)
+  One minute over, I'm going to jump off Cody, if you can handle any final questions, but it sounds like he's recapping Cody's going to give us what he has so far.  We're going to start working on an estimate based on that, but he's going to work on the second revision that's going to have a little bit more details pledged out later this week.  We will have two potential meetings, one to review the newer version of what Cody does and then one to do the estimate and it could possibly be one meeting depending on the time.  All right, guys, I'll talk to you later. I got to go as well.
+
+53:40 - Louis Watts (Wix)
+  I think you guys appreciate it.
+
+53:56 - Michael Zschoche
+  Thank you.
