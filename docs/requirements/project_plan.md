@@ -8,59 +8,53 @@ We are following the [Doc Driven Development Process](docs/doc-driven-developmen
 
 ---
 
-## Feature Breakdown
+## Requirements
 
-### 1. Authentication
-- [ ] Define authentication requirements (e.g., login, multi-factor authentication, password reset).
-- [ ] Create user authentication flow diagrams.
-- [ ] Develop API requirements for authentication endpoints.
+### Business Requirements
+Below are the business requirements for the project that need to be created.
 
-### 2. User Management
-- [ ] Define user roles and permissions.
-- [ ] Draft requirements for user creation, updating, and deletion.
-- [ ] Create ERD for user-related entities.
+#### 1. Authentication Requirements
+- [ ] Define user authentication flows and methods
+  - Login mechanisms
+  - Multi-factor authentication needs
+  - Password reset procedures
+- [ ] Document security requirements
+- [ ] Specify session management requirements
 
-### 3. Billing
-- [ ] Define invoicing requirements (e.g., accounts receivable, accounts payable).
-- [ ] Map workflows for invoice generation and payment processing.
-- [ ] Finalize integration requirements for payment gateways.
+#### 2. User Management Requirements
+- [ ] Define user roles and permission requirements
+- [ ] Specify user lifecycle management needs
+  - User creation workflows
+  - Profile update requirements
+  - Account deletion procedures
+- [ ] Document user data storage requirements
 
-### 4. Reporting
-- [ ] List key reports to be generated (e.g., Executive Summary).
-- [ ] Define data sources and aggregation methods.
-- [ ] Draft visualizations for report presentation.
+#### 3. Billing Requirements
+- [ ] Define invoicing requirements
+  - Accounts receivable specifications
+  - Accounts payable requirements
+- [ ] Specify payment processing requirements
+- [ ] Document payment gateway integration needs
 
-### 5. Contact Management
-- [ ] Outline requirements for managing contacts (e.g., carriers, factoring companies).
-- [ ] Create workflows for adding, updating, and deleting contacts.
-- [ ] Define database schema for contact management.
+#### 4. Reporting Requirements
+- [ ] Define required report types
+  - Executive Summary specifications
+  - Financial report requirements
+- [ ] Specify data aggregation requirements
+- [ ] Define visualization requirements
 
----
+#### 5. Contact Management Requirements
+- [ ] Define contact types and relationships
+  - Carrier management requirements
+  - Factoring company management needs
+- [ ] Specify contact data requirements
+- [ ] Document contact workflow requirements
 
-## Milestones
-1. Complete authentication module (Est. Date: TBD)
-2. Finalize user management workflows (Est. Date: TBD)
-3. Deliver billing and invoicing module (Est. Date: TBD)
-4. Generate first set of reports (Est. Date: TBD)
-5. Finalize contact management feature (Est. Date: TBD)
+### Technical Requirements
+Below are the technical requirements for the project that need to be implemented.
 
----
+#### 1. Documentation Scraper Requirements
+- [ ] Web Scraping Implementation
+  - use a javascript library to scrape the documentation
+  - save the files to the ./docs/scraped/makerkit directory
 
-## Progress Tracking
-- [ ] Task 1: Define overall system architecture.
-- [ ] Task 2: Review ERD for completeness.
-- [ ] Task 3: Begin implementation of authentication module.
-
----
-
-## Change Log
-| Date       | Change                              | Author        |
-|------------|-------------------------------------|---------------|
-| YYYY-MM-DD | Initial draft created              | ChatGPT       |
-| YYYY-MM-DD | Updated requirements for billing   | Ryan Vice     |
-
----
-
-**Note**: This plan will evolve as new information is added and tasks are completed. Updates will be reflected in this document.
-
----
