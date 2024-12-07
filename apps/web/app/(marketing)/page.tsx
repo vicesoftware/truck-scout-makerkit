@@ -27,19 +27,20 @@ function Home() {
       <Hero
         pill={
           <Pill label={'New'}>
-            <span>The leading SaaS Starter Kit for ambitious developers</span>
+            <span>The leading Trucking Brokerage Platform for modern logistics</span>
           </Pill>
         }
         title={
           <>
-            <span>The ultimate SaaS Starter</span>
-            <span>for your next project</span>
+            <span className="text-primary">Streamline Your Brokerage</span>
+            <span>Operations Today</span>
           </>
         }
         subtitle={
           <span>
-            Build and Ship a SaaS faster than ever before with the next-gen SaaS
-            Starter Kit. Ship your SaaS in days, not months.
+            Simplify your trucking brokerage workflow. 
+            Connect brokers, shippers, and factoring companies seamlessly, reduce paperwork, 
+            and accelerate your business growth.
           </span>
         }
         cta={<MainCallToActionButton />}
@@ -65,7 +66,7 @@ function Home() {
             heading={
               <>
                 <b className="font-semibold dark:text-white">
-                  The ultimate SaaS Starter Kit
+                  The Ultimate Platform
                 </b>
                 .{' '}
                 <GradientSecondaryText>
