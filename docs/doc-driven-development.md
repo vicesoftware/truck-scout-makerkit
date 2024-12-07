@@ -7,60 +7,58 @@ Doc Driven Development is a methodology developed by [Ryan Vice](https://docdriv
 
 ```mermaid
 graph TD
-    subgraph "ChatGPT Area"
-        A[Custom GPT]
-        D[Plan Generation]
-        
-        subgraph "Files"
-            B[Requirements Documents]
-            C[Discovery Transcripts]
-        end
-        
-        B --> A
-        C --> A
-        A --> D
+    subgraph "Files"
+        B[Requirements Documents]
+        C[Discovery Transcripts]
     end
 
-    subgraph "GitHub Area"
+    subgraph "ChatGPT"
+        A[Custom GPT]
+        
+        B -->|1 - Initial GPT Setup| A
+        C -->|1 - Initial GPT Setup| A
+
+    end
+
+    subgraph "GitHub"
         E[Project Plan]
         F[AI Implementation]
-        G[Project Overview]
         
-        E --> F
-        F --> E
-        E --> G
+        E -->|3 - Generate Code| F
+        F -->|4 - Update Plan| E
     end
 
-    D -->|Generate Initial Plan| E
-    G -->|Status Updates| A
+    A -->|2 - Generate Initial Plan| E
+    E -->|5 - Status Updates
+    via GitHub URL| A
 ```
 
 ## Detailed Process
 
 1. **Initial GPT Setup**
-   - Create a custom GPT loaded with comprehensive requirements documentation
-   - Include flow diagrams containing ERDs and discovery/review meeting transcripts
-   - GPT serves as a knowledge base for project requirements and decisions
+   - Load Requirements Documents and Discovery Transcripts into Custom GPT
+   - Documents include flow diagrams, ERDs, and meeting transcripts
+   - Creates a comprehensive knowledge base for project understanding
 
-2. **Plan Generation**
-   - Utilize the custom GPT to generate an executable markdown plan
-   - Plan serves as a living document that guides implementation
-   - Ensures alignment between requirements and execution
+2. **Generate Initial Plan**
+   - Custom GPT analyzes loaded documents
+   - Generates executable markdown Project Plan
+   - Establishes foundation for implementation and tracking
 
-3. **AI-Driven Implementation**
-   - AI Agents execute items from the plan
-   - Maintain and update plan documentation as implementation progresses
-   - Ensures documentation stays in sync with development
+3. **Generate Code**
+   - AI Agents use Project Plan to implement features
+   - Follow specifications and requirements from plan
+   - Create working code based on documented requirements
 
-4. **Documentation Integration**
-   - Project overview document links back to plan in GitHub
-   - Public repository maintains transparency and accessibility
-   - Enables seamless information flow between documentation and implementation
+4. **Update Plan**
+   - Implementation progress feeds back to Project Plan
+   - Document changes and completed features
+   - Keep plan in sync with actual development
 
-5. **Continuous Evolution**
-   - Custom GPT maintains access to latest plan status via GitHub
-   - Enables informed decisions for future requirements and planning
-   - Creates a feedback loop between implementation and planning
+5. **Status Updates via GitHub URL**
+   - Project Plan in GitHub provides latest status
+   - Custom GPT accesses updated plan through GitHub URL
+   - Enables informed decisions for future planning and requirements
 
 ## Key Benefits
 

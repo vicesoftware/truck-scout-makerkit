@@ -23,34 +23,33 @@ graph TD
         C[Discovery Transcripts]
     end
 
-    subgraph "ChatGPT Area"
+    subgraph "ChatGPT"
         A[Custom GPT]
-        D[Plan Generation]
         
-        B --> A
-        C --> A
-        A --> D
+        B -->|1 - Initial GPT Setup| A
+        C -->|1 - Initial GPT Setup| A
+
     end
 
-    subgraph "GitHub Area"
+    subgraph "GitHub"
         E[Project Plan]
         F[AI Implementation]
-        G[Project Overview]
         
-        E --> F
-        F --> E
-        E --> G
+        E -->|3 - Generate Code| F
+        F -->|4 - Update Plan| E
     end
 
-    D -->|Generate Initial Plan| E
-    G -->|Status Updates| A
+    A -->|2 - Generate Initial Plan| E
+    E -->|5 - Status Updates
+    via GitHub URL| A
 ```
 
 We are using a heavily AI driven approach that utilizes a combination of:
-- [Flow diagrams/ERD documents](docs/requirements/rag) and call transcripts for system design
+- [Flow diagrams/ERD documents and call transcripts](docs/requirements/rag) for system design
 - [AI Agent Product Owner](https://chatgpt.com/g/g-67545b7de2088191b29e78715371ac98-truck-scout-product-owner) (PO) 
   - Custom GPT with Retrieval-Augmented Generation (RAG) for requirements management
-- [Detailed Doc Driven Development Process](docs/doc-driven-development.md) - Learn more about our development methodology
+
+> 📚 **[Learn more about our Doc Driven Development Process](docs/doc-driven-development.md)** - Discover how we're revolutionizing development with AI-powered documentation
 
 ## Technical Foundation
 
