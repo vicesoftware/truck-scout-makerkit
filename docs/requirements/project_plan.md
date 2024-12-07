@@ -4,64 +4,7 @@
 This document outlines the project plan for developing the key features and modules of the application. The approach follows the **Doc Driven Development** methodology developed by **Ryan Vice** (https://docdrivendev.com/), which emphasizes using comprehensive documentation and AI tools to streamline development and maintain alignment throughout the project lifecycle.
 
 ### **Doc Driven Development Approach**
-Our implementation of Doc Driven Development follows these key steps:
-
-```mermaid
-graph TD
-    subgraph "Files for RAG"
-       B[Requirements Documents]
-       C[Discovery Transcripts]
-    end
-
-    subgraph "ChatGPT Area"
-        A[Custom GPT]
-        
-
-        
-        B --> A
-        C --> A
-    end
-
-    subgraph "GitHub Area"
-        E[Project Plan]
-        F[AI Implementation]
-
-        
-        E -->|Build Features| F
-        F -->|Update Plan| E
-    end
-
-    A -->|Generate Plan| E
-    E -->|Status Updates 
-         via GitHub URL| A
-```
-
-1. **Initial GPT Setup**
-   - Created a custom GPT loaded with comprehensive requirements documentation
-   - Included flow diagrams containing ERDs and discovery/review meeting transcripts
-   - GPT serves as a knowledge base for project requirements and decisions
-
-2. **Plan Generation**
-   - Utilized the custom GPT to generate this executable markdown plan
-   - Plan serves as a living document that guides implementation
-   - Ensures alignment between requirements and execution
-
-3. **AI-Driven Implementation**
-   - AI Agents execute items from the plan
-   - Maintain and update this plan document as implementation progresses
-   - Ensures documentation stays in sync with development
-
-4. **Documentation Integration**
-   - Project overview document links back to this plan in GitHub
-   - Public repository maintains transparency and accessibility
-   - Enables seamless information flow between documentation and implementation
-
-5. **Continuous Evolution**
-   - Custom GPT maintains access to latest plan status via GitHub
-   - Enables informed decisions for future requirements and planning
-   - Creates a feedback loop between implementation and planning
-
-This approach ensures that documentation drives development while maintaining adaptability and transparency throughout the project lifecycle.
+We are following the [Doc Driven Development Process](docs/doc-driven-development.md) to develop this project.
 
 ---
 
