@@ -1,16 +1,8 @@
-# Task: Plan RLS Functions <!-- omit in toc -->
+# Task: Plan RLS Functions
 
 This document outlines the plan for reusable Row-Level Security (RLS) functions in the TruckingApp database schema. These functions are designed to enforce consistent and secure access control based on the application's domain requirements and current DBML schema.
 
 ---
-- [**1. Goals of RLS Functions**](#1-goals-of-rls-functions)
-- [**2. Proposed Functions**](#2-proposed-functions)
-  - [**1. `has_role_on_account(account_id UUID)`**](#1-has_role_on_accountaccount_id-uuid)
-  - [**3. has\_permission(user\_id UUID, account\_id UUID, permission TEXT)**](#3-has_permissionuser_id-uuid-account_id-uuid-permission-text)
-  - [**3. Key Considerations**](#3-key-considerations)
-  - [**4. Next Steps**](#4-next-steps)
-
-
 ## **1. Goals of RLS Functions**
 - Enforce multi-tenancy by restricting access based on `account_id`.
 - Implement role-based access control (RBAC) using `role_permissions`.
@@ -19,7 +11,7 @@ This document outlines the plan for reusable Row-Level Security (RLS) functions 
 
 ---
 
-## **2. Proposed Functions**
+## **2. Core Functions**
 
 ### **1. `has_role_on_account(account_id UUID)`**
 - **Purpose**: Check if the current user has a role on a given `account_id`.
@@ -34,11 +26,11 @@ This document outlines the plan for reusable Row-Level Security (RLS) functions 
       SELECT 1
       FROM public.accounts_memberships
       WHERE account_id = account_id
-        AND user_id = current_user_id() -- Replace with session-based user ID retrieval
+        AND user_id = auth.uid()
     );
   END;
   $$ LANGUAGE plpgsql STABLE;
-
+  ```
 - **Use Cases**: Validate membership for tables like `trucking.loads`, `trucking.carriers`, and `public.accounts`.
 
 ### **2. can_access_entity(user_id UUID, entity_id UUID, entity_type TEXT)**
@@ -48,7 +40,6 @@ This document outlines the plan for reusable Row-Level Security (RLS) functions 
   - `entity_id`: The ID of the entity being accessed.
   - `entity_type`: The type of entity (e.g., load, document).
 - **Logic**:
-
 ```sql
 CREATE OR REPLACE FUNCTION public.can_access_entity(user_id UUID, entity_id UUID, entity_type TEXT)
 RETURNS BOOLEAN AS $$
@@ -90,10 +81,9 @@ $$ LANGUAGE plpgsql STABLE;
 - **Inputs**:
   - `user_id`: The user making the request.
   - `account_id`: The account being queried.
-  - `permission`: The required permission (e.g., `tickets.update`).
+  - `permission`: The required permission (e.g., `invoices.update`).
 - **Logic**:
 ```sql
-Copy code
 CREATE OR REPLACE FUNCTION public.has_permission(user_id UUID, account_id UUID, permission TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
@@ -109,10 +99,49 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE;
 ```
-- **Use Cases**:
-  - Role-based operation control for tables like `trucking.loads` and `trucking.drivers`.
+- **Use Cases**: Role-based operation control for tables like `trucking.loads` and `trucking.drivers`.
 
-### **3. Key Considerations**
+## **3. Invoice-Specific Functions**
+
+Following the tutorial's pattern of nested permission checks, we need these additional functions for the invoice system:
+
+### **1. has_role_on_invoice(invoice_id UUID)**
+- **Purpose**: Check if user has role on invoice's account (similar to tutorial's has_role_on_ticket_account)
+- **Logic**:
+```sql
+CREATE OR REPLACE FUNCTION public.has_role_on_invoice(invoice_id UUID)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1
+    FROM trucking.invoices invoice
+    WHERE invoice.id = invoice_id
+      AND public.has_role_on_account(invoice.account_id)
+  );
+END;
+$$ LANGUAGE plpgsql STABLE;
+```
+
+### **2. is_factoring_company_for_invoice(invoice_id UUID)**
+- **Purpose**: Check if current user is the factoring company for this invoice
+- **Logic**:
+```sql
+CREATE OR REPLACE FUNCTION public.is_factoring_company_for_invoice(invoice_id UUID)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1
+    FROM trucking.invoices i
+    JOIN trucking.carriers c ON i.carrier_id = c.id
+    WHERE i.id = invoice_id
+      AND c.factoring_company_id = auth.uid()
+  );
+END;
+$$ LANGUAGE plpgsql STABLE;
+```
+
+## **4. Key Considerations**
+
 1. **Schema Alignment**:
   - Leverage the `public.accounts`, `public.accounts_memberships`, and `public.role_permissions` tables for role and account-based validation.
   - Account for entity-specific relationships, such as `trucking.loads.account_id`.
@@ -124,13 +153,11 @@ $$ LANGUAGE plpgsql STABLE;
 3. **Testing**:
   - Validate functions against sample data for edge cases (e.g., cross-account data, entity ownership).
 
-### **4. Next Steps**
-1. Finalize and implement these functions in the database.
-2. Test the functions with real-world scenarios.
-3. Incorporate these functions into RLS policies for specific tables.
+## **5. Next Steps**
+
+1. Implement core functions in the database.
+2. Add invoice-specific functions.
+3. Test the functions with real-world scenarios.
+4. Incorporate these functions into RLS policies for specific tables.
 
 ---
-
-
-
-

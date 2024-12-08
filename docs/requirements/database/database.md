@@ -39,8 +39,7 @@ This document contains the DBML representation of the database schema for the Tr
 |----------------------|----------------------------------------------------------------------------------------|
 | `carriers`           | Represents trucking carriers and their details, including factoring company associations.|
 | `drivers`            | Stores information about drivers, such as license numbers and contact info.             |
-| `vehicles`           | Manages vehicles, including their VIN, license plate, and maintenance status.           |
-| `maintenance_logs`   | Logs maintenance activities performed on vehicles.                                      |
+| `vehicles`           | Manages vehicles, including their VIN, license plate, and status.                       |
 | `loads`              | Represents freight loads, including origin, destination, and assigned carriers.         |
 | `invoices`           | Manages invoices associated with loads and carriers.                                    |
 | `contacts`           | Stores contact information for key individuals in the trucking operations.              |
@@ -188,15 +187,6 @@ Table trucking.vehicles {
   status VARCHAR(50) [note: 'Values: active, maintenance, decommissioned']
   created_at TIMESTAMP
   updated_at TIMESTAMP
-}
-
-Table trucking.maintenance_logs {
-  id UUID [pk]
-  vehicle_id UUID [ref: > trucking.vehicles.id]
-  description TEXT
-  performed_at TIMESTAMP
-  cost DECIMAL(10, 2)
-  created_at TIMESTAMP
 }
 
 Table trucking.loads {
@@ -357,15 +347,6 @@ Table vehicles {
   updated_at TIMESTAMP
 }
 
-Table maintenance_logs {
-  id UUID [pk]
-  vehicle_id UUID [ref: > vehicles.id]
-  description TEXT
-  performed_at TIMESTAMP
-  cost DECIMAL(10, 2)
-  created_at TIMESTAMP
-}
-
 Table loads {
   id UUID [pk]
   account_id UUID [ref: > accounts.id]
@@ -411,5 +392,3 @@ Table factoring_companies {
   created_at TIMESTAMP
   updated_at TIMESTAMP
 }
-```
-
