@@ -1,3 +1,4 @@
+
 # Invoice System Business Rules
 
 This document outlines the business rules for the invoice system based on our domain requirements.
@@ -16,6 +17,8 @@ This document outlines the business rules for the invoice system based on our do
    - Cannot modify invoice data
 
 3. **Role-Based Permissions**:
+   - System admins have global access to view invoice totals and other system-wide details.
+   - Company admins can view invoice totals if their responsibilities include financial oversight.
    ```sql
    -- Required permissions in app_permissions enum
    'invoices.create'    -- Create new invoices
@@ -38,13 +41,15 @@ This document outlines the business rules for the invoice system based on our do
    - Paid invoices cannot be modified
    - Void requires a reason
    - Status changes must be logged
+   - Reversing statuses (e.g., `Paid -> Pending`) is prohibited without an administrative override.
+   - All status changes must be logged, including who made the change and the reason.
 
 ## **2. Data Protection**
 
 ### **Sensitive Fields**
 1. **Financial Data**:
-   - `amount`: Full visibility restricted
-   - `payment_details`: Contains sensitive info
+   - `amount`: Masked for roles without full access
+   - `payment_details`: Contains sensitive info, masked for roles without access
    - `internal_notes`: Account-only visibility
 
 2. **Access Levels**:
@@ -65,6 +70,10 @@ This document outlines the business rules for the invoice system based on our do
    - Previous value
    - New value
    - Reason (if required)
+
+3. **Access Logging**:
+   - Log all access to sensitive fields (e.g., invoice totals, payment details).
+   - Include user ID, timestamp, and data accessed.
 
 ## **3. Implementation Requirements**
 
@@ -106,12 +115,16 @@ CREATE INDEX ix_invoices_load_id ON trucking.invoices(load_id);
    - Invalid changes are blocked
    - Proper audit trail created
 
+2. **Access Logging Tests**:
+   - Ensure all sensitive data access is logged with correct user ID, timestamp, and accessed fields.
+
 ## **5. Success Criteria**
 
 1. **Security**:
    - No data leakage between accounts
    - Proper factoring company isolation
    - Financial data properly protected
+   - Sensitive fields are masked as per access levels
 
 2. **Functionality**:
    - All roles can perform allowed actions
@@ -122,3 +135,22 @@ CREATE INDEX ix_invoices_load_id ON trucking.invoices(load_id);
    - Efficient policy evaluation
    - Quick access patterns
    - Proper index usage
+
+## **Future Work**
+
+### Medium Priority Enhancements
+1. Expand testing coverage for access control, especially for roles with limited access, like factoring companies.
+2. Enhance security for factoring company views with rate limiting and detailed access logs.
+3. Improve status change audits by requiring reasons for all transitions and capturing user roles in logs.
+
+### Low Priority Suggestions
+1. Plan for scalability, such as multi-currency support and invoice dispute handling.
+2. Refactor database functions (`has_role_on_invoice`, `can_update_invoice_status`) for modularity and reusability.
+3. Implement admin-only reporting views for streamlined oversight without exposing sensitive details.
+
+---
+
+## **Notes**
+
+This document includes high-priority changes in the relevant sections for immediate implementation, while medium- and low-priority suggestions are deferred to the future work section for later enhancements.
+
