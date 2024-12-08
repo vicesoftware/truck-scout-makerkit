@@ -83,6 +83,38 @@ Scraped documentation is saved to the `docs/scraped` directory:
 2. Follow the [MakerKit setup documentation](https://makerkit.dev/docs/next-supabase-turbo/introduction)
 3. Review the [project plan](/docs/requirements/initial_project_plan.md) for development context
 
+### Running Supabase Locally
+
+To work with the local Supabase instance:
+
+1. Start the Supabase services:
+```bash
+pnpm run supabase:web:start
+```
+
+2. Reset the database (if needed):
+```bash
+pnpm run supabase:web:reset
+```
+
+3. Access Supabase Studio:
+   - Open http://127.0.0.1:54323 in your browser
+   - Login credentials:
+     - Email: admin@admin.com
+     - Password: admin
+   - Use the left sidebar to navigate:
+     - Table Editor: View and modify database tables
+     - SQL Editor: Run custom queries
+     - Authentication: Manage users and settings
+     - Storage: Manage file storage
+
+4. Direct Database Connection (for external tools):
+   - Host: 127.0.0.1
+   - Port: 54322
+   - Database: postgres
+   - Username: postgres
+   - Password: postgres
+
 ## Contributing
 
 This project is under active development. Contributors should:
