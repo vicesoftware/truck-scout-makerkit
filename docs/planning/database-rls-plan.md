@@ -38,11 +38,6 @@ Tasks focused on planning, requirements gathering, and stakeholder alignment.
   - ✓ Outlined security requirements
   - ✓ Completed in [invoice-business-rules.md](../requirements/database/invoice-business-rules.md)
 
-- [ ] **Validate Requirements**:
-  - Test edge cases specific to invoice workflows
-  - Verify factoring company access patterns
-  - See detailed plan in [rls_validation_task_list_plan.md](./rls_validation_task_list_plan.md)
-
 ### **Cline (Code-Level Implementation and Debugging)**
 Tasks focused on implementing the invoice system security following the tutorial pattern.
 
