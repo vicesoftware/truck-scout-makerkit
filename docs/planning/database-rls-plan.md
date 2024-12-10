@@ -1,4 +1,5 @@
-# RLS Implementation Plan for TruckingApp
+ocs/planning/database-rls-plan.md</path>
+<content"># RLS Implementation Plan for TruckingApp
 
 This document outlines the tasks and responsibilities for implementing Row-Level Security (RLS) in the TruckingApp database schema, starting with the invoices system as our test entity.
 
@@ -70,6 +71,45 @@ Tasks focused on implementing the invoice system security following the tutorial
   - Permission validation tests
   - Status management tests
 
+### **Testing Strategy**
+
+#### **Authentication and RLS Testing Approach**
+
+**Key Principles**:
+- Integrate tests directly within the web application
+- Leverage Playwright for testing
+- Follow MakerKit's recommended testing practices
+- Focus on minimal, focused test cases
+
+**Test Location**:
+- Tests will be located in `apps/web/tests/`
+- Specific authentication test: `apps/web/tests/authentication.test.ts`
+
+**Authentication Test Scenarios**:
+1. **Successful Authentication**
+   - Validate login with predefined test user
+   - Verify user context retrieval
+   - Check account membership
+
+2. **Authentication Failure**
+   - Test invalid credential scenarios
+   - Ensure proper error handling
+
+**RLS Validation Tests**:
+- Verify row-level security for invoices
+- Test access control for different user roles
+- Validate permission-based access
+
+**Testing Configuration**:
+- Use Playwright for test execution
+- Integrate with Github Actions
+- Run tests as part of CI/CD pipeline
+
+**Implementation Notes**:
+- Tests will use Supabase client for authentication
+- Leverage environment-specific configurations
+- Ensure test isolation and repeatability
+
 ### **Collaborative Tasks**
 Tasks requiring iteration between Custom GPT and Cline.
 
@@ -127,3 +167,5 @@ Tasks requiring iteration between Custom GPT and Cline.
 2. Implement core RLS functions
 3. Set up invoice permissions
 4. Configure access policies
+5. Implement authentication tests
+6. Validate RLS policies
