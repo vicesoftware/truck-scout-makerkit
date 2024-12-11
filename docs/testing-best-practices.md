@@ -20,6 +20,7 @@
 - Never commit real secrets
 - Use placeholder values for testing environments
 - Enable tests selectively with environment flags
+- Load environment variables from specific project configurations when needed
 
 #### Example Environment Setup
 ```bash
@@ -123,7 +124,97 @@ pnpm run typecheck
 pnpm run lint
 ```
 
-### 10. Continuous Improvement
+### 10. Row-Level Security (RLS) Testing Best Practices
+
+#### Test Data Management
+- Use predefined test users with known roles and permissions
+- Create dedicated test UUIDs for non-existent entities
+- Maintain consistent test data across test suites
+```typescript
+const testUsers = {
+  owner: {
+    email: 'test@example.com',
+    userId: '31a03e74-1639-45b6-bfa7-77447f1a4762'
+  },
+  member: {
+    email: 'member@example.com',
+    userId: 'member-test-user-id'
+  }
+};
+```
+
+#### Schema Validation
+- Verify table structure and column existence
+- Test RLS policies are active
+- Validate data types and constraints
+```typescript
+test('Validate table schema and RLS policies', async () => {
+  const { data, error } = await supabase
+    .from('table_name')
+    .select('id, field1, field2')
+    .limit(0);
+
+  expect(error).toBeNull();
+  expect(data).toBeTruthy();
+});
+```
+
+#### Access Control Testing
+- Test CRUD operations for each role
+- Verify unauthorized access is prevented
+- Test cross-account access restrictions
+```typescript
+test('Verify RLS prevents unauthorized access', async () => {
+  const { data, error } = await supabase
+    .from('table_name')
+    .select('*')
+    .eq('account_id', NON_EXISTENT_ACCOUNT_ID)
+    .limit(1);
+
+  expect(data).toEqual([]);
+  expect(error).toBeNull();
+});
+```
+
+#### Related Records Management
+- Create necessary related records before testing
+- Clean up all related records after tests
+- Maintain referential integrity
+```typescript
+// Create related records
+const relatedData = {
+  id: crypto.randomUUID(),
+  account_id: testUsers.owner.userId
+};
+
+const { error } = await supabase
+  .from('related_table')
+  .insert(relatedData);
+
+// Test main functionality
+
+// Cleanup related records
+await supabase
+  .from('related_table')
+  .delete()
+  .eq('id', relatedData.id);
+```
+
+#### Property Validation
+- Test all required fields exist
+- Validate field types and formats
+- Check computed or derived fields
+```typescript
+if (data) {
+  data.forEach(record => {
+    expect(record).toHaveProperty('id');
+    expect(record).toHaveProperty('account_id');
+    expect(record).toHaveProperty('created_at');
+  });
+}
+```
+
+### 11. Continuous Improvement
 - Regularly review and update tests
 - Maintain test coverage
 - Automate where possible
@@ -142,8 +233,12 @@ pnpm run lint
 - Overly complex test setups
 - Ignoring test performance
 - Inconsistent testing approaches
+- Not cleaning up test data
+- Hardcoding test values without documentation
+- Skipping RLS policy validation
 
 ## Recommended Reading
 - [Playwright Documentation](https://playwright.dev/)
 - [MakerKit Testing Guide](https://makerkit.dev/)
 - [Turborepo Documentation](https://turbo.build/)
+- [Supabase RLS Guide](https://supabase.com/docs/guides/auth/row-level-security)
