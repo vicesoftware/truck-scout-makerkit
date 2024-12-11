@@ -259,3 +259,19 @@ SELECT pg_catalog.setval('"public"."role_permissions_id_seq"', 7, true);
 --
 
 SELECT pg_catalog.setval('"supabase_functions"."hooks_id_seq"', 19, true);
+
+
+-- Additional seed data for invoices
+INSERT INTO "public"."invoices" ("id", "account_id", "load_id", "carrier_id", "amount", "due_date", "paid_status", "status", "created_at", "updated_at") VALUES 
+(
+    '99999999-9999-9999-9999-999999999999',
+    '5deaa894-2094-4da3-b4fd-1fada0809d1c',  -- Using the existing account ID from the seed data
+    NULL,  -- load_id can be null
+    NULL,  -- carrier_id can be null
+    1250.50,
+    NOW() + INTERVAL '30 days',
+    false,
+    'Draft',
+    NOW(),
+    NOW()
+);
