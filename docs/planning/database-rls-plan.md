@@ -1,5 +1,4 @@
-ocs/planning/database-rls-plan.md</path>
-<content"># RLS Implementation Plan for TruckingApp
+# RLS Implementation Plan for TruckingApp
 
 This document outlines the tasks and responsibilities for implementing Row-Level Security (RLS) in the TruckingApp database schema, starting with the invoices system as our test entity.
 
@@ -14,7 +13,27 @@ This document outlines the tasks and responsibilities for implementing Row-Level
 
 ---
 
-## **2. Tasks and Responsibilities**
+## **2. Current Focus: RLS Policy Validation**
+
+### **Immediate Testing Objectives**
+- Verify RLS policy prevents unauthorized access to invoices
+- Validate account-based data isolation
+- Ensure minimal data leakage between accounts
+
+### **Test Validation Criteria**
+1. **Unauthorized Access Prevention**
+   - Confirm no data retrieval for non-existent accounts
+   - Verify strict account-level data boundaries
+   - Test edge cases in access control
+
+2. **Data Isolation Mechanisms**
+   - Validate Supabase RLS policies
+   - Ensure service role cannot bypass account restrictions
+   - Test with predefined test scenarios
+
+---
+
+## **3. Existing Tasks and Responsibilities**
 
 ### **Custom GPT (Domain Knowledge and Requirements Expertise)**
 Tasks focused on planning, requirements gathering, and stakeholder alignment.
@@ -61,54 +80,25 @@ Tasks focused on implementing the invoice system security following the tutorial
   alter type public.app_permissions add value 'invoices.status';
   ```
 
-- [ ] **Set Up Initial Migrations**:
-  - Create migration for invoice security
-  - Add RLS policies
-  - Configure permissions
+### **E2E Testing Strategy**
 
-- [ ] **Implement Testing Framework**:
-  - Unit tests for invoice access
-  - Permission validation tests
-  - Status management tests
+#### **Playwright Test Approach**
+- Location: `apps/e2e/tests/rls/invoice-rls-validation.spec.ts`
+- Key Testing Scenarios:
+  1. **Schema Validation**
+     - Verify invoices table structure
+     - Confirm expected columns and types
+  
+  2. **Access Control Validation**
+     - Test cross-account data access restrictions
+     - Validate RLS policies prevent unauthorized data retrieval
+     - Ensure data access is scoped to account context
 
-### **Testing Strategy**
-
-#### **Authentication and RLS Testing Approach**
-
-**Key Principles**:
-- Integrate tests directly within the web application
-- Leverage Playwright for testing
-- Follow MakerKit's recommended testing practices
-- Focus on minimal, focused test cases
-
-**Test Location**:
-- Tests will be located in `apps/web/tests/`
-- Specific authentication test: `apps/web/tests/authentication.test.ts`
-
-**Authentication Test Scenarios**:
-1. **Successful Authentication**
-   - Validate login with predefined test user
-   - Verify user context retrieval
-   - Check account membership
-
-2. **Authentication Failure**
-   - Test invalid credential scenarios
-   - Ensure proper error handling
-
-**RLS Validation Tests**:
-- Verify row-level security for invoices
-- Test access control for different user roles
-- Validate permission-based access
-
-**Testing Configuration**:
-- Use Playwright for test execution
-- Integrate with Github Actions
-- Run tests as part of CI/CD pipeline
-
-**Implementation Notes**:
-- Tests will use Supabase client for authentication
-- Leverage environment-specific configurations
-- Ensure test isolation and repeatability
+#### **Test Configuration**
+- Conditional test execution using `ENABLE_E2E_JOB` flag
+- Use service role for administrative-level verification
+- Minimal, focused test cases
+- Integration with CI/CD pipeline
 
 ### **Collaborative Tasks**
 Tasks requiring iteration between Custom GPT and Cline.
@@ -133,39 +123,31 @@ Tasks requiring iteration between Custom GPT and Cline.
 | RLS Functions         | Custom GPT       | Complete          | Defined in rls-functions-req.md             |
 | Policy Blueprints     | Custom GPT       | Complete          | Defined in RLS_Policy_Blueprints.md         |
 | Business Rules        | Custom GPT       | Complete          | Defined in invoice-business-rules.md        |
-| Implementation        | Cline            | Not Started       | Ready to begin                              |
-| Testing Framework     | Collaborative    | Not Started       | Will follow implementation                  |
+| E2E Testing Framework | Collaborative    | In Progress       | Playwright tests developed                  |
+| Implementation        | Cline            | Pending           | Ready to begin migration                    |
+| Full RLS Setup        | Collaborative    | Not Started       | Dependent on initial implementation         |
 
 ---
 
-## **4. Implementation Steps**
+## **4. Updated Implementation Steps**
 
-1. **Phase 1: Core Invoice Security**
-   - Create initial migration
-   - Set up base RLS policies
-   - Implement core functions
+1. **RLS Policy Validation Phase**
+   - Develop comprehensive test scenarios
+   - Create precise RLS policy tests
+   - Verify account-specific data access
+   - Validate unauthorized access prevention
 
-2. **Phase 2: Access Control**
-   - Implement RLS policies
-   - Set up permissions
-   - Configure role access
-
-3. **Phase 3: Testing**
-   - Implement test framework
-   - Validate all scenarios
-   - Test edge cases
-
-4. **Phase 4: Documentation**
-   - Document implementation
-   - Create usage examples
-   - Record patterns for reuse
+2. **Refinement and Documentation**
+   - Document test findings
+   - Identify potential RLS policy improvements
+   - Create guidelines for future RLS implementations
 
 ---
 
-## **5. Next Steps**
-1. Create initial migration file
-2. Implement core RLS functions
-3. Set up invoice permissions
-4. Configure access policies
-5. Implement authentication tests
-6. Validate RLS policies
+## **5. Next Immediate Steps**
+1. Refine E2E test for RLS policy validation
+2. Verify test scenarios cover key access control requirements
+3. Document test methodology and findings
+4. Prepare recommendations for RLS policy enhancement
+
+
