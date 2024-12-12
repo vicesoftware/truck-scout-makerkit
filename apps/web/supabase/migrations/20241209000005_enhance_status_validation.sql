@@ -4,7 +4,14 @@ RETURNS BOOLEAN AS $$
 DECLARE
     current_status TEXT;
     user_role TEXT;
+    v_user_id UUID;
 BEGIN
+    -- Get authenticated user ID
+    v_user_id := auth.uid();
+    IF v_user_id IS NULL THEN
+        RETURN FALSE;
+    END IF;
+
     -- Get current status and user role
     SELECT
         i.status,
@@ -13,16 +20,17 @@ BEGIN
     JOIN public.accounts_memberships am
         ON i.account_id = am.account_id
     WHERE i.id = invoice_id
-    AND am.user_id = COALESCE(auth.uid(), (SELECT user_id FROM auth.users LIMIT 1));
+    AND am.user_id = v_user_id;
 
-    -- Members cannot change status
-    IF user_role = 'member' THEN
-        RAISE EXCEPTION 'Members are not authorized to change invoice status'
-            USING HINT = 'Only owners, billing, and admin roles can change invoice status';
+    -- If no role found, user doesn't have access
+    IF user_role IS NULL THEN
+        RETURN FALSE;
     END IF;
 
     -- Validate status transitions based on role
     RETURN CASE
+        -- Members cannot change status
+        WHEN user_role = 'member' THEN FALSE
         -- Owner can make any transition except from Paid
         WHEN user_role = 'owner' AND current_status != 'Paid' THEN TRUE
         -- Billing can transition Draft->Pending->Paid
