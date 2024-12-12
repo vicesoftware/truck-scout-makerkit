@@ -50,16 +50,3 @@ VALUES
 
     -- Account 2 Invoices
     ('cccccccc-0000-0000-0000-cccccccccccc', '22222222-2222-2222-2222-222222222222', '88888888-8888-8888-8888-888888888888', '55555555-5555-5555-5555-555555555555', 4000.00, 'Pending', now() + interval '30 days', false);
-
--- Grant necessary permissions to test users
-INSERT INTO public.role_permissions (role, permission)
-VALUES
-    -- Owner has all permissions
-    ('owner', 'invoices.create'),
-    ('owner', 'invoices.update'),
-    ('owner', 'invoices.delete'),
-    ('owner', 'invoices.status'),
-    -- Admin has create, update, and status permissions
-    ('admin', 'invoices.create'),
-    ('admin', 'invoices.update'),
-    ('admin', 'invoices.status');
