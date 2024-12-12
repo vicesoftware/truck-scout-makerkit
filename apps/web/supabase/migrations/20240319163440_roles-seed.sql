@@ -1,4 +1,4 @@
--- Seed the roles table with default roles 'owner' and 'member'
+-- Seed the roles table with default roles 'owner', 'member', and 'billing'
 insert into public.roles(
     name,
     hierarchy_level)
@@ -12,6 +12,13 @@ insert into public.roles(
 values (
     'member',
     2);
+
+insert into public.roles(
+    name,
+    hierarchy_level)
+values (
+    'billing',
+    3);
 
 -- We seed the role_permissions table with the default roles and permissions
 insert into public.role_permissions(
