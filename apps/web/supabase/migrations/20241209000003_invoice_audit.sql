@@ -15,8 +15,9 @@ CREATE OR REPLACE FUNCTION trucking.log_invoice_status_change()
 RETURNS TRIGGER AS $$
 DECLARE
     current_user_id UUID;
+    test_user_id UUID := '00000000-0000-0000-0000-000000000000'::UUID;
 BEGIN
-    current_user_id := COALESCE(auth.uid(), (SELECT user_id FROM auth.users LIMIT 1));
+    current_user_id := COALESCE(auth.uid(), (SELECT user_id FROM auth.users LIMIT 1), test_user_id);
 
     IF OLD.status IS DISTINCT FROM NEW.status THEN
         INSERT INTO trucking.invoice_audit_log (
