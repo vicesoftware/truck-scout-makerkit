@@ -15,9 +15,19 @@ CREATE OR REPLACE FUNCTION public.log_invoice_status_change()
 RETURNS TRIGGER AS $$
 DECLARE
     current_user_id UUID;
-    test_user_id UUID := '00000000-0000-0000-0000-000000000000'::UUID;
 BEGIN
-    current_user_id := COALESCE(auth.uid(), (SELECT user_id FROM auth.users LIMIT 1), test_user_id);
+    -- Get the current user ID with fallbacks
+    SELECT
+        COALESCE(
+            auth.uid(),
+            NULLIF(current_setting('app.current_user_id', TRUE), ''),
+            (SELECT user_id FROM auth.users WHERE email = 'test@makerkit.dev' LIMIT 1)
+        ) INTO current_user_id;
+
+    -- Ensure we have a user ID
+    IF current_user_id IS NULL THEN
+        RAISE EXCEPTION 'User ID is required for audit logging';
+    END IF;
 
     IF OLD.status IS DISTINCT FROM NEW.status THEN
         INSERT INTO public.invoice_audit_log (
@@ -45,6 +55,6 @@ DROP TRIGGER IF EXISTS invoice_status_audit_trigger ON public.invoices;
 
 -- Create trigger for status changes
 CREATE TRIGGER invoice_status_audit_trigger
-    AFTER UPDATE ON public.invoices
+    BEFORE UPDATE ON public.invoices
     FOR EACH ROW
     EXECUTE FUNCTION public.log_invoice_status_change();
