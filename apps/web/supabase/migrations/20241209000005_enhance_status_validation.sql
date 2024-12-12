@@ -13,7 +13,7 @@ BEGIN
     SELECT
         i.status,
         am.account_role INTO current_status, user_role
-    FROM trucking.invoices i
+    FROM public.invoices i
     JOIN public.accounts_memberships am
         ON i.account_id = am.account_id
     WHERE i.id = invoice_id
@@ -37,10 +37,10 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Update RLS policies to use enhanced validation
-DROP POLICY IF EXISTS update_invoices ON trucking.invoices;
+DROP POLICY IF EXISTS update_invoices ON public.invoices;
 
 -- Create policy for invoice updates with proper row-level security context
-CREATE POLICY update_invoices ON trucking.invoices
+CREATE POLICY update_invoices ON public.invoices
     FOR UPDATE
     TO authenticated
     USING (
@@ -73,8 +73,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-DROP TRIGGER IF EXISTS set_status_update_flag_trigger ON trucking.invoices;
+DROP TRIGGER IF EXISTS set_status_update_flag_trigger ON public.invoices;
 CREATE TRIGGER set_status_update_flag_trigger
-    BEFORE UPDATE ON trucking.invoices
+    BEFORE UPDATE ON public.invoices
     FOR EACH ROW
     EXECUTE FUNCTION public.set_status_update_flag();
