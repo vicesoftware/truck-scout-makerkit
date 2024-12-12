@@ -27,10 +27,13 @@ BEGIN
         RETURN FALSE;
     END IF;
 
+    -- Members cannot change status
+    IF user_role = 'member' THEN
+        RETURN FALSE;
+    END IF;
+
     -- Validate status transitions based on role
     RETURN CASE
-        -- Members cannot change status
-        WHEN user_role = 'member' THEN FALSE
         -- Owner can make any transition except from Paid
         WHEN user_role = 'owner' AND current_status != 'Paid' THEN TRUE
         -- Billing can transition Draft->Pending->Paid
@@ -54,37 +57,29 @@ CREATE POLICY update_invoices ON public.invoices
     FOR UPDATE
     TO authenticated
     USING (
-        CASE
-            WHEN current_setting('my.status_update', true)::boolean THEN
-                public.can_update_invoice_status(id, status)
-            ELSE
-                public.has_permission(auth.uid(), account_id, 'invoices.update')
-        END
-    )
-    WITH CHECK (
-        CASE
-            WHEN current_setting('my.status_update', true)::boolean THEN
-                public.can_update_invoice_status(id, status)
-            ELSE
-                public.has_permission(auth.uid(), account_id, 'invoices.update')
-        END
+        EXISTS (
+            SELECT 1
+            FROM public.accounts_memberships am
+            WHERE am.user_id = auth.uid()
+            AND am.account_id = invoices.account_id
+            AND (
+                -- Allow non-status updates if user has general update permission
+                (invoices.status = status AND public.has_permission(auth.uid(), account_id, 'invoices.update'))
+                OR
+                -- For status changes, enforce role-based rules
+                (invoices.status != status AND (
+                    -- Owner can change any status except Paid
+                    (am.account_role = 'owner' AND invoices.status != 'Paid')
+                    OR
+                    -- Billing can transition Draft->Pending->Paid
+                    (am.account_role = 'billing' AND (
+                        (invoices.status = 'Draft' AND status = 'Pending')
+                        OR (invoices.status = 'Pending' AND status = 'Paid')
+                    ))
+                    OR
+                    -- Admin can transition Draft->Pending
+                    (am.account_role = 'admin' AND invoices.status = 'Draft' AND status = 'Pending')
+                ))
+            )
+        )
     );
-
--- Add trigger to set status_update flag
-CREATE OR REPLACE FUNCTION public.set_status_update_flag()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF OLD.status IS DISTINCT FROM NEW.status THEN
-        PERFORM set_config('my.status_update', 'true', true);
-    ELSE
-        PERFORM set_config('my.status_update', 'false', true);
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-DROP TRIGGER IF EXISTS set_status_update_flag_trigger ON public.invoices;
-CREATE TRIGGER set_status_update_flag_trigger
-    BEFORE UPDATE ON public.invoices
-    FOR EACH ROW
-    EXECUTE FUNCTION public.set_status_update_flag();
