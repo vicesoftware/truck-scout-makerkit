@@ -15,10 +15,14 @@ BEGIN
     WHERE i.id = invoice_id
     AND am.user_id = COALESCE(auth.uid(), (SELECT user_id FROM auth.users LIMIT 1));
 
+    -- Members cannot change status
+    IF user_role = 'member' THEN
+        RAISE EXCEPTION 'Members are not authorized to change invoice status'
+            USING HINT = 'Only owners, billing, and admin roles can change invoice status';
+    END IF;
+
     -- Validate status transitions based on role
     RETURN CASE
-        -- Members cannot change status
-        WHEN user_role = 'member' THEN FALSE
         -- Owner can make any transition except from Paid
         WHEN user_role = 'owner' AND current_status != 'Paid' THEN TRUE
         -- Billing can transition Draft->Pending->Paid
