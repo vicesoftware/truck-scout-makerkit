@@ -1,47 +1,35 @@
--- Save existing role permissions
-CREATE TABLE IF NOT EXISTS temp_role_permissions AS
-SELECT * FROM public.role_permissions;
+-- Add new invoice permissions to app_permissions enum
+ALTER TYPE public.app_permissions ADD VALUE IF NOT EXISTS 'invoices.create';
+ALTER TYPE public.app_permissions ADD VALUE IF NOT EXISTS 'invoices.update';
+ALTER TYPE public.app_permissions ADD VALUE IF NOT EXISTS 'invoices.delete';
+ALTER TYPE public.app_permissions ADD VALUE IF NOT EXISTS 'invoices.status';
 
--- Drop existing tables and types that depend on app_permissions
-DROP TABLE IF EXISTS public.role_permissions;
+-- Add timestamps to role_permissions if they don't exist
+DO $$ BEGIN
+    ALTER TABLE public.role_permissions ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT now();
+    ALTER TABLE public.role_permissions ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT now();
+EXCEPTION
+    WHEN duplicate_column THEN null;
+END $$;
 
--- Drop the existing enum type
-DROP TYPE IF EXISTS public.app_permissions;
+-- Add id column if it doesn't exist
+DO $$ BEGIN
+    ALTER TABLE public.role_permissions ADD COLUMN IF NOT EXISTS id UUID DEFAULT gen_random_uuid() PRIMARY KEY;
+EXCEPTION
+    WHEN duplicate_column THEN null;
+END $$;
 
--- Recreate the enum type with all permissions
-CREATE TYPE public.app_permissions AS ENUM (
-  'roles.manage',
-  'billing.manage',
-  'settings.manage',
-  'members.manage',
-  'invites.manage',
-  'invoices.create',
-  'invoices.update',
-  'invoices.delete',
-  'invoices.status'
-);
-
--- Recreate the role_permissions table
-CREATE TABLE IF NOT EXISTS public.role_permissions (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  role VARCHAR(255) NOT NULL REFERENCES public.roles(name) ON DELETE CASCADE,
-  permission public.app_permissions NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  UNIQUE(role, permission)
-);
-
--- Restore existing permissions that are still valid
-INSERT INTO public.role_permissions (role, permission)
-SELECT role, permission::public.app_permissions
-FROM temp_role_permissions
-WHERE permission::TEXT IN (
-  'roles.manage',
-  'billing.manage',
-  'settings.manage',
-  'members.manage',
-  'invites.manage'
-);
-
--- Drop the temporary table
-DROP TABLE temp_role_permissions;
+-- Add unique constraint if it doesn't exist (using a safer approach)
+DO $$
+BEGIN
+    -- Check if the constraint already exists
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'role_permissions_role_permission_key'
+    ) THEN
+        ALTER TABLE public.role_permissions
+        ADD CONSTRAINT role_permissions_role_permission_key
+        UNIQUE (role, permission);
+    END IF;
+END $$;
