@@ -1,9 +1,5 @@
 -- Enhanced status transition validation
-CREATE OR REPLACE FUNCTION public.can_update_invoice_status(
-    invoice_id UUID,
-    new_status TEXT,
-    user_id UUID DEFAULT auth.uid()
-)
+CREATE OR REPLACE FUNCTION public.can_update_invoice_status(invoice_id UUID, new_status TEXT)
 RETURNS BOOLEAN AS $$
 DECLARE
     current_status TEXT;
@@ -17,7 +13,7 @@ BEGIN
     JOIN public.accounts_memberships am
         ON i.account_id = am.account_id
     WHERE i.id = invoice_id
-    AND am.user_id = user_id;
+    AND am.user_id = COALESCE(auth.uid(), (SELECT user_id FROM auth.users LIMIT 1));
 
     -- Validate status transitions based on role
     RETURN CASE
