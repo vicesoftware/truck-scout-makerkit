@@ -24,7 +24,9 @@ values (
 insert into public.role_permissions(
   role,
   permission)
-values (
+values
+-- Owner permissions
+(
   'owner',
   'roles.manage'),
 (
@@ -40,8 +42,28 @@ values (
   'owner',
   'invites.manage'),
 (
+  'owner',
+  'invoices.create'),
+(
+  'owner',
+  'invoices.update'),
+(
+  'owner',
+  'invoices.delete'),
+(
+  'owner',
+  'invoices.status'),
+-- Member permissions
+(
   'member',
   'settings.manage'),
 (
   'member',
-  'invites.manage');
+  'invites.manage'),
+-- Billing permissions
+(
+  'billing',
+  'invoices.update'),
+(
+  'billing',
+  'invoices.status');
