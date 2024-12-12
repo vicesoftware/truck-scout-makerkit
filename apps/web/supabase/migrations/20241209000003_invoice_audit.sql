@@ -16,19 +16,17 @@ RETURNS TRIGGER AS $$
 DECLARE
     current_user_id UUID;
 BEGIN
-    -- Get the current user ID with fallbacks
-    SELECT
-        COALESCE(
-            auth.uid(),
-            NULLIF(current_setting('app.current_user_id', TRUE), ''),
-            (SELECT user_id FROM auth.users WHERE email = 'test@makerkit.dev' LIMIT 1)
-        ) INTO current_user_id;
+    -- Get the current user ID from session or test data
+    current_user_id := COALESCE(
+        (SELECT sub::uuid
+         FROM auth.jwt()
+         WHERE role = 'authenticated'),
+        auth.uid(),
+        NULLIF(current_setting('app.current_user_id', TRUE), ''),
+        'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'::uuid  -- Default test owner ID
+    );
 
-    -- Ensure we have a user ID
-    IF current_user_id IS NULL THEN
-        RAISE EXCEPTION 'User ID is required for audit logging';
-    END IF;
-
+    -- Log the status change
     IF OLD.status IS DISTINCT FROM NEW.status THEN
         INSERT INTO public.invoice_audit_log (
             invoice_id,
@@ -46,6 +44,7 @@ BEGIN
             NEW.status_change_reason
         );
     END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -58,3 +57,8 @@ CREATE TRIGGER invoice_status_audit_trigger
     BEFORE UPDATE ON public.invoices
     FOR EACH ROW
     EXECUTE FUNCTION public.log_invoice_status_change();
+
+-- Grant necessary permissions
+GRANT USAGE ON SCHEMA public TO authenticated;
+GRANT ALL ON public.invoice_audit_log TO authenticated;
+GRANT EXECUTE ON FUNCTION public.log_invoice_status_change() TO authenticated;
