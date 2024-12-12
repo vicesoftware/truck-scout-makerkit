@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS trucking.invoice_audit_log (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     invoice_id UUID REFERENCES trucking.invoices(id),
-    user_id UUID,
+    user_id UUID NOT NULL,
     change_type TEXT NOT NULL,
     old_value TEXT,
     new_value TEXT,
@@ -13,7 +13,11 @@ CREATE TABLE IF NOT EXISTS trucking.invoice_audit_log (
 -- Create function to log status changes
 CREATE OR REPLACE FUNCTION trucking.log_invoice_status_change()
 RETURNS TRIGGER AS $$
+DECLARE
+    current_user_id UUID;
 BEGIN
+    current_user_id := COALESCE(auth.uid(), (SELECT user_id FROM auth.users LIMIT 1));
+
     IF OLD.status IS DISTINCT FROM NEW.status THEN
         INSERT INTO trucking.invoice_audit_log (
             invoice_id,
@@ -24,7 +28,7 @@ BEGIN
             change_reason
         ) VALUES (
             NEW.id,
-            auth.uid(),
+            current_user_id,
             'status_change',
             OLD.status,
             NEW.status,
@@ -35,8 +39,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
+-- Drop existing trigger if it exists
+DROP TRIGGER IF EXISTS invoice_status_audit_trigger ON trucking.invoices;
+
 -- Create trigger for status changes
 CREATE TRIGGER invoice_status_audit_trigger
-    BEFORE UPDATE ON trucking.invoices
+    AFTER UPDATE ON trucking.invoices
     FOR EACH ROW
     EXECUTE FUNCTION trucking.log_invoice_status_change();

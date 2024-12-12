@@ -38,22 +38,43 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Update RLS policies to use enhanced validation
 DROP POLICY IF EXISTS update_invoices ON trucking.invoices;
+
+-- Create policy for invoice updates with proper row-level security context
 CREATE POLICY update_invoices ON trucking.invoices
     FOR UPDATE
     TO authenticated
     USING (
         CASE
-            WHEN NEW.status IS DISTINCT FROM OLD.status THEN
-                public.can_update_invoice_status(id, NEW.status)
+            WHEN current_setting('my.status_update', true)::boolean THEN
+                public.can_update_invoice_status(id, status)
             ELSE
                 public.has_permission(auth.uid(), account_id, 'invoices.update')
         END
     )
     WITH CHECK (
         CASE
-            WHEN NEW.status IS DISTINCT FROM OLD.status THEN
-                public.can_update_invoice_status(id, NEW.status)
+            WHEN current_setting('my.status_update', true)::boolean THEN
+                public.can_update_invoice_status(id, status)
             ELSE
                 public.has_permission(auth.uid(), account_id, 'invoices.update')
         END
     );
+
+-- Add trigger to set status_update flag
+CREATE OR REPLACE FUNCTION public.set_status_update_flag()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF OLD.status IS DISTINCT FROM NEW.status THEN
+        PERFORM set_config('my.status_update', 'true', true);
+    ELSE
+        PERFORM set_config('my.status_update', 'false', true);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS set_status_update_flag_trigger ON trucking.invoices;
+CREATE TRIGGER set_status_update_flag_trigger
+    BEFORE UPDATE ON trucking.invoices
+    FOR EACH ROW
+    EXECUTE FUNCTION public.set_status_update_flag();
