@@ -12,6 +12,12 @@ This document contains the DBML representation of the database schema for the Tr
       - [Applying Migrations](#applying-migrations)
       - [Creating a New Migration](#creating-a-new-migration)
     - [Database Type Generation](#database-type-generation)
+- [Database Change Management](#database-change-management)
+  - [Documentation Updates](#documentation-updates)
+  - [Key Documentation Locations](#key-documentation-locations)
+  - [Migration Management](#migration-management)
+    - [Critical Rules for Supabase Migration Ordering](#critical-rules-for-supabase-migration-ordering)
+    - [Common Migration Errors](#common-migration-errors)
   - [Best Practices](#best-practices)
   - [Typical Development Workflow](#typical-development-workflow)
   - [Debugging and Troubleshooting](#debugging-and-troubleshooting)
@@ -46,6 +52,9 @@ This document contains the DBML representation of the database schema for the Tr
     - [Migration Conflicts](#migration-conflicts-1)
     - [Type Generation Issues](#type-generation-issues-1)
   - [Security Notes](#security-notes-1)
+- [Important Schema Verification Guidelines](#important-schema-verification-guidelines)
+  - [Critical Areas to Verify](#critical-areas-to-verify)
+  - [Critical File Locations](#critical-file-locations)
 
 
 ## Database Management Workflow
@@ -82,6 +91,39 @@ pnpm run --filter web supabase migrations new description_of_change
 # Generate Supabase types for client-side use
 pnpm run supabase:web:typegen
 ```
+
+## Database Change Management
+
+When making database schema changes or implementing new database features, follow these steps:
+
+### Documentation Updates
+
+1. Update this file (database.md) with all schema changes
+2. Document best practices and problematic approaches
+3. Review and update requirements documents if implementation details have changed
+4. Update planning documents to reflect any new learnings or approach changes
+
+### Key Documentation Locations
+
+- Schema documentation: This file (`docs/requirements/database/database.md`)
+- Requirements: `docs/requirements/database/`
+- Planning: `docs/planning/`
+
+### Migration Management
+
+For better maintainability and review efficiency, related database migrations should be consolidated into a single migration file. This is particularly important when working on complex features that involve multiple database changes (like RLS implementations).
+
+#### Critical Rules for Supabase Migration Ordering
+
+1. Function definitions must precede GRANT statements that reference them
+2. Migration files are executed in alphabetical/timestamp order
+3. Use `pnpm supabase:reset` in the apps/web directory to test migration changes
+4. Enable required feature flags (like ENABLE_E2E_JOB and ENABLE_BILLING_TESTS) when testing migrations that affect those features
+
+#### Common Migration Errors
+
+- "function does not exist" usually indicates a GRANT statement is trying to reference a function that hasn't been created yet
+- Migration failures can be debugged by adding --debug to the supabase command
 
 ### Best Practices
 
@@ -730,3 +772,40 @@ pnpm run --filter web supabase logs
 - Never commit sensitive credentials
 - Use environment-specific configurations
 - Limit database access permissions
+
+
+## Important Schema Verification Guidelines
+
+When working with database features in TruckScout Makerkit, always verify consistency between documentation and implementation:
+
+### Critical Areas to Verify
+
+1. Field Constraints
+   - NOT NULL constraints
+   - DEFAULT values
+   - Unique constraints
+
+2. Data Types
+   - Timestamp types (TIMESTAMP vs TIMESTAMP WITH TIME ZONE)
+   - Numeric precision
+   - String lengths
+
+3. Field Presence
+   - Check for missing fields
+   - Verify additional fields
+   - Ensure field names match
+
+### Critical File Locations
+
+- Schema Documentation: This file (`docs/requirements/database/database.md`)
+  * Contains complete DBML schema definitions
+  * Documents best practices and workflows
+  * Provides troubleshooting guides
+
+- Schema Implementation: `apps/web/supabase/migrations/`
+  * Contains actual SQL migrations
+  * Implements the documented schema
+  * Includes RLS policies and triggers
+
+Always cross-reference these locations when making database changes to ensure consistency between documentation and implementation.
+
