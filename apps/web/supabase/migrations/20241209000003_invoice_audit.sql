@@ -18,9 +18,7 @@ DECLARE
 BEGIN
     -- Get the current user ID from session or test data
     current_user_id := COALESCE(
-        (SELECT sub::uuid
-         FROM auth.jwt()
-         WHERE role = 'authenticated'),
+        (auth.jwt()->>'sub')::uuid,
         auth.uid(),
         NULLIF(current_setting('app.current_user_id', TRUE), ''),
         'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'::uuid  -- Default test owner ID
