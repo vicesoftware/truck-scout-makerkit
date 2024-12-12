@@ -1,74 +1,133 @@
--- Consolidated Invoice RLS Implementation
--- Combines all invoice-related migrations into a single, coherent file
+-- Ensure required extensions and schemas
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Set search path to ensure proper schema context
+SET search_path = public, auth;
+
+-- Create authenticated role first if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticated') THEN
+        CREATE ROLE authenticated;
+    END IF;
+END $$;
+
+-- Verify auth schema exists (required for RLS)
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = 'auth') THEN
+        RAISE EXCEPTION 'Auth schema must exist before running these migrations';
+    END IF;
+END $$;
+
+-- Verify accounts table exists
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'accounts') THEN
+        RAISE EXCEPTION 'Accounts table must exist before running these migrations';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'accounts_memberships') THEN
+        RAISE EXCEPTION 'Accounts memberships table must exist before running these migrations';
+    END IF;
+END $$;
+
+BEGIN;
+
+-- Grant schema usage to authenticated role early
+GRANT USAGE ON SCHEMA public TO authenticated;
 
 -- Remove trucking schema and move tables to public schema
 DROP SCHEMA IF EXISTS trucking CASCADE;
 
--- Recreate carriers table in public schema
+-- Create base tables first
 CREATE TABLE IF NOT EXISTS public.carriers (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    account_id UUID NOT NULL REFERENCES public.accounts(id),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    account_id UUID NOT NULL,
     name TEXT NOT NULL,
-    factoring_company_id UUID,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+    contact_info JSONB,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT fk_carriers_account
+        FOREIGN KEY (account_id)
+        REFERENCES public.accounts(id)
+        ON DELETE CASCADE
+        DEFERRABLE INITIALLY DEFERRED
 );
 
--- Recreate loads table in public schema
 CREATE TABLE IF NOT EXISTS public.loads (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    account_id UUID NOT NULL REFERENCES public.accounts(id),
-    carrier_id UUID REFERENCES public.carriers(id),
-    status TEXT NOT NULL DEFAULT 'Draft',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    account_id UUID NOT NULL,
+    carrier_id UUID,
+    load_number TEXT NOT NULL DEFAULT 'L-' || gen_random_uuid(),
+    status TEXT DEFAULT 'draft',
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT fk_loads_account
+        FOREIGN KEY (account_id)
+        REFERENCES public.accounts(id)
+        ON DELETE CASCADE
+        DEFERRABLE INITIALLY DEFERRED,
+    CONSTRAINT fk_loads_carrier
+        FOREIGN KEY (carrier_id)
+        REFERENCES public.carriers(id)
+        DEFERRABLE INITIALLY DEFERRED
 );
 
--- Recreate invoices table in public schema with all fields
 CREATE TABLE IF NOT EXISTS public.invoices (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    account_id UUID NOT NULL REFERENCES public.accounts(id),
-    load_id UUID REFERENCES public.loads(id),
-    carrier_id UUID REFERENCES public.carriers(id),
-    amount DECIMAL(10,2) NOT NULL,
-    status TEXT NOT NULL DEFAULT 'Draft',
-    due_date TIMESTAMP WITH TIME ZONE,
-    paid_status BOOLEAN DEFAULT FALSE,
-    internal_notes TEXT,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    account_id UUID NOT NULL,
+    load_id UUID,
+    carrier_id UUID,
+    invoice_number TEXT NOT NULL,
+    amount DECIMAL(10,2),
+    status TEXT DEFAULT 'draft',
+    paid_status BOOLEAN DEFAULT false,
+    due_date TIMESTAMPTZ,
     bank_details TEXT,
     payment_details TEXT,
+    internal_notes TEXT,
     status_change_reason TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now(),
+    created_by UUID REFERENCES auth.users,
+    updated_by UUID REFERENCES auth.users,
+    CONSTRAINT fk_invoices_account
+        FOREIGN KEY (account_id)
+        REFERENCES public.accounts(id)
+        ON DELETE CASCADE
+        DEFERRABLE INITIALLY DEFERRED,
+    CONSTRAINT fk_invoices_load
+        FOREIGN KEY (load_id)
+        REFERENCES public.loads(id)
+        DEFERRABLE INITIALLY DEFERRED,
+    CONSTRAINT fk_invoices_carrier
+        FOREIGN KEY (carrier_id)
+        REFERENCES public.carriers(id)
+        DEFERRABLE INITIALLY DEFERRED
 );
 
--- Add performance indexes
-CREATE INDEX IF NOT EXISTS ix_carriers_account_id ON public.carriers(account_id);
-CREATE INDEX IF NOT EXISTS ix_loads_account_id ON public.loads(account_id);
-CREATE INDEX IF NOT EXISTS ix_loads_carrier_id ON public.loads(carrier_id);
-CREATE INDEX IF NOT EXISTS ix_invoices_account_id ON public.invoices(account_id);
-CREATE INDEX IF NOT EXISTS ix_invoices_carrier_id ON public.invoices(carrier_id);
-CREATE INDEX IF NOT EXISTS ix_invoices_load_id ON public.invoices(load_id);
-
--- Create invoice audit log table
 CREATE TABLE IF NOT EXISTS public.invoice_audit_log (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    invoice_id UUID REFERENCES public.invoices(id),
+    invoice_id UUID NOT NULL,
     user_id UUID NOT NULL,
-    change_type TEXT NOT NULL,
+    action_type TEXT NOT NULL,
     old_value TEXT,
     new_value TEXT,
-    change_reason TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+    reason TEXT,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT fk_invoice_audit_log_invoice
+        FOREIGN KEY (invoice_id)
+        REFERENCES public.invoices(id)
+        ON DELETE CASCADE
+        DEFERRABLE INITIALLY DEFERRED
 );
 
--- Add billing role permissions
-INSERT INTO public.role_permissions (role, permission)
-VALUES
-    ('billing', 'invoices.create'),
-    ('billing', 'invoices.update'),
-    ('billing', 'invoices.status')
-ON CONFLICT (role, permission) DO NOTHING;
+-- Create indexes
+CREATE INDEX IF NOT EXISTS idx_invoices_account_id ON public.invoices(account_id);
+CREATE INDEX IF NOT EXISTS idx_invoices_load_id ON public.invoices(load_id);
+CREATE INDEX IF NOT EXISTS idx_invoice_audit_log_invoice_id ON public.invoice_audit_log(invoice_id);
+CREATE INDEX IF NOT EXISTS idx_carriers_account_id ON public.carriers(account_id);
+CREATE INDEX IF NOT EXISTS idx_loads_account_id ON public.loads(account_id);
 
 -- Create function to mask sensitive invoice data
 CREATE OR REPLACE FUNCTION public.mask_sensitive_invoice_data(
@@ -98,103 +157,81 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Create function to validate status transitions
-CREATE OR REPLACE FUNCTION public.can_update_invoice_status(invoice_id UUID, new_status TEXT)
+CREATE OR REPLACE FUNCTION public.can_update_invoice_status(
+    invoice_id UUID,
+    new_status TEXT
+)
 RETURNS BOOLEAN AS $$
 DECLARE
     current_status TEXT;
     user_role TEXT;
-    v_user_id UUID;
 BEGIN
-    -- Get authenticated user ID
-    v_user_id := auth.uid();
-    IF v_user_id IS NULL THEN
-        RETURN FALSE;
-    END IF;
+    -- Get current status
+    SELECT status INTO current_status
+    FROM public.invoices
+    WHERE id = invoice_id;
 
-    -- Get current status and user role
-    SELECT
-        i.status,
-        am.account_role INTO current_status, user_role
-    FROM public.invoices i
-    JOIN public.accounts_memberships am
-        ON i.account_id = am.account_id
+    -- Get user role
+    SELECT account_role INTO user_role
+    FROM public.accounts_memberships am
+    JOIN public.invoices i ON i.account_id = am.account_id
     WHERE i.id = invoice_id
-    AND am.user_id = v_user_id;
+    AND am.user_id = auth.uid();
 
-    -- If no role found, user doesn't have access
-    IF user_role IS NULL THEN
-        RETURN FALSE;
-    END IF;
-
-    -- Members cannot change status
-    IF user_role = 'member' THEN
-        RETURN FALSE;
-    END IF;
-
-    -- Validate status transitions based on role
-    RETURN CASE
-        -- Owner can make any transition except from Paid
-        WHEN user_role = 'owner' AND current_status != 'Paid' THEN TRUE
-        -- Billing can transition Draft->Pending->Paid
-        WHEN user_role = 'billing' AND (
-            (current_status = 'Draft' AND new_status = 'Pending') OR
-            (current_status = 'Pending' AND new_status = 'Paid')
-        ) THEN TRUE
-        -- Admin can transition Draft->Pending
-        WHEN user_role = 'admin' AND current_status = 'Draft' AND new_status = 'Pending' THEN TRUE
-        -- No other transitions allowed
-        ELSE FALSE
-    END;
+    -- Validate status transition
+    RETURN (
+        (user_role = 'owner') OR
+        (user_role = 'billing' AND new_status = 'paid') OR
+        (user_role = 'member' AND FALSE)  -- Members cannot change status
+    ) AND (
+        (current_status = 'draft' AND new_status = 'pending') OR
+        (current_status = 'pending' AND new_status = 'paid') OR
+        (current_status = current_status AND new_status = current_status)  -- Allow "updating" to same status
+    );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Create function to log status changes
+-- Create function to log invoice status changes
 CREATE OR REPLACE FUNCTION public.log_invoice_status_change()
 RETURNS TRIGGER AS $$
 DECLARE
     current_user_id UUID;
-    jwt_sub TEXT;
 BEGIN
-    -- Get JWT sub value safely
-    jwt_sub := auth.jwt()->>'sub';
+    -- Get the current user ID from the auth.uid() function
+    current_user_id := auth.uid();
 
-    -- Get the current user ID from session or test data with proper type casting
-    current_user_id := COALESCE(
-        CASE
-            WHEN jwt_sub IS NOT NULL THEN jwt_sub::uuid
-            ELSE NULL
-        END,
-        auth.uid(),
-        CASE
-            WHEN current_setting('app.current_user_id', TRUE) IS NOT NULL
-            THEN current_setting('app.current_user_id', TRUE)::uuid
-            ELSE NULL
-        END,
-        'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'::uuid  -- Default test owner ID
-    );
+    -- If no user ID is available, use the system user ID or raise an exception
+    IF current_user_id IS NULL THEN
+        RAISE EXCEPTION 'User ID is required for status changes';
+    END IF;
 
-    -- Log the status change
-    IF OLD.status IS DISTINCT FROM NEW.status THEN
+    IF (TG_OP = 'UPDATE' AND OLD.status IS DISTINCT FROM NEW.status) THEN
         INSERT INTO public.invoice_audit_log (
             invoice_id,
             user_id,
-            change_type,
+            action_type,
             old_value,
             new_value,
-            change_reason
+            reason,
+            created_at
         ) VALUES (
             NEW.id,
             current_user_id,
             'status_change',
             OLD.status,
             NEW.status,
-            NEW.status_change_reason
+            NEW.status_change_reason,
+            now()
         );
     END IF;
-
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Grant execute permissions on functions before they are used in views or triggers
+GRANT EXECUTE ON FUNCTION public.mask_sensitive_invoice_data(TEXT, UUID, UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.can_update_invoice_status(UUID, TEXT) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.log_invoice_status_change() TO authenticated;
 
 -- Create masked invoice view
 CREATE OR REPLACE VIEW public.invoice_details AS
@@ -210,49 +247,45 @@ SELECT
     END as masked_payment_details
 FROM public.invoices i;
 
--- Create trigger for status changes
-DROP TRIGGER IF EXISTS invoice_status_audit_trigger ON public.invoices;
-CREATE TRIGGER invoice_status_audit_trigger
-    BEFORE UPDATE ON public.invoices
+-- Create triggers
+DROP TRIGGER IF EXISTS log_invoice_status_changes ON public.invoices;
+CREATE TRIGGER log_invoice_status_changes
+    AFTER UPDATE ON public.invoices
     FOR EACH ROW
     EXECUTE FUNCTION public.log_invoice_status_change();
 
--- Update RLS policies
-DROP POLICY IF EXISTS update_invoices ON public.invoices;
-CREATE POLICY update_invoices ON public.invoices
-    FOR UPDATE
-    TO authenticated
-    USING (
-        EXISTS (
-            SELECT 1
-            FROM public.accounts_memberships am
-            WHERE am.user_id = auth.uid()
-            AND am.account_id = invoices.account_id
-            AND (
-                -- Allow non-status updates if user has general update permission
-                (invoices.status = status AND public.has_permission(auth.uid(), account_id, 'invoices.update'))
-                OR
-                -- For status changes, enforce role-based rules
-                (invoices.status != status AND (
-                    -- Owner can change any status except Paid
-                    (am.account_role = 'owner' AND invoices.status != 'Paid')
-                    OR
-                    -- Billing can transition Draft->Pending->Paid
-                    (am.account_role = 'billing' AND (
-                        (invoices.status = 'Draft' AND status = 'Pending')
-                        OR (invoices.status = 'Pending' AND status = 'Paid')
-                    ))
-                    OR
-                    -- Admin can transition Draft->Pending
-                    (am.account_role = 'admin' AND invoices.status = 'Draft' AND status = 'Pending')
-                ))
-            )
-        )
-    );
+-- Enable RLS
+ALTER TABLE public.invoices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.invoice_audit_log ENABLE ROW LEVEL SECURITY;
 
--- Grant necessary permissions
-GRANT USAGE ON SCHEMA public TO authenticated;
+-- Create RLS policies
+DROP POLICY IF EXISTS invoice_account_access ON public.invoices;
+CREATE POLICY invoice_account_access ON public.invoices
+    FOR ALL
+    TO authenticated
+    USING (account_id IN (
+        SELECT account_id
+        FROM public.accounts_memberships
+        WHERE user_id = auth.uid()
+    ));
+
+DROP POLICY IF EXISTS invoice_audit_access ON public.invoice_audit_log;
+CREATE POLICY invoice_audit_access ON public.invoice_audit_log
+    FOR ALL
+    TO authenticated
+    USING (invoice_id IN (
+        SELECT id
+        FROM public.invoices
+        WHERE account_id IN (
+            SELECT account_id
+            FROM public.accounts_memberships
+            WHERE user_id = auth.uid()
+        )
+    ));
+
+-- Grant remaining permissions
+GRANT ALL ON public.invoices TO authenticated;
 GRANT ALL ON public.invoice_audit_log TO authenticated;
-GRANT EXECUTE ON FUNCTION public.log_invoice_status_change() TO authenticated;
-GRANT EXECUTE ON FUNCTION public.mask_sensitive_invoice_data() TO authenticated;
-GRANT EXECUTE ON FUNCTION public.can_update_invoice_status() TO authenticated;
+GRANT ALL ON public.invoice_details TO authenticated;
+
+COMMIT;
