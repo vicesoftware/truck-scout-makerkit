@@ -44,8 +44,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=test-anon-key
 ```typescript
 export default defineConfig({
   // Only run E2E tests when explicitly enabled
-  testIgnore: process.env.ENABLE_E2E_JOB !== 'true' 
-    ? ['**/*.spec.ts'] 
+  testIgnore: process.env.ENABLE_E2E_JOB !== 'true'
+    ? ['**/*.spec.ts']
     : [],
 
   // Optimize for CI/CD environment
@@ -70,7 +70,7 @@ test('validate user context and account membership', async () => {
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
   // Retrieve user information by ID
-  const { data: userData, error: userError } = 
+  const { data: userData, error: userError } =
     await supabase.auth.admin.getUserById(testUser.userId);
 
   // Validate user exists and has correct email
@@ -79,7 +79,7 @@ test('validate user context and account membership', async () => {
   expect(userData!.user!.email).toBe(testUser.email);
 
   // Check account membership
-  const { data: membershipData, error: membershipError } = 
+  const { data: membershipData, error: membershipError } =
     await supabase
       .from('accounts_memberships')
       .select('account_role')
@@ -213,6 +213,128 @@ if (data) {
   });
 }
 ```
+
+#### Database Trigger Testing
+1. **User Context Resolution**
+   - Test triggers with both authenticated and service role contexts
+   - Verify proper fallback behavior for missing user context
+   - Validate JWT token handling in SECURITY DEFINER functions
+   ```typescript
+   test('Trigger handles user context correctly', async () => {
+     // Test with authenticated user
+     const { error: authError } = await userClient
+       .from('invoices')
+       .update({ status: 'pending' })
+       .eq('id', invoiceId);
+
+     // Verify audit log has correct user
+     const { data: auditLog } = await adminClient
+       .from('invoice_audit_log')
+       .select('user_id')
+       .eq('invoice_id', invoiceId)
+       .single();
+
+     expect(auditLog.user_id).toBe(testUser.id);
+   });
+   ```
+
+2. **Common Trigger Anti-Patterns**
+   - Avoid using `current_setting()` without `TRUE` parameter
+   - Don't rely on hardcoded fallback users
+   - Never skip user context validation
+   ```sql
+   -- BAD: Unreliable user context resolution
+   current_user_id := current_setting('app.current_user_id');
+
+   -- GOOD: Proper user context resolution with fallbacks
+   current_user_id := COALESCE(
+       CASE WHEN auth.jwt()->>'sub' IS NOT NULL
+            THEN (auth.jwt()->>'sub')::uuid
+            ELSE NULL
+       END,
+       auth.uid(),
+       CASE WHEN current_setting('app.current_user_id', TRUE) IS NOT NULL
+            THEN current_setting('app.current_user_id', TRUE)::uuid
+            ELSE NULL
+       END
+   );
+   ```
+
+3. **RLS Policy Interactions**
+   - Test trigger behavior with RLS policies enabled
+   - Verify BEFORE triggers respect RLS policies
+   - Test SECURITY DEFINER functions carefully
+   ```typescript
+   test('Trigger respects RLS policies', async () => {
+     // Should fail due to RLS
+     const { error: memberError } = await memberClient
+       .from('invoices')
+       .update({ status: 'paid' })
+       .eq('id', invoiceId);
+
+     expect(memberError).toBeTruthy();
+
+     // Should succeed with proper role
+     const { error: ownerError } = await ownerClient
+       .from('invoices')
+       .update({ status: 'paid' })
+       .eq('id', invoiceId);
+
+     expect(ownerError).toBeNull();
+   });
+   ```
+
+4. **Audit Logging Best Practices**
+   - Always capture both old and new values
+   - Include user context in audit records
+   - Test audit log completeness
+   ```typescript
+   test('Audit log captures changes correctly', async () => {
+     const oldStatus = 'draft';
+     const newStatus = 'pending';
+
+     await ownerClient
+       .from('invoices')
+       .update({ status: newStatus })
+       .eq('id', invoiceId);
+
+     const { data: auditLog } = await adminClient
+       .from('invoice_audit_log')
+       .select('*')
+       .eq('invoice_id', invoiceId)
+       .single();
+
+     expect(auditLog.old_value).toBe(oldStatus);
+     expect(auditLog.new_value).toBe(newStatus);
+     expect(auditLog.user_id).toBeDefined();
+   });
+   ```
+
+5. **Error Handling in Triggers**
+   - Test missing user context scenarios
+   - Verify proper error messages
+   - Validate transaction rollback behavior
+   ```typescript
+   test('Trigger handles errors appropriately', async () => {
+     // Should fail with clear error
+     const { error } = await serviceClient
+       .rpc('update_invoice_status', {
+         p_invoice_id: invoiceId,
+         p_new_status: 'invalid_status'
+       });
+
+     expect(error.message).toContain('Invalid status transition');
+
+     // Verify no partial updates
+     const { data: invoice } = await serviceClient
+       .from('invoices')
+       .select('status')
+       .eq('id', invoiceId)
+       .single();
+
+     expect(invoice.status).toBe('draft');
+   });
+   ```
 
 ### 11. Continuous Improvement
 - Regularly review and update tests

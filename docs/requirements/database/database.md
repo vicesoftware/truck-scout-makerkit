@@ -89,6 +89,50 @@ pnpm run supabase:web:typegen
 2. Use migrations for schema evolution
 3. Avoid direct database modifications
 4. Test migrations in local environment before production
+5. Trigger Implementation Guidelines:
+   - Use BEFORE triggers for RLS compatibility
+   - Implement robust user context handling:
+     ```sql
+     -- Example of proper user context resolution
+     current_user_id := COALESCE(
+         CASE WHEN auth.jwt()->>'sub' IS NOT NULL THEN (auth.jwt()->>'sub')::uuid ELSE NULL END,
+         auth.uid(),
+         CASE WHEN current_setting('app.current_user_id', TRUE) IS NOT NULL
+              THEN current_setting('app.current_user_id', TRUE)::uuid
+              ELSE NULL END
+     );
+     ```
+   - Use SECURITY DEFINER sparingly and only for audit logging
+   - Always set search_path in SECURITY DEFINER functions
+   - Validate permissions before state changes
+   - Handle NULL values gracefully in all cases
+   - Implement proper error handling for missing context
+   - Consider RLS policies when designing triggers:
+     * BEFORE triggers can modify data before RLS policies
+     * AFTER triggers might not have access to modified data
+     * Use explicit error handling for permission checks
+
+6. Function Security Best Practices:
+   - Minimize use of SECURITY DEFINER
+   - Always specify search_path in SECURITY DEFINER functions
+   - Validate all input parameters thoroughly
+   - Implement proper error handling
+   - Use type casting with COALESCE for safer operations
+   - Document security implications in function headers
+
+7. Audit Logging Best Practices:
+   - Always capture user context in audit logs
+   - Include both old and new values for changes
+   - Store reasons for sensitive operations
+   - Use consistent change_type values
+   - Implement proper error handling for audit failures
+
+8. Status Management Best Practices:
+   - Implement strict state transition validation
+   - Use role-based permission checks for status changes
+   - Log all status transitions with user context
+   - Require reasons for sensitive status changes
+   - Prevent modifications to finalized states
 
 ### Typical Development Workflow
 
@@ -318,11 +362,43 @@ Table public.invoices {
   account_id UUID [ref: > public.accounts.id]
   load_id UUID [ref: > public.loads.id]
   carrier_id UUID [ref: > public.carriers.id]
+  amount DECIMAL(10,2) [not null]
+  status TEXT [not null, default: 'Draft', note: 'Values: Draft, Pending, Paid, Void']
+  due_date TIMESTAMP WITH TIME ZONE
+  paid_status BOOLEAN [default: false]
+  bank_details TEXT
+  payment_details TEXT
+  status_change_reason TEXT
+  internal_notes TEXT
+  created_at TIMESTAMP WITH TIME ZONE [default: now()]
+  updated_at TIMESTAMP WITH TIME ZONE [default: now()]
+}
+
+Table public.invoice_audit_log {
+  id UUID [pk]
+  invoice_id UUID [ref: > public.invoices.id]
+  user_id UUID [not null]
+  change_type TEXT [not null]
+  old_value TEXT
+  new_value TEXT
+  change_reason TEXT
+  created_at TIMESTAMP WITH TIME ZONE [default: now()]
+}
+
+View public.invoice_details {
+  id UUID [ref: > public.invoices.id]
+  account_id UUID
+  load_id UUID
+  carrier_id UUID
   amount DECIMAL(10,2)
-  due_date TIMESTAMP
+  status TEXT
+  due_date TIMESTAMP WITH TIME ZONE
   paid_status BOOLEAN
-  created_at TIMESTAMP
-  updated_at TIMESTAMP
+  masked_bank_details TEXT [note: 'Masked for non-privileged roles']
+  masked_payment_details TEXT [note: 'Masked for non-privileged roles']
+  internal_notes TEXT
+  created_at TIMESTAMP WITH TIME ZONE
+  updated_at TIMESTAMP WITH TIME ZONE
 }
 
 Table public.contacts {
@@ -497,11 +573,43 @@ Table invoices {
   account_id UUID [ref: > accounts.id]
   load_id UUID [ref: > loads.id]
   carrier_id UUID [ref: > carriers.id]
+  amount DECIMAL(10,2) [not null]
+  status TEXT [not null, default: 'Draft', note: 'Values: Draft, Pending, Paid, Void']
+  due_date TIMESTAMP WITH TIME ZONE
+  paid_status BOOLEAN [default: false]
+  bank_details TEXT
+  payment_details TEXT
+  status_change_reason TEXT
+  internal_notes TEXT
+  created_at TIMESTAMP WITH TIME ZONE [default: now()]
+  updated_at TIMESTAMP WITH TIME ZONE [default: now()]
+}
+
+Table invoice_audit_log {
+  id UUID [pk]
+  invoice_id UUID [ref: > invoices.id]
+  user_id UUID [not null]
+  change_type TEXT [not null]
+  old_value TEXT
+  new_value TEXT
+  change_reason TEXT
+  created_at TIMESTAMP WITH TIME ZONE [default: now()]
+}
+
+View invoice_details {
+  id UUID [ref: > invoices.id]
+  account_id UUID
+  load_id UUID
+  carrier_id UUID
   amount DECIMAL(10,2)
-  due_date TIMESTAMP
+  status TEXT
+  due_date TIMESTAMP WITH TIME ZONE
   paid_status BOOLEAN
-  created_at TIMESTAMP
-  updated_at TIMESTAMP
+  masked_bank_details TEXT [note: 'Masked for non-privileged roles']
+  masked_payment_details TEXT [note: 'Masked for non-privileged roles']
+  internal_notes TEXT
+  created_at TIMESTAMP WITH TIME ZONE
+  updated_at TIMESTAMP WITH TIME ZONE
 }
 
 Table contacts {

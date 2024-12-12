@@ -140,6 +140,108 @@ END;
 $$ LANGUAGE plpgsql STABLE;
 ```
 
+### **3. mask_sensitive_invoice_data(field_value TEXT, user_id UUID, invoice_id UUID)**
+- **Purpose**: Mask sensitive invoice data based on user role and permissions
+- **Inputs**:
+  - `field_value`: The original value to potentially mask
+  - `user_id`: The user requesting access
+  - `invoice_id`: The invoice being accessed
+- **Logic**:
+```sql
+CREATE OR REPLACE FUNCTION public.mask_sensitive_invoice_data(
+    field_value TEXT,
+    user_id UUID,
+    invoice_id UUID
+)
+RETURNS TEXT AS $$
+DECLARE
+    has_full_access BOOLEAN;
+BEGIN
+    -- Check if user has full access (owner or billing role)
+    SELECT EXISTS (
+        SELECT 1
+        FROM public.invoices i
+        JOIN public.accounts_memberships am ON i.account_id = am.account_id
+        WHERE i.id = invoice_id
+        AND am.user_id = user_id
+        AND am.account_role IN ('owner', 'billing')
+    ) INTO has_full_access;
+
+    RETURN CASE
+        WHEN has_full_access THEN field_value
+        ELSE '****'
+    END;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+```
+- **Use Cases**:
+  - Masking bank details for non-privileged roles
+  - Protecting payment information
+  - Securing sensitive financial data
+- **Security Notes**:
+  - Uses SECURITY DEFINER for consistent access control
+  - Implements role-based masking logic
+  - Prevents unauthorized access to sensitive data
+
+### **4. can_update_invoice_status(invoice_id UUID, new_status TEXT)**
+- **Purpose**: Validate invoice status transitions based on user role and current status
+- **Inputs**:
+  - `invoice_id`: The invoice being updated
+  - `new_status`: The proposed new status
+- **Logic**:
+```sql
+CREATE OR REPLACE FUNCTION public.can_update_invoice_status(
+    invoice_id UUID,
+    new_status TEXT
+)
+RETURNS BOOLEAN AS $$
+DECLARE
+    current_status TEXT;
+    user_role TEXT;
+BEGIN
+    -- Get current status and user role
+    SELECT
+        i.status,
+        am.account_role
+    INTO
+        current_status,
+        user_role
+    FROM public.invoices i
+    JOIN public.accounts_memberships am
+        ON i.account_id = am.account_id
+    WHERE i.id = invoice_id
+        AND am.user_id = auth.uid();
+
+    -- Role-based transition rules
+    CASE user_role
+        WHEN 'owner' THEN
+            -- Owner can make any transition except from Paid
+            RETURN current_status != 'Paid';
+        WHEN 'billing' THEN
+            -- Billing can transition Draft->Pending->Paid
+            RETURN (
+                (current_status = 'Draft' AND new_status = 'Pending') OR
+                (current_status = 'Pending' AND new_status = 'Paid')
+            );
+        WHEN 'admin' THEN
+            -- Admin can only transition Draft->Pending
+            RETURN current_status = 'Draft' AND new_status = 'Pending';
+        ELSE
+            -- Other roles cannot change status
+            RETURN FALSE;
+    END CASE;
+END;
+$$ LANGUAGE plpgsql STABLE;
+```
+- **Use Cases**:
+  - Enforcing status transition workflow
+  - Implementing role-based status changes
+  - Preventing invalid status transitions
+- **Security Notes**:
+  - Validates user role and permissions
+  - Enforces business rules for status changes
+  - Prevents unauthorized status modifications
+
 ## **4. Key Considerations**
 
 1. **Schema Alignment**:

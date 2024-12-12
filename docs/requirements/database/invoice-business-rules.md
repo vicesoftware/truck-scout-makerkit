@@ -1,4 +1,3 @@
-
 # Invoice System Business Rules
 
 This document outlines the business rules for the invoice system based on our domain requirements.
@@ -37,12 +36,27 @@ This document outlines the business rules for the invoice system based on our do
    ```
 
 2. **Status Rules**:
-   - Only billing role or owner can change status
-   - Paid invoices cannot be modified
-   - Void requires a reason
-   - Status changes must be logged
-   - Reversing statuses (e.g., `Paid -> Pending`) is prohibited without an administrative override.
-   - All status changes must be logged, including who made the change and the reason.
+   - Status transitions follow strict role permissions:
+     * Owner: Can make any transition except from Paid
+     * Billing: Can transition Draft->Pending->Paid
+     * Admin: Can transition Draft->Pending only
+     * Member: Cannot change status
+   - Paid invoices cannot be modified or changed to any other status
+   - Void status requires a documented reason
+   - Status changes must be logged with:
+     * User ID who made the change
+     * Previous status
+     * New status
+     * Timestamp
+     * Change reason (required for Void)
+   - Status validation enforced through database functions:
+     ```sql
+     -- Function to validate status transitions
+     can_update_invoice_status(invoice_id UUID, new_status TEXT)
+     ```
+   - Audit trail maintained in invoice_audit_log table
+   - Status changes trigger automatic audit logging
+   - Invalid transitions are blocked with appropriate error messages
 
 ## **2. Data Protection**
 

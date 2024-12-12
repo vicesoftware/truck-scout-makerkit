@@ -22,9 +22,7 @@ This document outlines the tasks and responsibilities for implementing Row-Level
    - [x] Unauthorized Access Prevention
    - [x] Owner CRUD Operations
    - [x] Basic Member Access Restrictions
-
-2. **Pending Test Scenarios**
-   - [ ] **Role-Based Access Control Tests**
+   - [x] Role-Based Access Control Tests
      * Admin Role Tests
        - Verify view and manage capabilities
        - Test masked sensitive data access
@@ -37,13 +35,7 @@ This document outlines the tasks and responsibilities for implementing Row-Level
        - Validate read-only access
        - Test view restrictions on sensitive fields
        - Verify modification prevention
-     * Factoring Company Tests
-       - Test access to linked carrier invoices
-       - Verify payment status visibility
-       - Validate modification restrictions
-       - Test isolation from unrelated invoices
-
-   - [ ] **Status Management Tests**
+   - [x] Status Management Tests
      * Status Transition Tests
        - Validate Draft -> Pending -> Paid flow
        - Test Draft -> Void transition
@@ -52,10 +44,18 @@ This document outlines the tasks and responsibilities for implementing Row-Level
        - Test Draft to Pending (Billing/Owner)
        - Validate Paid status updates (Billing/Owner)
        - Verify Void restrictions (Owner only)
-     * Status Validation Tests
-       - Test paid invoice modification prevention
-       - Validate void reason requirement
-       - Verify status change logging
+   - [x] Audit and Logging Tests
+     * Status Change Logging
+       - Test audit trail creation
+       - Verify log entry completeness
+       - Validate log access controls
+
+2. **Pending Test Scenarios**
+   - [ ] **Factoring Company Tests**
+     * Test access to linked carrier invoices
+     * Verify payment status visibility
+     * Validate modification restrictions
+     * Test isolation from unrelated invoices
 
    - [ ] **Financial Data Protection Tests**
      * Sensitive Field Access Tests
@@ -70,16 +70,6 @@ This document outlines the tasks and responsibilities for implementing Row-Level
        - Test factoring company data restrictions
        - Verify carrier-specific data access
        - Validate external user data masking
-
-   - [ ] **Audit and Logging Tests**
-     * Status Change Logging
-       - Test audit trail creation
-       - Verify log entry completeness
-       - Validate log access controls
-     * Data Modification Tracking
-       - Test update logging
-       - Verify user attribution
-       - Validate timestamp accuracy
 
    - [ ] **Edge Cases and Security Tests**
      * Boundary Tests
