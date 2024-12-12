@@ -15,12 +15,23 @@ CREATE OR REPLACE FUNCTION public.log_invoice_status_change()
 RETURNS TRIGGER AS $$
 DECLARE
     current_user_id UUID;
+    jwt_sub TEXT;
 BEGIN
-    -- Get the current user ID from session or test data
+    -- Get JWT sub value safely
+    jwt_sub := auth.jwt()->>'sub';
+
+    -- Get the current user ID from session or test data with proper type casting
     current_user_id := COALESCE(
-        (auth.jwt()->>'sub')::uuid,
+        CASE
+            WHEN jwt_sub IS NOT NULL THEN jwt_sub::uuid
+            ELSE NULL
+        END,
         auth.uid(),
-        NULLIF(current_setting('app.current_user_id', TRUE), ''),
+        CASE
+            WHEN current_setting('app.current_user_id', TRUE) IS NOT NULL
+            THEN current_setting('app.current_user_id', TRUE)::uuid
+            ELSE NULL
+        END,
         'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'::uuid  -- Default test owner ID
     );
 
