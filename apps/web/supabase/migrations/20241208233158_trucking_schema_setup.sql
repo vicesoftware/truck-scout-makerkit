@@ -32,6 +32,9 @@ CREATE TABLE public.invoices (
     due_date TIMESTAMP WITH TIME ZONE,
     paid_status BOOLEAN DEFAULT FALSE,
     internal_notes TEXT,
+    bank_details TEXT,
+    payment_details TEXT,
+    status_change_reason TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
@@ -44,7 +47,7 @@ CREATE INDEX IF NOT EXISTS ix_invoices_account_id ON public.invoices(account_id)
 CREATE INDEX IF NOT EXISTS ix_invoices_carrier_id ON public.invoices(carrier_id);
 CREATE INDEX IF NOT EXISTS ix_invoices_load_id ON public.invoices(load_id);
 
--- Add RPC function to retrieve invoices 
+-- Add RPC function to retrieve invoices
 CREATE OR REPLACE FUNCTION get_invoices_from_trucking_schema()
 RETURNS TABLE (
     id UUID,
@@ -61,16 +64,16 @@ RETURNS TABLE (
 LANGUAGE SQL
 SECURITY DEFINER
 AS $$
-    SELECT 
-        id, 
-        account_id, 
-        load_id, 
-        carrier_id, 
-        amount, 
-        due_date, 
-        paid_status, 
-        status, 
-        created_at, 
+    SELECT
+        id,
+        account_id,
+        load_id,
+        carrier_id,
+        amount,
+        due_date,
+        paid_status,
+        status,
+        created_at,
         updated_at
     FROM public.invoices
     LIMIT 10;

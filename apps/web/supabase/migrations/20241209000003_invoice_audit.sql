@@ -1,7 +1,7 @@
 -- Create invoice audit log table
-CREATE TABLE IF NOT EXISTS trucking.invoice_audit_log (
+CREATE TABLE IF NOT EXISTS public.invoice_audit_log (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    invoice_id UUID REFERENCES trucking.invoices(id),
+    invoice_id UUID REFERENCES public.invoices(id),
     user_id UUID NOT NULL,
     change_type TEXT NOT NULL,
     old_value TEXT,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS trucking.invoice_audit_log (
 );
 
 -- Create function to log status changes
-CREATE OR REPLACE FUNCTION trucking.log_invoice_status_change()
+CREATE OR REPLACE FUNCTION public.log_invoice_status_change()
 RETURNS TRIGGER AS $$
 DECLARE
     current_user_id UUID;
@@ -20,7 +20,7 @@ BEGIN
     current_user_id := COALESCE(auth.uid(), (SELECT user_id FROM auth.users LIMIT 1), test_user_id);
 
     IF OLD.status IS DISTINCT FROM NEW.status THEN
-        INSERT INTO trucking.invoice_audit_log (
+        INSERT INTO public.invoice_audit_log (
             invoice_id,
             user_id,
             change_type,
@@ -41,10 +41,10 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Drop existing trigger if it exists
-DROP TRIGGER IF EXISTS invoice_status_audit_trigger ON trucking.invoices;
+DROP TRIGGER IF EXISTS invoice_status_audit_trigger ON public.invoices;
 
 -- Create trigger for status changes
 CREATE TRIGGER invoice_status_audit_trigger
-    AFTER UPDATE ON trucking.invoices
+    AFTER UPDATE ON public.invoices
     FOR EACH ROW
-    EXECUTE FUNCTION trucking.log_invoice_status_change();
+    EXECUTE FUNCTION public.log_invoice_status_change();
