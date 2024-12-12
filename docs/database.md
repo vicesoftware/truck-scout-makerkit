@@ -9,8 +9,7 @@ This document contains the DBML representation of the database schema for the Tr
 | Schema Name | Description                                                                                   |
 |-------------|-----------------------------------------------------------------------------------------------|
 | `auth`      | Manages user authentication and Supabase integration.                                         |
-| `public`    | Core functionality for multi-tenancy and SaaS features like accounts, roles, and memberships. |
-| `trucking`  | Domain-specific entities such as carriers, loads, vehicles, and drivers.                     |
+| `public`    | Core functionality including multi-tenancy, SaaS features, and domain-specific trucking entities. |
 | `kit`       | Utility tables for analytics, documents, and custom functionality.                           |
 
 ## **Entity Descriptions**
@@ -27,16 +26,6 @@ This document contains the DBML representation of the database schema for the Tr
 | `accounts_memberships`| Links users to accounts and defines their roles within those accounts.                 |
 | `roles`               | Defines role types (e.g., owner, admin, member) and their hierarchy.                   |
 | `role_permissions`    | Specifies permissions for each role.                                                   |
-
-### Kit Schema (Utilities)
-| Entity Name  | Description                                                                                     |
-|--------------|-------------------------------------------------------------------------------------------------|
-| `analytics`  | Stores analytics data and reports for accounts.                                                 |
-| `documents`  | Manages uploaded documents linked to specific entities like carriers, drivers, or loads.         |
-
-### Trucking Schema (Domain)
-| Entity Name           | Description                                                                            |
-|----------------------|----------------------------------------------------------------------------------------|
 | `carriers`           | Represents trucking carriers and their details, including factoring company associations.|
 | `drivers`            | Stores information about drivers, such as license numbers and contact info.             |
 | `vehicles`           | Manages vehicles, including their VIN, license plate, and maintenance status.           |
@@ -46,11 +35,17 @@ This document contains the DBML representation of the database schema for the Tr
 | `contacts`           | Stores contact information for key individuals in the trucking operations.              |
 | `factoring_companies`| Details factoring companies used by carriers for invoice payments.                      |
 
+### Kit Schema (Utilities)
+| Entity Name  | Description                                                                                     |
+|--------------|-------------------------------------------------------------------------------------------------|
+| `analytics`  | Stores analytics data and reports for accounts.                                                 |
+| `documents`  | Manages uploaded documents linked to specific entities like carriers, drivers, or loads.         |
+
 ---
 
 ## **About DBML and Visualization**
 
-[DBML (Database Markup Language)](https://www.dbml.org/) is a DSL for documenting database schemas. While our schema uses multiple database schemas (auth, public, kit, trucking), some visualization tools like dbdiagram.io don't support this feature. Therefore, we maintain two versions:
+[DBML (Database Markup Language)](https://www.dbml.org/) is a DSL for documenting database schemas. While our schema uses multiple database schemas (auth, public, kit), some visualization tools like dbdiagram.io don't support this feature. Therefore, we maintain two versions:
 
 1. **Full Version with Schemas** (in this document)
    - Complete schema organization
@@ -79,10 +74,6 @@ Schema auth {
 
 Schema public {
   description: "Core SaaS functionality and multi-tenancy"
-}
-
-Schema trucking {
-  description: "Trucking-specific domain entities"
 }
 
 Schema kit {
@@ -130,6 +121,99 @@ Table public.role_permissions {
   permission VARCHAR(50)
 }
 
+Table public.carriers {
+  id UUID [pk]
+  account_id UUID [ref: > public.accounts.id]
+  name VARCHAR(255)
+  mc_number VARCHAR(50)
+  contact_info JSONB
+  rating DECIMAL(3,2)
+  preferred_status BOOLEAN
+  factoring_company_id UUID [ref: > public.factoring_companies.id]
+  created_at TIMESTAMP
+  updated_at TIMESTAMP
+}
+
+Table public.drivers {
+  id UUID [pk]
+  account_id UUID [ref: > public.accounts.id]
+  name VARCHAR(255)
+  license_number VARCHAR(50) [unique]
+  phone VARCHAR(20)
+  email VARCHAR(255)
+  status VARCHAR(50) [note: 'Values: active, inactive, suspended']
+  created_at TIMESTAMP
+  updated_at TIMESTAMP
+}
+
+Table public.vehicles {
+  id UUID [pk]
+  account_id UUID [ref: > public.accounts.id]
+  vin VARCHAR(50) [unique]
+  make VARCHAR(255)
+  model VARCHAR(255)
+  year INT
+  license_plate VARCHAR(20) [unique]
+  status VARCHAR(50) [note: 'Values: active, maintenance, decommissioned']
+  created_at TIMESTAMP
+  updated_at TIMESTAMP
+}
+
+Table public.maintenance_logs {
+  id UUID [pk]
+  vehicle_id UUID [ref: > public.vehicles.id]
+  description TEXT
+  performed_at TIMESTAMP
+  cost DECIMAL(10, 2)
+  created_at TIMESTAMP
+}
+
+Table public.loads {
+  id UUID [pk]
+  account_id UUID [ref: > public.accounts.id]
+  origin VARCHAR(255)
+  destination VARCHAR(255)
+  pickup_date TIMESTAMP
+  delivery_date TIMESTAMP
+  status VARCHAR(50)
+  carrier_id UUID [ref: > public.carriers.id]
+  created_at TIMESTAMP
+  updated_at TIMESTAMP
+}
+
+Table public.invoices {
+  id UUID [pk]
+  account_id UUID [ref: > public.accounts.id]
+  load_id UUID [ref: > public.loads.id]
+  carrier_id UUID [ref: > public.carriers.id]
+  amount DECIMAL(10,2)
+  due_date TIMESTAMP
+  paid_status BOOLEAN
+  created_at TIMESTAMP
+  updated_at TIMESTAMP
+}
+
+Table public.contacts {
+  id UUID [pk]
+  account_id UUID [ref: > public.accounts.id]
+  name VARCHAR(255)
+  email VARCHAR(255)
+  phone VARCHAR(20)
+  role VARCHAR(255)
+  notes TEXT
+  created_at TIMESTAMP
+  updated_at TIMESTAMP
+}
+
+Table public.factoring_companies {
+  id UUID [pk]
+  account_id UUID [ref: > public.accounts.id]
+  name VARCHAR(255)
+  contact_info JSONB
+  created_at TIMESTAMP
+  updated_at TIMESTAMP
+}
+
 // Tables in 'kit'
 Table kit.analytics {
   id UUID [pk]
@@ -149,100 +233,6 @@ Table kit.documents {
   uploaded_at TIMESTAMP
   expiry_date TIMESTAMP
   created_at TIMESTAMP
-}
-
-// Tables in 'trucking'
-Table trucking.carriers {
-  id UUID [pk]
-  account_id UUID [ref: > public.accounts.id]
-  name VARCHAR(255)
-  mc_number VARCHAR(50)
-  contact_info JSONB
-  rating DECIMAL(3,2)
-  preferred_status BOOLEAN
-  factoring_company_id UUID [ref: > trucking.factoring_companies.id]
-  created_at TIMESTAMP
-  updated_at TIMESTAMP
-}
-
-Table trucking.drivers {
-  id UUID [pk]
-  account_id UUID [ref: > public.accounts.id]
-  name VARCHAR(255)
-  license_number VARCHAR(50) [unique]
-  phone VARCHAR(20)
-  email VARCHAR(255)
-  status VARCHAR(50) [note: 'Values: active, inactive, suspended']
-  created_at TIMESTAMP
-  updated_at TIMESTAMP
-}
-
-Table trucking.vehicles {
-  id UUID [pk]
-  account_id UUID [ref: > public.accounts.id]
-  vin VARCHAR(50) [unique]
-  make VARCHAR(255)
-  model VARCHAR(255)
-  year INT
-  license_plate VARCHAR(20) [unique]
-  status VARCHAR(50) [note: 'Values: active, maintenance, decommissioned']
-  created_at TIMESTAMP
-  updated_at TIMESTAMP
-}
-
-Table trucking.maintenance_logs {
-  id UUID [pk]
-  vehicle_id UUID [ref: > trucking.vehicles.id]
-  description TEXT
-  performed_at TIMESTAMP
-  cost DECIMAL(10, 2)
-  created_at TIMESTAMP
-}
-
-Table trucking.loads {
-  id UUID [pk]
-  account_id UUID [ref: > public.accounts.id]
-  origin VARCHAR(255)
-  destination VARCHAR(255)
-  pickup_date TIMESTAMP
-  delivery_date TIMESTAMP
-  status VARCHAR(50)
-  carrier_id UUID [ref: > trucking.carriers.id]
-  created_at TIMESTAMP
-  updated_at TIMESTAMP
-}
-
-Table trucking.invoices {
-  id UUID [pk]
-  account_id UUID [ref: > public.accounts.id]
-  load_id UUID [ref: > trucking.loads.id]
-  carrier_id UUID [ref: > trucking.carriers.id]
-  amount DECIMAL(10,2)
-  due_date TIMESTAMP
-  paid_status BOOLEAN
-  created_at TIMESTAMP
-  updated_at TIMESTAMP
-}
-
-Table trucking.contacts {
-  id UUID [pk]
-  account_id UUID [ref: > public.accounts.id]
-  name VARCHAR(255)
-  email VARCHAR(255)
-  phone VARCHAR(20)
-  role VARCHAR(255)
-  notes TEXT
-  created_at TIMESTAMP
-  updated_at TIMESTAMP
-}
-
-Table trucking.factoring_companies {
-  id UUID [pk]
-  account_id UUID [ref: > public.accounts.id]
-  name VARCHAR(255)
-  contact_info JSONB
-  created_at TIMESTAMP
-  updated_at TIMESTAMP
 }
 ```
 
@@ -411,5 +401,3 @@ Table factoring_companies {
   created_at TIMESTAMP
   updated_at TIMESTAMP
 }
-```
-
