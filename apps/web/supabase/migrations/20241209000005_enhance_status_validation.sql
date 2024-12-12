@@ -17,6 +17,8 @@ BEGIN
 
     -- Validate status transitions based on role
     RETURN CASE
+        -- Members cannot change status
+        WHEN user_role = 'member' THEN FALSE
         -- Owner can make any transition except from Paid
         WHEN user_role = 'owner' AND current_status != 'Paid' THEN TRUE
         -- Billing can transition Draft->Pending->Paid
