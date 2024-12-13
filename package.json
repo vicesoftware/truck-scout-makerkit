@@ -47,14 +47,12 @@
   "devDependencies": {
     "@manypkg/cli": "^0.23.0",
     "@turbo/gen": "^2.3.3",
+    "@types/puppeteer": "^7.0.4",
     "cross-env": "^7.0.3",
     "prettier": "^3.4.1",
+    "puppeteer": "^23.10.1",
+    "ts-node": "^10.9.2",
     "turbo": "2.3.3",
     "typescript": "^5.7.2"
-  },
-  "dependencies": {
-    "@types/puppeteer": "^7.0.4",
-    "puppeteer": "^23.10.1",
-    "ts-node": "^10.9.2"
   }
 }

@@ -64,6 +64,7 @@ This project is built on the MakerKit Supabase SaaS Starter Kit (Turbo Edition),
 - [Project Plan & Requirements](/docs/requirements/initial_project_plan.md)
 - [Technical Documentation](https://makerkit.dev/docs/next-supabase-turbo/introduction)
 - [Flow Diagrams & ERDs](/docs/requirements/rag/)
+- [Testing Best Practices](/docs/testing-best-practices.md)
 
 ### Documentation Scrapers
 
@@ -114,6 +115,25 @@ pnpm run supabase:web:reset
    - Database: postgres
    - Username: postgres
    - Password: postgres
+
+### Running Tests
+
+> For detailed testing guidelines, see our [Testing Best Practices](/docs/testing-best-practices.md). Here's the basic workflow for running tests:
+
+1. Start Supabase:
+```bash
+pnpm run supabase:web:start
+```
+
+2. Start the development server (using the monorepo filter):
+```bash
+pnpm --filter web dev
+```
+
+3. Run the tests:
+```bash
+pnpm run test
+```
 
 ## Contributing
 

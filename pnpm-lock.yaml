@@ -14,16 +14,6 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      '@types/puppeteer':
-        specifier: ^7.0.4
-        version: 7.0.4(typescript@5.7.2)
-      puppeteer:
-        specifier: ^23.10.1
-        version: 23.10.1(typescript@5.7.2)
-      ts-node:
-        specifier: ^10.9.2
-        version: 10.9.2(@types/node@22.10.1)(typescript@5.7.2)
     devDependencies:
       '@manypkg/cli':
         specifier: ^0.23.0
@@ -31,12 +21,21 @@ importers:
       '@turbo/gen':
         specifier: ^2.3.3
         version: 2.3.3(@types/node@22.10.1)(typescript@5.7.2)
+      '@types/puppeteer':
+        specifier: ^7.0.4
+        version: 7.0.4(typescript@5.7.2)
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
       prettier:
         specifier: ^3.4.1
         version: 3.4.1
+      puppeteer:
+        specifier: ^23.10.1
+        version: 23.10.1(typescript@5.7.2)
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@22.10.1)(typescript@5.7.2)
       turbo:
         specifier: 2.3.3
         version: 2.3.3
@@ -123,7 +122,7 @@ importers:
         version: 0.0.8(@supabase/postgrest-js@1.16.3)(@supabase/supabase-js@2.46.2)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.3
-        version: 1.2.3(@supabase/postgrest-js@1.16.3)(@supabase/supabase-js@2.46.2)(@tanstack/react-query@5.62.1(react@19.0.0-rc-45804af1-20241021))(next@15.0.3(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(babel-plugin-react-compiler@19.0.0-beta-df7b47d-20241124)(react-dom@19.0.0-rc-45804af1-20241021(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021)
+        version: 1.2.3(@supabase/postgrest-js@1.16.3)(@supabase/supabase-js@2.46.2)(@tanstack/react-query@5.62.1(react@19.0.0-rc-45804af1-20241021))(next@15.0.3(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@19.0.0-rc-45804af1-20241021(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021)
       '@marsidev/react-turnstile':
         specifier: ^1.1.0
         version: 1.1.0(react-dom@19.0.0-rc-45804af1-20241021(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021)
@@ -726,7 +725,7 @@ importers:
         version: 0.0.8(@supabase/postgrest-js@1.16.3)(@supabase/supabase-js@2.46.2)
       '@makerkit/data-loader-supabase-nextjs':
         specifier: ^1.2.3
-        version: 1.2.3(@supabase/postgrest-js@1.16.3)(@supabase/supabase-js@2.46.2)(@tanstack/react-query@5.62.1(react@19.0.0-rc-45804af1-20241021))(next@15.0.3(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(babel-plugin-react-compiler@19.0.0-beta-df7b47d-20241124)(react-dom@19.0.0-rc-45804af1-20241021(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021)
+        version: 1.2.3(@supabase/postgrest-js@1.16.3)(@supabase/supabase-js@2.46.2)(@tanstack/react-query@5.62.1(react@19.0.0-rc-45804af1-20241021))(next@15.0.3(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@19.0.0-rc-45804af1-20241021(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021)
       '@supabase/supabase-js':
         specifier: ^2.46.2
         version: 2.46.2
@@ -8500,7 +8499,7 @@ snapshots:
       '@supabase/supabase-js': 2.46.2
       ts-case-convert: 2.1.0
 
-  '@makerkit/data-loader-supabase-nextjs@1.2.3(@supabase/postgrest-js@1.16.3)(@supabase/supabase-js@2.46.2)(@tanstack/react-query@5.62.1(react@19.0.0-rc-45804af1-20241021))(next@15.0.3(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(babel-plugin-react-compiler@19.0.0-beta-df7b47d-20241124)(react-dom@19.0.0-rc-45804af1-20241021(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021)':
+  '@makerkit/data-loader-supabase-nextjs@1.2.3(@supabase/postgrest-js@1.16.3)(@supabase/supabase-js@2.46.2)(@tanstack/react-query@5.62.1(react@19.0.0-rc-45804af1-20241021))(next@15.0.3(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(react-dom@19.0.0-rc-45804af1-20241021(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021))(react@19.0.0-rc-45804af1-20241021)':
     dependencies:
       '@makerkit/data-loader-supabase-core': 0.0.8(@supabase/postgrest-js@1.16.3)(@supabase/supabase-js@2.46.2)
       '@supabase/supabase-js': 2.46.2
