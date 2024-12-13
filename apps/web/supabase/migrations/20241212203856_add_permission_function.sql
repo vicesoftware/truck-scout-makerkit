@@ -12,10 +12,10 @@ declare
   user_role text;
 begin
   -- Get the user's role for the specified account
-  select role into user_role
-  from public.account_user
-  where account_user.account_id = $1
-  and account_user.user_id = $3;
+  select account_role into user_role
+  from public.accounts_memberships
+  where accounts_memberships.account_id = $1
+  and accounts_memberships.user_id = $3;
 
   -- If no role found, user doesn't have access
   if user_role is null then

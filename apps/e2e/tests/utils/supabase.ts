@@ -102,13 +102,13 @@ export async function createTestAccountWithUser(user: TestUser): Promise<{ accou
     const accountUser = {
       user_id: authUser.user.id,
       account_id: account.id,
-      role: user.role,
+      account_role: user.role,
     };
 
     console.log('Linking user to account:', accountUser);
 
     const { error: linkError } = await supabaseAdmin
-      .from('account_user')
+      .from('accounts_memberships')
       .insert([accountUser]);
 
     if (linkError) {
@@ -230,12 +230,12 @@ export async function cleanupTestAccount(accountId: string | undefined) {
 
     // Delete account user associations
     const { error: userError } = await supabaseAdmin
-      .from('account_user')
+      .from('accounts_memberships')
       .delete()
       .eq('account_id', accountId);
 
     if (userError) {
-      console.error('Error deleting account users:', userError);
+      console.error('Error deleting account memberships:', userError);
     }
 
     // Finally delete the account

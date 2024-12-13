@@ -54,11 +54,11 @@ test.describe('Carrier CRUD Operations', () => {
 
       // Link admin to owner's account
       const { error: linkError } = await supabaseAdmin
-        .from('account_user')
+        .from('accounts_memberships')
         .insert({
           user_id: adminUser.id,
           account_id: ownerAccount.id,
-          role: 'admin'
+          account_role: 'admin'
         });
 
       if (linkError) {
