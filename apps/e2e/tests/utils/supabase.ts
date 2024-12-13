@@ -18,7 +18,7 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
 
 // Initialize Supabase client with admin privileges for test setup
-const supabaseAdmin = createClient(
+export const supabaseAdmin = createClient(
   SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY,
   {
@@ -30,7 +30,7 @@ const supabaseAdmin = createClient(
 );
 
 // Regular client for user operations
-const supabase = createClient(
+export const supabase = createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
