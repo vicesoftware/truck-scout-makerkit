@@ -3,15 +3,53 @@
 ## Overview
 This document outlines the end-to-end test plan for carrier management functionality, focusing on authenticated access and CRUD operations.
 
+## Reference Documents
+For reference, here are the documents that describe the database schema, testing best practices, and migrations. Review these before starting any testing tasks.
+- [Database Schema](../database.md)
+- [Testing Best Practices](../testing-best-practices.md)
+- [Carrier Tables Migration](../web/supabase/migrations/20241212203857_carrier_tables.sql)
+- [Carrier Permissions Migration](../web/supabase/migrations/20241212203857_add_carrier_permissions.sql)
+
 ## Test Environment Setup
 
-### Authentication and Roles
-1. Create test users with different roles:
-   - Owner (highest privileges)
-   - Admin (can manage carriers)
-   - Member (limited access)
-2. Each test should demonstrate proper role-based access control
-3. Tests should use Supabase authentication
+### Prerequisites
+1. Basic Supabase DB connectivity ✅
+   - Test connection to database ✅
+   - Verify ability to query tables ✅
+   - Ensure environment variables are properly set ✅
+
+### Authentication Capabilities Required
+
+#### 1. User Creation & Management
+- Create users with different roles:
+  - Owner (highest privileges)
+  - Admin (can manage carriers) ✅
+  - Member (limited access) ✅
+- Support email/password authentication
+- Handle user cleanup after tests
+- Generate unique test emails
+- Manage password requirements
+
+#### 2. Account Management
+- Create test accounts
+- Link users to accounts with specific roles
+- Support multiple users per account
+- Clean up accounts and related data
+- Handle account-specific data isolation ✅
+
+#### 3. Permission Verification
+- Check specific permissions (e.g., carriers.manage) ✅
+- Verify role-based access control
+- Test permission inheritance
+- Validate cross-account access restrictions ✅
+- Handle permission-denied scenarios ✅
+
+#### 4. Authentication Utilities
+- Create authenticated Supabase clients
+- Manage authentication tokens/sessions
+- Handle token refresh if needed
+- Support concurrent authenticated sessions
+- Clean up authentication state
 
 ### Database State
 - Tests should handle their own test data setup and cleanup
@@ -20,11 +58,11 @@ This document outlines the end-to-end test plan for carrier management functiona
 
 ## Test Scenarios
 
-### 1. Authentication and Authorization (Base Pattern)
-This foundational test will demonstrate the pattern for authenticated database access that other tests will follow.
+### 1. Authentication and Authorization (Base Pattern) ✅
+This foundational test demonstrates the pattern for authenticated database access that other tests will follow.
 
 ```typescript
-// Pattern to demonstrate:
+// Pattern demonstrated in carrier-auth.spec.ts:
 - Create test account
 - Create authenticated user with specific role
 - Verify database access with role permissions
@@ -90,42 +128,55 @@ This foundational test will demonstrate the pattern for authenticated database a
 - Verify all CRUD operations are permitted
 - Test managing carriers across the account
 
-#### Admin Role Tests
-- Verify all CRUD operations are permitted
-- Test managing carriers across the account
+#### Admin Role Tests ✅
+- Verify all CRUD operations are permitted ✅
+- Test managing carriers across the account ✅
 
-#### Member Role Tests
-- Verify read-only access
-- Confirm create/update/delete operations are denied
+#### Member Role Tests ✅
+- Verify read-only access ✅
+- Confirm create/update/delete operations are denied ✅
 
 ### 4. Edge Cases and Error Handling
 - Test duplicate MC numbers
 - Test invalid data formats
 - Test missing required fields
-- Test unauthorized access attempts
-- Test cross-account access attempts
+- Test unauthorized access attempts ✅
+- Test cross-account access attempts ✅
 
 ## Implementation Priority
 
-1. Authentication Pattern Test
-   - This will establish the base pattern for all subsequent tests
-   - Focus on demonstrating proper role-based DB access
+1. Basic Database Connectivity ✅
+   - Verify Supabase connection ✅
+   - Test basic table access ✅
+   - Ensure proper error handling ✅
 
-2. Basic CRUD Tests
+2. Authentication Pattern Test ✅
+   - Demonstrate proper role-based DB access ✅
+   - Verify basic authentication capabilities ✅
+
+3. User Management Tests (Next Priority)
+   - Test user creation with different roles
+   - Test email/password authentication
+   - Test user cleanup processes
+   - Test password requirements
+
+4. Account Management Tests
+   - Test account creation
+   - Test user-account linking
+   - Test multi-user support
+   - Test account cleanup
+
+5. Basic CRUD Tests
    - Create with required fields
    - Read single carrier
    - Update basic fields
    - Delete carrier
 
-3. Advanced CRUD Tests
+6. Advanced CRUD Tests
    - Complex create scenarios
    - List and filter operations
    - Batch operations
    - Edge cases
-
-4. Role-Based Access Tests
-   - Different role permissions
-   - Access control verification
 
 ## Test Data Management
 
@@ -171,3 +222,22 @@ interface TestCarrier {
 5. Document any non-obvious test setup or assertions
 6. Use helper functions for common operations
 7. Maintain consistent naming conventions
+
+## Progress Tracking
+- Basic Database Connectivity Test ✅
+  - Created and verified supabase.spec.ts
+  - Confirmed ability to query roles table
+  - Established pattern for basic DB access tests
+
+- Authentication Pattern Test ✅
+  - Demonstrated basic role-based access
+  - Verified account isolation
+  - Tested basic permission enforcement
+
+Next Steps:
+1. Implement user management tests
+   - Focus on user creation and roles
+   - Test authentication scenarios
+2. Implement account management tests
+3. Develop basic CRUD test suite
+4. Add advanced scenarios and edge cases
