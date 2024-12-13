@@ -1,0 +1,10 @@
+{
+  "title": "How Monitoring works",
+  "pages": [
+    {
+      "url": "https://makerkit.dev/docs/next-supabase-turbo/monitoring/overview",
+      "title": "Setting Monitoring in Makerkit",
+      "content": "Setting Monitoring in MakerkitIntroducing how Makerkit handles monitoring of performance metrics and exceptions in the Next.js Supabase SaaS kit\n\nMakerkit provides first-class support for two monitoring providers:Baselime (now part of Cloudflare)SentryMakerkit will set up a few things for you out of the box:Performance Metrics - Instrumentation using Next.js's instrumentation hookClient exceptions - Automatically capturing uncaught exceptions on the clientServer exceptions - Automatically capturing server-side exceptions when using the functions enhanceAction and enhanceRouteHandlerAdditionally, it provides you with the tools to manually capturing exceptions, should you want to.Configuring Monitoring in MakerkitTo set up monitoring in your application, you need to define the two variables below:# sentry or baselimeNEXT_PUBLIC_MONITORING_PROVIDER=# performance monitoring (only required for Baselime)ENABLE_MONITORING_INSTRUMENTATION=trueINSTRUMENTATION_SERVICE_NAME=your_service_nameMonitoring Provider - the monitoring provider to use. Based on this variable, Makerkit will provide the relative implementation.Enable Instrumentation - if enabled, we report performance metrics to the provider using Next.jsFor the provider's specific settings, please check the relative documentation.Performance MonitoringPerformance monitoring uses Next.js' experimental instrumentation for reporting performance metrics using OpenTelemetry.NB: Performance monitoring is only enabled for Node.js runtimes."
+    }
+  ]
+}

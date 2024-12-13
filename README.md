@@ -64,12 +64,76 @@ This project is built on the MakerKit Supabase SaaS Starter Kit (Turbo Edition),
 - [Project Plan & Requirements](/docs/requirements/initial_project_plan.md)
 - [Technical Documentation](https://makerkit.dev/docs/next-supabase-turbo/introduction)
 - [Flow Diagrams & ERDs](/docs/requirements/rag/)
+- [Testing Best Practices](/docs/testing-best-practices.md)
+
+### Documentation Scrapers
+
+We maintain local copies of external documentation using scrapers to ensure offline access and integration with our development workflow. The scrapers are located in `docs/scrapers/`:
+
+```bash
+# Run the MakerKit documentation scraper
+node docs/scrapers/makerkit-scraper.js
+```
+
+Scraped documentation is saved to the `docs/scraped` directory:
+- MakerKit documentation: `docs/scraped/makerkit/`
 
 ## Getting Started
 
 1. Clone the repository
 2. Follow the [MakerKit setup documentation](https://makerkit.dev/docs/next-supabase-turbo/introduction)
 3. Review the [project plan](/docs/requirements/initial_project_plan.md) for development context
+
+### Running Supabase Locally
+
+To work with the local Supabase instance:
+
+1. Start the Supabase services:
+```bash
+pnpm run supabase:web:start
+```
+
+2. Reset the database (if needed):
+```bash
+pnpm run supabase:web:reset
+```
+
+3. Access Supabase Studio:
+   - Open http://127.0.0.1:54323 in your browser
+   - Login credentials:
+     - Email: admin@admin.com
+     - Password: admin
+   - Use the left sidebar to navigate:
+     - Table Editor: View and modify database tables
+     - SQL Editor: Run custom queries
+     - Authentication: Manage users and settings
+     - Storage: Manage file storage
+
+4. Direct Database Connection (for external tools):
+   - Host: 127.0.0.1
+   - Port: 54322
+   - Database: postgres
+   - Username: postgres
+   - Password: postgres
+
+### Running Tests
+
+> For detailed testing guidelines, see our [Testing Best Practices](/docs/testing-best-practices.md). Here's the basic workflow for running tests:
+
+1. Start Supabase:
+```bash
+pnpm run supabase:web:start
+```
+
+2. Start the development server (using the monorepo filter):
+```bash
+pnpm --filter web dev
+```
+
+3. Run the tests:
+```bash
+pnpm run test
+```
 
 ## Contributing
 
