@@ -48,12 +48,24 @@ importers:
       '@playwright/test':
         specifier: ^1.49.0
         version: 1.49.0
+      '@supabase/supabase-js':
+        specifier: ^2.46.2
+        version: 2.46.2
       '@types/node':
         specifier: ^22.10.1
         version: 22.10.1
+      '@types/uuid':
+        specifier: ^9.0.7
+        version: 9.0.8
+      dotenv-cli:
+        specifier: ^7.4.4
+        version: 7.4.4
       node-html-parser:
         specifier: ^6.1.13
         version: 6.1.13
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
 
   apps/web:
     dependencies:
@@ -4132,6 +4144,9 @@ packages:
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
+
+  '@types/uuid@9.0.8':
+    resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
 
   '@types/ws@8.5.13':
     resolution: {integrity: sha512-osM/gWBTPKgHV8XkTunnegTRIsvF6owmf5w+JtAfOw472dptdm0dlGv4xCt6GwQRcC2XVOvvRE/0bAoQcL2QkA==}
@@ -11268,6 +11283,8 @@ snapshots:
   '@types/unist@2.0.11': {}
 
   '@types/unist@3.0.3': {}
+
+  '@types/uuid@9.0.8': {}
 
   '@types/ws@8.5.13':
     dependencies:

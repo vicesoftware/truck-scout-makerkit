@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "report": "playwright show-report",
-    "test": "playwright test --max-failures=1",
+    "test": "dotenv -e .env.test -- playwright test --max-failures=1",
     "test:ui": "playwright test --ui"
   },
   "keywords": [],
@@ -13,7 +13,11 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.49.0",
+    "@supabase/supabase-js": "^2.46.2",
     "@types/node": "^22.10.1",
-    "node-html-parser": "^6.1.13"
+    "@types/uuid": "^9.0.7",
+    "dotenv-cli": "^7.4.4",
+    "node-html-parser": "^6.1.13",
+    "uuid": "^9.0.1"
   }
 }
