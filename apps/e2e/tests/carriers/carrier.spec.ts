@@ -208,7 +208,7 @@ test.describe('Carrier Tests', () => {
       expect(createError).toBeDefined();
       expect(carrier).toBeNull();
       if (createError) {
-        expect(createError.message).toContain('permission denied');
+        expect(createError.message).toContain('row-level security policy');
       } else {
         throw new Error('Expected an error but none was received');
       }
