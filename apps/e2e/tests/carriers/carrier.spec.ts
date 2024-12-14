@@ -1,231 +1,372 @@
 import { test, expect } from '@playwright/test';
 import {
-  supabaseAdmin,
   createTestAccountWithUser,
+  addUserToAccount,
   createAuthenticatedClient,
   cleanupTestAccount,
-  generateTestCarrier,
-  generateTestFactoringCompany,
+  TestAccount,
+  TestUser,
   hasPermission,
-  TestUser
 } from '../utils/supabase';
 
-// Configure test to run sequentially
-test.describe.configure({ mode: 'serial' });
-
-test.describe('Carrier CRUD Operations', () => {
-  let ownerAccount: { id: string; name: string };
+test.describe('Carrier Tests', () => {
+  let ownerAccount: TestAccount;
+  let ownerUser: TestUser;
+  let memberUser: TestUser;
   let adminUser: TestUser;
-  let testFactoringCompanyId: string;
-  let testCarrier: any;
+  let carrierId: string;
 
-  // Setup before all tests
   test.beforeAll(async () => {
     try {
-      console.log('Starting test setup...');
-
-      // Create owner account (for factoring company)
+      // 1. Create owner account
       const ownerSetup = await createTestAccountWithUser({
-        email: `owner-carrier-test-${Date.now()}@example.com`,
+        email: `owner-test-${Date.now()}@example.com`,
         password: 'TestPassword123!',
         role: 'owner'
       });
-
-      if (!ownerSetup?.account?.id) {
-        throw new Error('Owner account creation failed: ' + JSON.stringify(ownerSetup));
-      }
-
       ownerAccount = ownerSetup.account;
-      console.log('Owner account created:', ownerAccount);
+      ownerUser = ownerSetup.user;
 
-      // Create admin user
-      const adminSetup = await createTestAccountWithUser({
-        email: `admin-carrier-test-${Date.now()}@example.com`,
+      // 2. Add member user to owner's account
+      memberUser = await addUserToAccount(ownerAccount.id, {
+        email: `member-test-${Date.now()}@example.com`,
+        password: 'TestPassword123!',
+        role: 'member'
+      });
+
+      // 3. Add admin user to owner's account
+      adminUser = await addUserToAccount(ownerAccount.id, {
+        email: `admin-test-${Date.now()}@example.com`,
         password: 'TestPassword123!',
         role: 'admin'
       });
 
-      if (!adminSetup?.user?.id) {
-        throw new Error('Admin user creation failed: ' + JSON.stringify(adminSetup));
-      }
+      // 4. Create test carrier using owner client
+      const ownerClient = await createAuthenticatedClient(ownerUser);
+      
+      // Verify owner has carrier management permission
+      const canManage = await hasPermission(
+        ownerClient,
+        ownerAccount.id,
+        'carriers.manage'
+      );
+      expect(canManage).toBe(true);
 
-      adminUser = adminSetup.user;
-      console.log('Admin user created:', adminUser);
-
-      // Link admin to owner's account
-      const { error: linkError } = await supabaseAdmin
-        .from('accounts_memberships')
+      const { data: carrier, error: createError } = await ownerClient
+        .from('carriers')
         .insert({
-          user_id: adminUser.id,
           account_id: ownerAccount.id,
-          account_role: 'admin'
-        });
-
-      if (linkError) {
-        console.error('Error linking admin to account:', linkError);
-        throw new Error('Failed to link admin to account');
-      }
-
-      console.log('Admin linked to account successfully');
-
-      // Create a test factoring company
-      const factoringCompanyData = generateTestFactoringCompany(ownerAccount.id);
-      const { data: factoringCompany, error: factoringCompanyError } = await supabaseAdmin
-        .from('factoring_companies')
-        .insert(factoringCompanyData)
-        .select('id')
+          name: 'Test Carrier',
+          mc_number: 'MC67890',
+          preferred_status: false,
+          rating: 4.5
+        })
+        .select()
         .single();
 
-      if (factoringCompanyError || !factoringCompany) {
-        console.error('Factoring Company Creation Error:', factoringCompanyError);
-        throw new Error('Failed to create factoring company');
+      if (createError) {
+        throw new Error(`Failed to create test carrier: ${createError.message}`);
       }
 
-      testFactoringCompanyId = factoringCompany.id;
-      console.log('Factoring company created:', testFactoringCompanyId);
-    } catch (error) {
-      console.error('Carrier Test Setup Error:', error);
+      carrierId = carrier.id;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Test setup failed: ${error.message}`);
+    }
+  });
+
+  test.afterAll(async () => {
+    try {
+      await cleanupTestAccount(ownerAccount.id);
+    } catch (err) {
+      const error = err as Error;
+      console.error(`Cleanup failed: ${error.message}`);
       throw error;
     }
   });
 
-  // Cleanup after all tests
-  test.afterAll(async () => {
+  test('Member can read carrier', async () => {
     try {
-      if (ownerAccount?.id) {
-        await cleanupTestAccount(ownerAccount.id);
-        console.log('Test account cleanup completed');
+      const memberClient = await createAuthenticatedClient(memberUser);
+
+      // Verify member does not have carrier management permission
+      const canManage = await hasPermission(
+        memberClient,
+        ownerAccount.id,
+        'carriers.manage'
+      );
+      expect(canManage).toBe(false);
+
+      // Verify member can read carrier data
+      const { data: carrier, error: readError } = await memberClient
+        .from('carriers')
+        .select(`
+          id,
+          name,
+          mc_number,
+          preferred_status,
+          rating,
+          created_at,
+          updated_at
+        `)
+        .eq('id', carrierId)
+        .single();
+
+      if (readError) {
+        throw new Error(`Failed to read carrier: ${readError.message}`);
       }
-    } catch (error) {
-      console.error('Cleanup Error:', error);
+
+      expect(carrier).toBeDefined();
+      expect(carrier.id).toBe(carrierId);
+      expect(carrier.name).toBe('Test Carrier');
+      expect(carrier.mc_number).toBe('MC67890');
+      expect(carrier.preferred_status).toBe(false);
+      expect(carrier.rating).toBe(4.5);
+      expect(carrier.created_at).toBeDefined();
+      expect(carrier.updated_at).toBeDefined();
+
+      // Verify RLS policy prevents access to other accounts
+      const { data: otherCarrier, error: otherError } = await memberClient
+        .from('carriers')
+        .select()
+        .neq('account_id', ownerAccount.id)
+        .maybeSingle();
+
+      expect(otherCarrier).toBeNull();
+      expect(otherError).toBeNull();
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Member read test failed: ${error.message}`);
     }
   });
 
-  test('Admin should be able to create carriers', async () => {
-    // Authenticate admin client
-    const adminClient = await createAuthenticatedClient(adminUser);
+  test('Owner can create carrier', async () => {
+    try {
+      const ownerClient = await createAuthenticatedClient(ownerUser);
+      
+      // Verify owner has carrier management permission
+      const canManage = await hasPermission(
+        ownerClient,
+        ownerAccount.id,
+        'carriers.manage'
+      );
+      expect(canManage).toBe(true);
 
-    // Log detailed permission check
-    console.log('Checking admin permissions...');
-    const hasCarrierManagePermission = await hasPermission(
-      adminClient,
-      ownerAccount.id,
-      'carriers.manage'
-    );
-    console.log('Admin Carrier Manage Permission:', hasCarrierManagePermission);
-    expect(hasCarrierManagePermission).toBe(true);
+      const { data: carrier, error } = await ownerClient
+        .from('carriers')
+        .insert({
+          account_id: ownerAccount.id,
+          name: 'Another Test Carrier',
+          mc_number: 'MC54321',
+          preferred_status: true,
+          rating: 3.5
+        })
+        .select()
+        .single();
 
-    // Generate carrier data
-    const carrierData = generateTestCarrier(ownerAccount.id, testFactoringCompanyId);
-    console.log('Carrier Data to Insert:', JSON.stringify(carrierData, null, 2));
+      if (error) {
+        throw new Error(`Failed to create carrier: ${error.message}`);
+      }
 
-    // Attempt to create carrier
-    const { data, error } = await adminClient
-      .from('carriers')
-      .insert(carrierData)
-      .select('*')
-      .single();
-
-    // Log detailed error if insertion fails
-    if (error) {
-      console.error('Carrier Insertion Error:', JSON.stringify(error, null, 2));
+      expect(carrier).toBeDefined();
+      expect(carrier.name).toBe('Another Test Carrier');
+      expect(carrier.mc_number).toBe('MC54321');
+      expect(carrier.preferred_status).toBe(true);
+      expect(carrier.rating).toBe(3.5);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Owner create test failed: ${error.message}`);
     }
-
-    // Assertions
-    expect(error).toBeNull();
-    expect(data).toBeTruthy();
-    expect(data.name).toBe(carrierData.name);
-    expect(data.account_id).toBe(ownerAccount.id);
-    expect(data.factoring_company_id).toBe(testFactoringCompanyId);
-
-    // Store carrier for subsequent tests
-    testCarrier = data;
-    console.log('Carrier created successfully:', JSON.stringify(data, null, 2));
   });
 
-  test('Admin should be able to read carriers', async () => {
-    const adminClient = await createAuthenticatedClient(adminUser);
+  test('Member cannot create carrier', async () => {
+    try {
+      const memberClient = await createAuthenticatedClient(memberUser);
 
-    // Verify carrier read permission
-    const hasReadPermission = await hasPermission(
-      adminClient,
-      ownerAccount.id,
-      'carriers.read'
-    );
-    expect(hasReadPermission).toBe(true);
+      // Verify member does not have carrier management permission
+      const canManage = await hasPermission(
+        memberClient,
+        ownerAccount.id,
+        'carriers.manage'
+      );
+      expect(canManage).toBe(false);
 
-    // Attempt to read carrier
-    const { data, error } = await adminClient
-      .from('carriers')
-      .select('*')
-      .eq('id', testCarrier.id)
-      .single();
+      // Attempt to create carrier
+      const { data: carrier, error: createError } = await memberClient
+        .from('carriers')
+        .insert({
+          account_id: ownerAccount.id,
+          name: 'Member Test Carrier',
+          mc_number: 'MC99999',
+          preferred_status: false,
+          rating: 3.0
+        })
+        .select()
+        .single();
 
-    // Assertions
-    expect(error).toBeNull();
-    expect(data).toBeTruthy();
-    expect(data.id).toBe(testCarrier.id);
-    expect(data.name).toBe(testCarrier.name);
-    expect(data.account_id).toBe(ownerAccount.id);
+      // Verify creation was denied
+      expect(createError).toBeDefined();
+      expect(carrier).toBeNull();
+      if (createError) {
+        expect(createError.message).toContain('permission denied');
+      } else {
+        throw new Error('Expected an error but none was received');
+      }
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Member create test failed: ${error.message}`);
+    }
+  });
+
+  test('Member cannot update carrier', async () => {
+    try {
+      const memberClient = await createAuthenticatedClient(memberUser);
+
+      // Verify member does not have carrier management permission
+      const canManage = await hasPermission(
+        memberClient,
+        ownerAccount.id,
+        'carriers.manage'
+      );
+      expect(canManage).toBe(false);
+
+      // Attempt to update carrier
+      const { data: carrier, error: updateError } = await memberClient
+        .from('carriers')
+        .update({
+          name: 'Updated Name',
+          rating: 2.0
+        })
+        .eq('id', carrierId)
+        .select()
+        .single();
+
+      // Verify update was denied
+      expect(updateError).toBeDefined();
+      expect(carrier).toBeNull();
+      if (updateError) {
+        expect(updateError.message).toContain('permission denied');
+      } else {
+        throw new Error('Expected an error but none was received');
+      }
+
+      // Verify carrier was not actually updated
+      const { data: originalCarrier, error: readError } = await memberClient
+        .from('carriers')
+        .select()
+        .eq('id', carrierId)
+        .single();
+
+      expect(readError).toBeNull();
+      expect(originalCarrier.name).toBe('Test Carrier');
+      expect(originalCarrier.rating).toBe(4.5);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Member update test failed: ${error.message}`);
+    }
   });
 
   test('Admin should be able to update carriers', async () => {
-    const adminClient = await createAuthenticatedClient(adminUser);
+    try {
+      const adminClient = await createAuthenticatedClient(adminUser);
 
-    // Verify carrier update permission
-    const hasUpdatePermission = await hasPermission(
-      adminClient,
-      ownerAccount.id,
-      'carriers.manage'
-    );
-    expect(hasUpdatePermission).toBe(true);
+      // Verify admin has carrier management permission
+      const canManage = await hasPermission(
+        adminClient,
+        ownerAccount.id,
+        'carriers.manage'
+      );
+      expect(canManage).toBe(true);
 
-    // Update carrier data
-    const updatedName = `Updated Carrier ${Date.now()}`;
-    const { error: updateError } = await adminClient
-      .from('carriers')
-      .update({ name: updatedName })
-      .eq('id', testCarrier.id);
+      // Update carrier
+      const { data: updatedCarrier, error: updateError } = await adminClient
+        .from('carriers')
+        .update({
+          name: 'Admin Updated Carrier',
+          rating: 3.0,
+          preferred_status: true
+        })
+        .eq('id', carrierId)
+        .select()
+        .single();
 
-    expect(updateError).toBeNull();
+      if (updateError) {
+        throw new Error(`Failed to update carrier: ${updateError.message}`);
+      }
 
-    // Verify update
-    const { data: verifyData, error: verifyError } = await adminClient
-      .from('carriers')
-      .select('*')
-      .eq('id', testCarrier.id)
-      .single();
+      expect(updatedCarrier).toBeDefined();
+      expect(updatedCarrier.name).toBe('Admin Updated Carrier');
+      expect(updatedCarrier.rating).toBe(3.0);
+      expect(updatedCarrier.preferred_status).toBe(true);
 
-    expect(verifyError).toBeNull();
-    expect(verifyData.name).toBe(updatedName);
+      // Verify update persisted
+      const { data: verifyCarrier, error: verifyError } = await adminClient
+        .from('carriers')
+        .select()
+        .eq('id', carrierId)
+        .single();
+
+      expect(verifyError).toBeNull();
+      expect(verifyCarrier.name).toBe('Admin Updated Carrier');
+      expect(verifyCarrier.rating).toBe(3.0);
+      expect(verifyCarrier.preferred_status).toBe(true);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Admin update test failed: ${error.message}`);
+    }
   });
 
   test('Admin should be able to delete carriers', async () => {
-    const adminClient = await createAuthenticatedClient(adminUser);
+    try {
+      const adminClient = await createAuthenticatedClient(adminUser);
 
-    // Verify carrier delete permission
-    const hasDeletePermission = await hasPermission(
-      adminClient,
-      ownerAccount.id,
-      'carriers.manage'
-    );
-    expect(hasDeletePermission).toBe(true);
+      // Verify admin has carrier management permission
+      const canManage = await hasPermission(
+        adminClient,
+        ownerAccount.id,
+        'carriers.manage'
+      );
+      expect(canManage).toBe(true);
 
-    // Delete carrier
-    const { error: deleteError } = await adminClient
-      .from('carriers')
-      .delete()
-      .eq('id', testCarrier.id);
+      // Create a carrier to delete
+      const { data: carrier, error: createError } = await adminClient
+        .from('carriers')
+        .insert({
+          account_id: ownerAccount.id,
+          name: 'Carrier To Delete',
+          mc_number: 'MC11111',
+          preferred_status: false,
+          rating: 2.5
+        })
+        .select()
+        .single();
 
-    expect(deleteError).toBeNull();
+      if (createError) {
+        throw new Error(`Failed to create test carrier: ${createError.message}`);
+      }
 
-    // Verify deletion
-    const { data: verifyData, error: verifyError } = await adminClient
-      .from('carriers')
-      .select('*')
-      .eq('id', testCarrier.id);
+      // Delete the carrier
+      const { error: deleteError } = await adminClient
+        .from('carriers')
+        .delete()
+        .eq('id', carrier.id);
 
-    expect(verifyError).toBeNull();
-    expect(verifyData).toHaveLength(0);
+      if (deleteError) {
+        throw new Error(`Failed to delete carrier: ${deleteError.message}`);
+      }
+
+      // Verify carrier was deleted
+      const { data: verifyCarrier, error: verifyError } = await adminClient
+        .from('carriers')
+        .select()
+        .eq('id', carrier.id)
+        .maybeSingle();
+
+      expect(verifyError).toBeNull();
+      expect(verifyCarrier).toBeNull();
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Admin delete test failed: ${error.message}`);
+    }
   });
 });
