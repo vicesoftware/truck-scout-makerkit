@@ -125,15 +125,31 @@ pnpm run supabase:web:reset
 pnpm run supabase:web:start
 ```
 
-2. Start the development server (using the monorepo filter):
+2. Reset the database (optional, but recommended before running tests):
 ```bash
-pnpm --filter web dev
+pnpm run supabase:web:reset
 ```
 
-3. Run the tests:
+3. Run all tests:
 ```bash
 pnpm run test
 ```
+
+4. Run tests for a specific workspace (optional):
+```bash
+pnpm --filter web-e2e test
+```
+
+5. Run a specific test file (optional):
+```bash
+# Run a specific E2E test file from the project root
+pnpm --filter web-e2e test tests/carriers/carrier.spec.ts
+```
+
+Note: 
+- The `web-e2e` is the package name for our end-to-end (E2E) test workspace, located in the `apps/e2e/` directory. 
+- Always ensure Supabase is running and the database is in a known state before running tests.
+- Use `pnpm run supabase:web:reset` to reset the database to a clean state, which can help prevent test interference.
 
 ## Contributing
 

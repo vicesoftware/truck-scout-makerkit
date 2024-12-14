@@ -120,3 +120,214 @@ Tests are automatically run in GitHub Actions on every push. The workflow includ
 8. Always validate required environment variables at the start of tests
 9. Use clear error messages that indicate missing or invalid environment variables
 10. Keep environment variable validation in a centralized utility function
+
+
+## E2E Testing with Supabase
+
+### Account and User Setup
+
+When setting up test data with Supabase, it's important to understand the relationship between accounts, users, and permissions:
+
+1. **Account Structure**
+   - Each account has a primary owner (set during account creation)
+   - Additional users can be members of an account with different roles (owner, admin, member)
+   - Permissions are based on a user's role within an account
+
+2. **Test Setup Pattern**
+   ```typescript
+   // 1. Create the main account and owner
+   const ownerSetup = await createTestAccountWithUser({
+     email: `owner-test-${Date.now()}@example.com`,
+     password: 'TestPassword123!',
+     role: 'owner'
+   });
+   const ownerAccount = ownerSetup.account;
+
+   // 2. Add additional users to the account
+   const adminUser = await addUserToAccount(ownerAccount.id, {
+     email: `admin-test-${Date.now()}@example.com`,
+     password: 'TestPassword123!',
+     role: 'admin'
+   });
+
+   // 3. Create an authenticated client for API calls
+   const adminClient = await createAuthenticatedClient(adminUser);
+   ```
+
+3. **Permission Checking**
+   - Always verify permissions before attempting operations
+   - Users must be members of an account to have permissions
+   ```typescript
+   const hasPermission = await hasPermission(
+     client,
+     accountId,
+     'permission.name'
+   );
+   ```
+
+4. **Cleanup**
+   - Use cleanupTestAccount to remove test data
+   - This handles deletion order for foreign key constraints
+   - The owner membership is automatically removed when the account is deleted
+
+### Common Issues to Avoid
+
+1. **Account Membership**
+   - ❌ DON'T create separate accounts for admin/member users
+   - ✅ DO add them to the main test account instead
+   - This ensures proper permission inheritance
+
+2. **Permission Testing**
+   - ❌ DON'T assume users have permissions just because of their role
+   - ✅ DO check permissions before operations
+   - ✅ DO verify users are members of the target account
+
+3. **Data Cleanup**
+   - ❌ DON'T try to delete owner memberships directly
+   - ✅ DO clean up in the correct order (foreign key constraints)
+   - ✅ DO let account deletion handle cascade deletes
+
+### Database Schema Overview
+
+1. **Accounts Table**
+   - Primary table for organizations/workspaces
+   - Has a primary_owner_user_id field
+   - Contains basic account info (name, slug, etc.)
+
+2. **Accounts Memberships Table**
+   - Links users to accounts
+   - Stores the user's role in the account
+   - One user can be a member of multiple accounts
+
+3. **Roles and Permissions**
+   - Roles have hierarchy levels (owner > admin > member)
+   - Permissions are granted to roles
+   - The has_permission function checks role-based access
+
+### Utility Functions
+
+The test utilities provide several helper functions:
+
+1. `createTestAccountWithUser`
+   - Creates an account and its primary owner
+   - Use this first when setting up test data
+   ```typescript
+   const { account, user } = await createTestAccountWithUser({
+     email: 'test@example.com',
+     password: 'password',
+     role: 'owner'
+   });
+   ```
+
+2. `addUserToAccount`
+   - Adds additional users to an existing account
+   - Use this for admin/member test users
+   ```typescript
+   const adminUser = await addUserToAccount(accountId, {
+     email: 'admin@example.com',
+     password: 'password',
+     role: 'admin'
+   });
+   ```
+
+3. `createAuthenticatedClient`
+   - Creates a Supabase client for API calls
+   - Handles authentication automatically
+   ```typescript
+   const client = await createAuthenticatedClient(user);
+   ```
+
+4. `hasPermission`
+   - Checks if a user has a specific permission
+   - Requires account membership
+   ```typescript
+   const canManage = await hasPermission(
+     client,
+     accountId,
+     'resource.manage'
+   );
+   ```
+
+5. `cleanupTestAccount`
+   - Removes all test data for an account
+   - Handles deletion order automatically
+   ```typescript
+   await cleanupTestAccount(accountId);
+   ```
+
+### Example Test Structure
+
+```typescript
+test.describe('Feature Tests', () => {
+  let ownerAccount: TestAccount;
+  let adminUser: TestUser;
+
+  test.beforeAll(async () => {
+    // 1. Create owner account
+    const ownerSetup = await createTestAccountWithUser({
+      email: `owner-test-${Date.now()}@example.com`,
+      password: 'TestPassword123!',
+      role: 'owner'
+    });
+    ownerAccount = ownerSetup.account;
+
+    // 2. Add admin user to owner's account
+    adminUser = await addUserToAccount(ownerAccount.id, {
+      email: `admin-test-${Date.now()}@example.com`,
+      password: 'TestPassword123!',
+      role: 'admin'
+    });
+  });
+
+  test.afterAll(async () => {
+    await cleanupTestAccount(ownerAccount.id);
+  });
+
+  test('Admin can perform action', async () => {
+    const adminClient = await createAuthenticatedClient(adminUser);
+    
+    // Verify permissions
+    const hasAccess = await hasPermission(
+      adminClient,
+      ownerAccount.id,
+      'feature.permission'
+    );
+    expect(hasAccess).toBe(true);
+
+    // Perform test
+    // ...
+  });
+});
+```
+
+### Troubleshooting Common Errors
+
+1. **Permission Denied**
+   ```
+   Error: Permission denied for resource
+   ```
+   - Check if the user is a member of the correct account
+   - Verify the user has the correct role
+   - Use hasPermission to debug permission issues
+
+2. **Foreign Key Violation**
+   ```
+   Error: violates foreign key constraint
+   ```
+   - Clean up data in the correct order
+   - Use cleanupTestAccount instead of manual deletion
+
+3. **Cannot Delete Owner**
+   ```
+   Error: The primary account owner cannot be removed
+   ```
+   - Don't try to delete owner memberships directly
+   - Delete the account instead (it will cascade)
+
+4. **User Not Found**
+   ```
+   Error: User not found or invalid credentials
+   ```
+   - Verify the user was created successfully
+   - Check if the user is authenticated
+   - Ensure you're using the correct email/password
