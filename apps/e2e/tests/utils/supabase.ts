@@ -48,10 +48,15 @@ export type TestAccount = {
 };
 
 /**
- * Creates a test account and user with the specified role
+ * Creates a test account and its primary owner user.
+ * This is typically the first step in setting up test data.
+ * The owner will have full permissions for the account.
  */
 export async function createTestAccountWithUser(user: TestUser): Promise<{ account: TestAccount; user: TestUser }> {
   try {
+    // Add delay between user creations to prevent race conditions
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     console.log('Creating test user:', { email: user.email, role: user.role });
 
     // First create the user
@@ -63,6 +68,7 @@ export async function createTestAccountWithUser(user: TestUser): Promise<{ accou
 
     if (signUpError) {
       console.error('Error creating user:', signUpError);
+      console.error('Detailed error:', JSON.stringify(signUpError, null, 2));
       throw signUpError;
     }
 
@@ -93,26 +99,30 @@ export async function createTestAccountWithUser(user: TestUser): Promise<{ accou
 
     if (accountError) {
       console.error('Error creating account:', accountError);
+      console.error('Detailed error:', JSON.stringify(accountError, null, 2));
       throw accountError;
     }
 
     console.log('Created account:', account);
 
     // Link user to account with specified role
-    const accountUser = {
+    const membership = {
       user_id: authUser.user.id,
       account_id: account.id,
-      role: user.role,
+      account_role: user.role,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     };
 
-    console.log('Linking user to account:', accountUser);
+    console.log('Linking user to account:', membership);
 
     const { error: linkError } = await supabaseAdmin
-      .from('account_user')
-      .insert([accountUser]);
+      .from('accounts_memberships')
+      .insert([membership]);
 
     if (linkError) {
       console.error('Error linking user to account:', linkError);
+      console.error('Detailed error:', JSON.stringify(linkError, null, 2));
       throw linkError;
     }
 
@@ -124,12 +134,69 @@ export async function createTestAccountWithUser(user: TestUser): Promise<{ accou
     };
   } catch (error) {
     console.error('Error in createTestAccountWithUser:', error);
+    console.error('Detailed error:', JSON.stringify(error, null, 2));
     throw error;
   }
 }
 
 /**
- * Creates an authenticated Supabase client for a test user
+ * Adds a new user to an existing account with the specified role.
+ * Use this when you need additional users (like admins or members) in an account.
+ * The user will have permissions based on their role in the account.
+ */
+export async function addUserToAccount(
+  accountId: string,
+  user: TestUser
+): Promise<TestUser> {
+  try {
+    console.log('Creating additional user for account:', { accountId, email: user.email, role: user.role });
+
+    // Create the user
+    const { data: authUser, error: signUpError } = await supabaseAdmin.auth.admin.createUser({
+      email: user.email,
+      password: user.password,
+      email_confirm: true
+    });
+
+    if (signUpError) {
+      console.error('Error creating user:', signUpError);
+      throw signUpError;
+    }
+
+    if (!authUser?.user?.id) {
+      throw new Error('No user ID returned');
+    }
+
+    // Link user to account
+    const membership = {
+      user_id: authUser.user.id,
+      account_id: accountId,
+      account_role: user.role,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+
+    console.log('Adding user to account:', membership);
+
+    const { error: membershipError } = await supabaseAdmin
+      .from('accounts_memberships')
+      .insert([membership]);
+
+    if (membershipError) {
+      console.error('Error adding user to account:', membershipError);
+      throw membershipError;
+    }
+
+    return { ...user, id: authUser.user.id };
+  } catch (error) {
+    console.error('Error in addUserToAccount:', error);
+    throw error;
+  }
+}
+
+/**
+ * Creates an authenticated Supabase client for a test user.
+ * Use this when you need to make API calls as a specific user.
  */
 export async function createAuthenticatedClient(user: TestUser) {
   try {
@@ -170,7 +237,8 @@ export async function createAuthenticatedClient(user: TestUser) {
 }
 
 /**
- * Verifies if a user has a specific permission
+ * Verifies if a user has a specific permission in an account.
+ * The user must be a member of the account for permissions to work.
  */
 export async function hasPermission(client: any, accountId: string, permission: string): Promise<boolean> {
   try {
@@ -178,8 +246,8 @@ export async function hasPermission(client: any, accountId: string, permission: 
 
     const { data, error } = await client
       .rpc('has_permission', {
-        p_permission: permission,
-        p_account_id: accountId
+        p_account_id: accountId,
+        p_permission: permission
       });
 
     if (error) {
@@ -197,7 +265,8 @@ export async function hasPermission(client: any, accountId: string, permission: 
 }
 
 /**
- * Cleans up test data for an account
+ * Cleans up test data for an account.
+ * This will delete all associated data in the correct order to handle foreign key constraints.
  */
 export async function cleanupTestAccount(accountId: string | undefined) {
   if (!accountId) {
@@ -208,7 +277,11 @@ export async function cleanupTestAccount(accountId: string | undefined) {
   try {
     console.log('Cleaning up test data for account:', accountId);
 
+    // Add delay before cleanup to ensure all operations are complete
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     // Delete carriers first due to foreign key constraints
+    console.log('Deleting carriers for account:', accountId);
     const { error: carriersError } = await supabaseAdmin
       .from('carriers')
       .delete()
@@ -216,9 +289,12 @@ export async function cleanupTestAccount(accountId: string | undefined) {
 
     if (carriersError) {
       console.error('Error deleting carriers:', carriersError);
+      console.error('Detailed error:', JSON.stringify(carriersError, null, 2));
+      throw carriersError;
     }
 
     // Delete factoring companies
+    console.log('Deleting factoring companies for account:', accountId);
     const { error: factoringError } = await supabaseAdmin
       .from('factoring_companies')
       .delete()
@@ -226,19 +302,26 @@ export async function cleanupTestAccount(accountId: string | undefined) {
 
     if (factoringError) {
       console.error('Error deleting factoring companies:', factoringError);
+      console.error('Detailed error:', JSON.stringify(factoringError, null, 2));
+      throw factoringError;
     }
 
-    // Delete account user associations
-    const { error: userError } = await supabaseAdmin
-      .from('account_user')
+    // Delete non-owner account memberships first
+    console.log('Deleting account memberships for account:', accountId);
+    const { error: membershipError } = await supabaseAdmin
+      .from('accounts_memberships')
       .delete()
-      .eq('account_id', accountId);
+      .eq('account_id', accountId)
+      .neq('account_role', 'owner');
 
-    if (userError) {
-      console.error('Error deleting account users:', userError);
+    if (membershipError) {
+      console.error('Error deleting account memberships:', membershipError);
+      console.error('Detailed error:', JSON.stringify(membershipError, null, 2));
+      throw membershipError;
     }
 
-    // Finally delete the account
+    // Finally delete the account (this will cascade delete the owner membership)
+    console.log('Deleting account:', accountId);
     const { error: accountError } = await supabaseAdmin
       .from('accounts')
       .delete()
@@ -246,17 +329,21 @@ export async function cleanupTestAccount(accountId: string | undefined) {
 
     if (accountError) {
       console.error('Error deleting account:', accountError);
+      console.error('Detailed error:', JSON.stringify(accountError, null, 2));
+      throw accountError;
     }
 
     console.log('Successfully cleaned up test data');
   } catch (error) {
     console.error('Error in cleanupTestAccount:', error);
+    console.error('Detailed error:', JSON.stringify(error, null, 2));
     throw error;
   }
 }
 
 /**
- * Generates test carrier data
+ * Generates test carrier data.
+ * Use this to create carriers with valid test data.
  */
 export function generateTestCarrier(accountId: string, factoringCompanyId?: string) {
   return {
@@ -275,7 +362,8 @@ export function generateTestCarrier(accountId: string, factoringCompanyId?: stri
 }
 
 /**
- * Generates test factoring company data
+ * Generates test factoring company data.
+ * Use this to create factoring companies with valid test data.
  */
 export function generateTestFactoringCompany(accountId: string) {
   return {

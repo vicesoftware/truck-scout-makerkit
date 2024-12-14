@@ -1,3 +1,12 @@
+-- Create timestamp trigger function
+CREATE OR REPLACE FUNCTION update_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
 -- Create factoring companies table
 CREATE TABLE public.factoring_companies (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -30,6 +39,12 @@ CREATE TABLE public.carriers (
 CREATE INDEX idx_carriers_account ON public.carriers(account_id);
 CREATE INDEX idx_carriers_factoring_company ON public.carriers(factoring_company_id);
 CREATE INDEX idx_carriers_mc_number ON public.carriers(mc_number);
+
+-- Create timestamp trigger for carriers
+CREATE TRIGGER update_carriers_timestamp
+    BEFORE UPDATE ON carriers
+    FOR EACH ROW
+    EXECUTE FUNCTION update_timestamp();
 
 GRANT ALL ON public.carriers TO authenticated;
 GRANT ALL ON public.carriers TO service_role;

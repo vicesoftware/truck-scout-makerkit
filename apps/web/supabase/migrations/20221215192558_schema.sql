@@ -2716,7 +2716,7 @@ service_role;
 -- Storage
 -- Account Image
 insert into
-  storage.buckets (id, name, PUBLIC)
+  storage.buckets (id, name, public)
 values
   ('account_image', 'account_image', true);
 
