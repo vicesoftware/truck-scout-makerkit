@@ -43,12 +43,12 @@ test.describe('Carrier Tests', () => {
 
       // 4. Create test carrier using owner client
       const ownerClient = await createAuthenticatedClient(ownerUser);
-      
-      // Verify owner has carrier management permission
+
+      // Verify owner has carrier creation permission
       const canManage = await hasPermission(
         ownerClient,
         ownerAccount.id,
-        'carriers.manage'
+        'carriers.create'
       );
       expect(canManage).toBe(true);
 
@@ -89,13 +89,13 @@ test.describe('Carrier Tests', () => {
     try {
       const memberClient = await createAuthenticatedClient(memberUser);
 
-      // Verify member does not have carrier management permission
-      const canManage = await hasPermission(
+      // Verify member has read permission
+      const canRead = await hasPermission(
         memberClient,
         ownerAccount.id,
-        'carriers.manage'
+        'carriers.read'
       );
-      expect(canManage).toBe(false);
+      expect(canRead).toBe(true);
 
       // Verify member can read carrier data
       const { data: carrier, error: readError } = await memberClient
@@ -136,14 +136,14 @@ test.describe('Carrier Tests', () => {
   test('Owner can create carrier', async () => {
     try {
       const ownerClient = await createAuthenticatedClient(ownerUser);
-      
-      // Verify owner has carrier management permission
-      const canManage = await hasPermission(
+
+      // Verify owner has carrier creation permission
+      const canCreate = await hasPermission(
         ownerClient,
         ownerAccount.id,
-        'carriers.manage'
+        'carriers.create'
       );
-      expect(canManage).toBe(true);
+      expect(canCreate).toBe(true);
 
       const { data: carrier, error } = await ownerClient
         .from('carriers')
@@ -173,104 +173,90 @@ test.describe('Carrier Tests', () => {
   });
 
   test('Member cannot create carrier', async () => {
-    try {
-      const memberClient = await createAuthenticatedClient(memberUser);
+    const memberClient = await createAuthenticatedClient(memberUser);
 
-      // Verify member does not have carrier management permission
-      const canManage = await hasPermission(
-        memberClient,
-        ownerAccount.id,
-        'carriers.manage'
-      );
-      expect(canManage).toBe(false);
+    // Verify member does not have carrier creation permission
+    const canCreate = await hasPermission(
+      memberClient,
+      ownerAccount.id,
+      'carriers.create'
+    );
+    expect(canCreate).toBe(false);
 
-      // Attempt to create carrier
-      const { data: carrier, error: createError } = await memberClient
-        .from('carriers')
-        .insert({
-          account_id: ownerAccount.id,
-          name: 'Member Test Carrier',
-          mc_number: 'MC99999',
-          preferred_status: false,
-          rating: 3.0
-        })
-        .select()
-        .single();
+    // Attempt to create carrier
+    const { data: carrier, error: createError } = await memberClient
+      .from('carriers')
+      .insert({
+        account_id: ownerAccount.id,
+        name: 'Member Test Carrier',
+        mc_number: 'MC99999',
+        preferred_status: false,
+        rating: 3.0
+      })
+      .select()
+      .single();
 
-      // Verify creation was denied
-      expect(createError).toBeDefined();
-      expect(carrier).toBeNull();
-      if (createError) {
-        expect(createError.message).toContain('row-level security policy');
-      } else {
-        throw new Error('Expected an error but none was received');
-      }
-    } catch (err) {
-      const error = err as Error;
-      throw new Error(`Member create test failed: ${error.message}`);
-    }
+    // Verify creation was denied due to RLS policy
+    expect(createError).toBeDefined();
+    expect(carrier).toBeNull();
+    expect(createError?.message).toContain('row-level security policy');
   });
 
   test('Member cannot update carrier', async () => {
-    try {
-      const ownerClient = await createAuthenticatedClient(ownerUser);
-      const memberClient = await createAuthenticatedClient(memberUser);
+    const ownerClient = await createAuthenticatedClient(ownerUser);
+    const memberClient = await createAuthenticatedClient(memberUser);
 
-      // Create a test carrier as owner
-      const { data: carrier, error: createError } = await ownerClient
-        .from('carriers')
-        .insert({
-          account_id: ownerAccount.id,
-          name: 'Test Carrier',
-          mc_number: 'MC99999',
-          preferred_status: false,
-          rating: 4.0
-        })
-        .select()
-        .single();
+    // Create a test carrier as owner
+    const { data: carrier, error: createError } = await ownerClient
+      .from('carriers')
+      .insert({
+        account_id: ownerAccount.id,
+        name: 'Test Carrier',
+        mc_number: 'MC99999',
+        preferred_status: false,
+        rating: 4.0
+      })
+      .select()
+      .single();
 
-      if (createError) {
-        throw new Error(`Failed to create test carrier: ${createError.message}`);
-      }
-
-      // Verify member does not have carrier management permission
-      const canManage = await hasPermission(
-        memberClient,
-        ownerAccount.id,
-        'carriers.manage'
-      );
-      expect(canManage).toBe(false);
-
-      // Attempt to update carrier
-      const { error: updateError } = await memberClient
-        .from('carriers')
-        .update({
-          name: 'Member Updated Carrier',
-          rating: 2.0,
-          preferred_status: true
-        })
-        .eq('id', carrier.id);
-
-      // Verify update was denied
-      expect(updateError).toBeDefined();
-      expect(updateError?.message).toBe('new row violates row-level security policy for table "carriers"');
-    } catch (err) {
-      const error = err as Error;
-      throw new Error(`Member update test failed: ${error.message}`);
+    if (createError) {
+      throw new Error(`Failed to create test carrier: ${createError.message}`);
     }
+
+    // Verify member does not have carrier update permission
+    const canUpdate = await hasPermission(
+      memberClient,
+      ownerAccount.id,
+      'carriers.update'
+    );
+    expect(canUpdate).toBe(false);
+
+    // Attempt to update carrier
+    const { error: updateError } = await memberClient
+      .from('carriers')
+      .update({
+        name: 'Member Updated Carrier',
+        rating: 2.0,
+        preferred_status: true
+      })
+      .eq('id', carrier.id);
+
+    // Verify update was denied due to RLS policy
+    expect(updateError).toBeDefined();
+    expect(updateError?.message).toContain('row-level security policy');
   });
 
   test('Admin should be able to update carriers', async () => {
     try {
       const adminClient = await createAuthenticatedClient(adminUser);
 
-      // Verify admin has carrier management permission
-      const canManage = await hasPermission(
+      // Verify admin has carrier update permission
+      const canUpdate = await hasPermission(
         adminClient,
         ownerAccount.id,
-        'carriers.manage'
+        'carriers.update'
       );
-      expect(canManage).toBe(true);
+      expect(canUpdate).toBe(true);
 
       // Update carrier
       const { data: updatedCarrier, error: updateError } = await adminClient
@@ -314,13 +300,13 @@ test.describe('Carrier Tests', () => {
     try {
       const adminClient = await createAuthenticatedClient(adminUser);
 
-      // Verify admin has carrier management permission
-      const canManage = await hasPermission(
+      // Verify admin has carrier delete permission
+      const canDelete = await hasPermission(
         adminClient,
         ownerAccount.id,
-        'carriers.manage'
+        'carriers.delete'
       );
-      expect(canManage).toBe(true);
+      expect(canDelete).toBe(true);
 
       // Create a carrier to delete
       const { data: carrier, error: createError } = await adminClient

@@ -238,23 +238,10 @@ export async function hasPermission(client: any, accountId: string, permission: 
   try {
     console.log('Checking permission:', { accountId, permission });
 
-    // Get the current user's ID
-    const { data: { user }, error: userError } = await client.auth.getUser();
-    if (userError) {
-      console.error('Error getting user:', userError);
-      throw userError;
-    }
-
-    if (!user?.id) {
-      console.error('No user ID found');
-      throw new Error('No user ID found');
-    }
-
     const { data, error } = await client
       .rpc('has_permission', {
-        account_id: accountId,
-        permission_name: permission,
-        user_id: user.id
+        p_account_id: accountId,
+        p_permission: permission
       });
 
     if (error) {

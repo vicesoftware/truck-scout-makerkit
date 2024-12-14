@@ -7,10 +7,15 @@ DROP POLICY IF EXISTS carriers_delete ON carriers;
 -- Enable RLS on carriers table
 ALTER TABLE public.carriers ENABLE ROW LEVEL SECURITY;
 
--- Read policy - Allow read access to users in the same account with carriers.read permission
+-- Read policy - Allow read access to users in the same account
 CREATE POLICY carriers_read ON carriers
     FOR SELECT USING (
-        has_permission(account_id, 'carriers.read'::public.app_permissions)
+        EXISTS (
+            SELECT 1
+            FROM accounts_memberships am
+            WHERE am.account_id = carriers.account_id
+            AND am.user_id = auth.uid()
+        )
     );
 
 -- Create policy
@@ -35,3 +40,6 @@ CREATE POLICY carriers_delete ON carriers
 
 -- Grant necessary permissions to authenticated users
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.carriers TO authenticated;
+
+-- Ensure RLS is enforced for all operations
+ALTER TABLE public.carriers FORCE ROW LEVEL SECURITY;
