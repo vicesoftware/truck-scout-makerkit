@@ -30,12 +30,15 @@ begin
 
   -- For member role, check specific permissions
   if user_role = 'member' then
-    -- Members don't have carrier management permissions
-    if permission_name = 'carriers.manage' then
-      raise exception 'new row violates row-level security policy for table "carriers"'
-        using hint = 'Members cannot manage carriers';
-    end if;
-    return false;
+    case permission_name
+      when 'carriers.read' then
+        return true;
+      when 'carriers.create', 'carriers.update', 'carriers.delete' then
+        raise exception 'new row violates row-level security policy for table "carriers"'
+          using hint = 'Members can only read carriers';
+      else
+        return false;
+    end case;
   end if;
 
   raise exception 'new row violates row-level security policy for table "carriers"'
