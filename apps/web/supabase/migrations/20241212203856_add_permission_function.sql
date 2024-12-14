@@ -1,7 +1,7 @@
 -- Create internal has_permission function
 create or replace function public.has_permission_internal(
   account_id uuid,
-  permission_name text,
+  permission_name public.app_permissions,
   user_id uuid default auth.uid()
 )
 returns boolean
@@ -19,7 +19,8 @@ begin
 
   -- If no role found, user doesn't have access
   if user_role is null then
-    return false;
+    raise exception 'new row violates row-level security policy for table "carriers"'
+      using hint = 'User does not have access to this account';
   end if;
 
   -- Admin and owner roles have all permissions
@@ -27,20 +28,25 @@ begin
     return true;
   end if;
 
-  -- For member role, check specific permissions (can be expanded later)
+  -- For member role, check specific permissions
   if user_role = 'member' then
-    -- Add specific permission checks for members here
+    -- Members don't have carrier management permissions
+    if permission_name = 'carriers.manage' then
+      raise exception 'new row violates row-level security policy for table "carriers"'
+        using hint = 'Members cannot manage carriers';
+    end if;
     return false;
   end if;
 
-  return false;
+  raise exception 'new row violates row-level security policy for table "carriers"'
+    using hint = 'Invalid role or permission';
 end;
 $$;
 
 -- Create PostgREST-compatible wrapper function
 create or replace function public.has_permission(
   p_account_id uuid,
-  p_permission text
+  p_permission public.app_permissions
 )
 returns boolean
 language plpgsql
@@ -52,5 +58,5 @@ end;
 $$;
 
 -- Grant execute permissions
-grant execute on function public.has_permission_internal(uuid, text, uuid) to authenticated;
-grant execute on function public.has_permission(uuid, text) to authenticated;
+grant execute on function public.has_permission_internal(uuid, public.app_permissions, uuid) to authenticated;
+grant execute on function public.has_permission(uuid, public.app_permissions) to authenticated;

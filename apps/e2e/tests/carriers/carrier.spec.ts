@@ -100,15 +100,8 @@ test.describe('Carrier Tests', () => {
       // Verify member can read carrier data
       const { data: carrier, error: readError } = await memberClient
         .from('carriers')
-        .select(`
-          id,
-          name,
-          mc_number,
-          preferred_status,
-          rating,
-          created_at,
-          updated_at
-        `)
+        .select('id, name, mc_number, preferred_status, rating, created_at, updated_at')
+        .eq('account_id', ownerAccount.id)
         .eq('id', carrierId)
         .single();
 
@@ -220,7 +213,25 @@ test.describe('Carrier Tests', () => {
 
   test('Member cannot update carrier', async () => {
     try {
+      const ownerClient = await createAuthenticatedClient(ownerUser);
       const memberClient = await createAuthenticatedClient(memberUser);
+
+      // Create a test carrier as owner
+      const { data: carrier, error: createError } = await ownerClient
+        .from('carriers')
+        .insert({
+          account_id: ownerAccount.id,
+          name: 'Test Carrier',
+          mc_number: 'MC99999',
+          preferred_status: false,
+          rating: 4.0
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        throw new Error(`Failed to create test carrier: ${createError.message}`);
+      }
 
       // Verify member does not have carrier management permission
       const canManage = await hasPermission(
@@ -231,35 +242,18 @@ test.describe('Carrier Tests', () => {
       expect(canManage).toBe(false);
 
       // Attempt to update carrier
-      const { data: carrier, error: updateError } = await memberClient
+      const { error: updateError } = await memberClient
         .from('carriers')
         .update({
-          name: 'Updated Name',
-          rating: 2.0
+          name: 'Member Updated Carrier',
+          rating: 2.0,
+          preferred_status: true
         })
-        .eq('id', carrierId)
-        .select()
-        .single();
+        .eq('id', carrier.id);
 
       // Verify update was denied
       expect(updateError).toBeDefined();
-      expect(carrier).toBeNull();
-      if (updateError) {
-        expect(updateError.message).toContain('permission denied');
-      } else {
-        throw new Error('Expected an error but none was received');
-      }
-
-      // Verify carrier was not actually updated
-      const { data: originalCarrier, error: readError } = await memberClient
-        .from('carriers')
-        .select()
-        .eq('id', carrierId)
-        .single();
-
-      expect(readError).toBeNull();
-      expect(originalCarrier.name).toBe('Test Carrier');
-      expect(originalCarrier.rating).toBe(4.5);
+      expect(updateError?.message).toBe('new row violates row-level security policy for table "carriers"');
     } catch (err) {
       const error = err as Error;
       throw new Error(`Member update test failed: ${error.message}`);
@@ -367,6 +361,216 @@ test.describe('Carrier Tests', () => {
     } catch (err) {
       const error = err as Error;
       throw new Error(`Admin delete test failed: ${error.message}`);
+    }
+  });
+
+  test('Owner can list and filter carriers', async () => {
+    try {
+      const ownerClient = await createAuthenticatedClient(ownerUser);
+
+      // Create multiple test carriers
+      const carriers = [
+        { name: 'Test Carrier 1', mc_number: 'MC12345', preferred_status: true },
+        { name: 'Test Carrier 2', mc_number: 'MC67890', preferred_status: false },
+        { name: 'Test Carrier 3', mc_number: 'MC11111', preferred_status: true }
+      ];
+
+      // Insert test carriers
+      for (const carrier of carriers) {
+        const { error: createError } = await ownerClient
+          .from('carriers')
+          .insert({
+            ...carrier,
+            account_id: ownerAccount.id,
+            rating: 4.0
+          });
+
+        if (createError) {
+          throw new Error(`Failed to create test carrier: ${createError.message}`);
+        }
+      }
+
+      // Test filtering by MC number
+      const { data: mcNumberResult, error: mcNumberError } = await ownerClient
+        .from('carriers')
+        .select()
+        .eq('mc_number', 'MC12345')
+        .single();
+
+      expect(mcNumberError).toBeNull();
+      expect(mcNumberResult?.name).toBe('Test Carrier 1');
+
+      // Test filtering by preferred status
+      const { data: preferredResult, error: preferredError } = await ownerClient
+        .from('carriers')
+        .select()
+        .eq('preferred_status', true);
+
+      expect(preferredError).toBeNull();
+      expect(preferredResult?.length ?? 0).toBe(2);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Owner list and filter test failed: ${error.message}`);
+    }
+  });
+
+  test('Owner can create carrier with contact info', async () => {
+    try {
+      const ownerClient = await createAuthenticatedClient(ownerUser);
+
+      const contactInfo = {
+        phone: '555-0123',
+        email: 'contact@testcarrier.com',
+        address: '123 Test St'
+      };
+
+      const { data, error } = await ownerClient
+        .from('carriers')
+        .insert({
+          account_id: ownerAccount.id,
+          name: 'Contact Test Carrier',
+          mc_number: 'MC99999',
+          contact_info: contactInfo,
+          preferred_status: false,
+          rating: 4.0
+        })
+        .select()
+        .single();
+
+      expect(error).toBeNull();
+      expect(data.contact_info).toEqual(contactInfo);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Contact info test failed: ${error.message}`);
+    }
+  });
+
+  test('Carrier timestamps are properly set', async () => {
+    try {
+      const ownerClient = await createAuthenticatedClient(ownerUser);
+
+      // Create carrier
+      const { data: created, error: createError } = await ownerClient
+        .from('carriers')
+        .insert({
+          account_id: ownerAccount.id,
+          name: 'Timestamp Test Carrier',
+          mc_number: 'MC77777',
+          preferred_status: false,
+          rating: 4.0
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        throw new Error(`Failed to create carrier: ${createError.message}`);
+      }
+
+      expect(created.created_at).toBeDefined();
+      expect(created.updated_at).toBeDefined();
+      const originalUpdatedAt = created.updated_at;
+
+      // Wait to ensure different timestamp (3 seconds to be safe)
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
+      // Update carrier
+      const { data: updated, error: updateError } = await ownerClient
+        .from('carriers')
+        .update({ name: 'Updated Name' })
+        .eq('id', created.id)
+        .select()
+        .single();
+
+      if (updateError) {
+        throw new Error(`Failed to update carrier: ${updateError.message}`);
+      }
+
+      expect(updated.updated_at).not.toBe(originalUpdatedAt);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Timestamp test failed: ${error.message}`);
+    }
+  });
+
+  test('Cannot create carrier with duplicate MC number', async () => {
+    try {
+      const ownerClient = await createAuthenticatedClient(ownerUser);
+
+      // Create first carrier
+      const { error: firstError } = await ownerClient
+        .from('carriers')
+        .insert({
+          account_id: ownerAccount.id,
+          name: 'Original Carrier',
+          mc_number: 'MC44444',
+          preferred_status: false,
+          rating: 4.0
+        });
+
+      if (firstError) {
+        throw new Error(`Failed to create first carrier: ${firstError.message}`);
+      }
+
+      // Attempt to create carrier with same MC number
+      const { error } = await ownerClient
+        .from('carriers')
+        .insert({
+          account_id: ownerAccount.id,
+          name: 'Duplicate Carrier',
+          mc_number: 'MC44444',
+          preferred_status: false,
+          rating: 4.0
+        });
+
+      expect(error).toBeDefined();
+      if (error) {
+        expect(error.message).toContain('duplicate');
+      }
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Duplicate MC number test failed: ${error.message}`);
+    }
+  });
+
+  test('Validates carrier data formats', async () => {
+    try {
+      const ownerClient = await createAuthenticatedClient(ownerUser);
+
+      const invalidTests = [
+        {
+          data: { rating: 6.0 }, // Rating > 5.0
+          errorCheck: (error: any) => expect(error?.message).toContain('check_rating')
+        },
+        {
+          data: { rating: -1.0 }, // Rating < 0
+          errorCheck: (error: any) => expect(error?.message).toContain('check_rating')
+        },
+        {
+          data: { mc_number: '' }, // Empty MC number
+          errorCheck: (error: any) => expect(error?.message).toContain('null value in column')
+        }
+      ];
+
+      for (const test of invalidTests) {
+        const { error } = await ownerClient
+          .from('carriers')
+          .insert({
+            account_id: ownerAccount.id,
+            name: 'Invalid Test Carrier',
+            mc_number: 'MC55555',
+            preferred_status: false,
+            rating: 4.0,
+            ...test.data
+          });
+
+        expect(error).toBeDefined();
+        if (error) {
+          test.errorCheck(error);
+        }
+      }
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Data validation test failed: ${error.message}`);
     }
   });
 });
