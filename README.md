@@ -64,6 +64,7 @@ This project is built on the MakerKit Supabase SaaS Starter Kit (Turbo Edition),
 - [Project Plan & Requirements](/docs/requirements/initial_project_plan.md)
 - [Technical Documentation](https://makerkit.dev/docs/next-supabase-turbo/introduction)
 - [Flow Diagrams & ERDs](/docs/requirements/rag/)
+- [Database Testing Guide](/docs/requirements/database/database.md)
 
 ### Documentation Scrapers
 
@@ -114,6 +115,26 @@ pnpm run supabase:web:reset
    - Database: postgres
    - Username: postgres
    - Password: postgres
+
+### Database 
+
+You can find database developement documentation in the [Database Guide](/docs/database.md).
+
+#### DatabaseTesting
+
+The project uses pgTAP, a TAP-compliant testing framework for PostgreSQL, to ensure database integrity. To run the database tests:
+
+1. Reset the database to a clean state:
+```bash
+pnpm run supabase:web:reset
+```
+
+2. Run the test suite:
+```bash
+pnpm --filter web supabase:test
+```
+
+This will execute all database tests, including schema validation, permissions, and business logic. For detailed information about our database testing approach, see the [Database Testing Guide](/docs/database-testing-with-pg-tap.md).
 
 ## Contributing
 
