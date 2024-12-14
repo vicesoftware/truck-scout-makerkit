@@ -25,12 +25,12 @@ if (!enableBillingTests) {
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false, // Disable parallel execution to prevent race conditions
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 3 : 1,
-  /* Limit parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* Limit parallel tests. */
+  workers: 1, // Force sequential execution
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Ignore billing tests if the environment variable is not set. */

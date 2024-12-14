@@ -54,6 +54,9 @@ export type TestAccount = {
  */
 export async function createTestAccountWithUser(user: TestUser): Promise<{ account: TestAccount; user: TestUser }> {
   try {
+    // Add delay between user creations to prevent race conditions
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     console.log('Creating test user:', { email: user.email, role: user.role });
 
     // First create the user
@@ -65,6 +68,7 @@ export async function createTestAccountWithUser(user: TestUser): Promise<{ accou
 
     if (signUpError) {
       console.error('Error creating user:', signUpError);
+      console.error('Detailed error:', JSON.stringify(signUpError, null, 2));
       throw signUpError;
     }
 
@@ -95,6 +99,7 @@ export async function createTestAccountWithUser(user: TestUser): Promise<{ accou
 
     if (accountError) {
       console.error('Error creating account:', accountError);
+      console.error('Detailed error:', JSON.stringify(accountError, null, 2));
       throw accountError;
     }
 
@@ -129,6 +134,7 @@ export async function createTestAccountWithUser(user: TestUser): Promise<{ accou
     };
   } catch (error) {
     console.error('Error in createTestAccountWithUser:', error);
+    console.error('Detailed error:', JSON.stringify(error, null, 2));
     throw error;
   }
 }
@@ -271,7 +277,11 @@ export async function cleanupTestAccount(accountId: string | undefined) {
   try {
     console.log('Cleaning up test data for account:', accountId);
 
+    // Add delay before cleanup to ensure all operations are complete
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     // Delete carriers first due to foreign key constraints
+    console.log('Deleting carriers for account:', accountId);
     const { error: carriersError } = await supabaseAdmin
       .from('carriers')
       .delete()
@@ -279,9 +289,12 @@ export async function cleanupTestAccount(accountId: string | undefined) {
 
     if (carriersError) {
       console.error('Error deleting carriers:', carriersError);
+      console.error('Detailed error:', JSON.stringify(carriersError, null, 2));
+      throw carriersError;
     }
 
     // Delete factoring companies
+    console.log('Deleting factoring companies for account:', accountId);
     const { error: factoringError } = await supabaseAdmin
       .from('factoring_companies')
       .delete()
@@ -289,9 +302,12 @@ export async function cleanupTestAccount(accountId: string | undefined) {
 
     if (factoringError) {
       console.error('Error deleting factoring companies:', factoringError);
+      console.error('Detailed error:', JSON.stringify(factoringError, null, 2));
+      throw factoringError;
     }
 
     // Delete non-owner account memberships first
+    console.log('Deleting account memberships for account:', accountId);
     const { error: membershipError } = await supabaseAdmin
       .from('accounts_memberships')
       .delete()
@@ -300,9 +316,12 @@ export async function cleanupTestAccount(accountId: string | undefined) {
 
     if (membershipError) {
       console.error('Error deleting account memberships:', membershipError);
+      console.error('Detailed error:', JSON.stringify(membershipError, null, 2));
+      throw membershipError;
     }
 
     // Finally delete the account (this will cascade delete the owner membership)
+    console.log('Deleting account:', accountId);
     const { error: accountError } = await supabaseAdmin
       .from('accounts')
       .delete()
@@ -310,11 +329,14 @@ export async function cleanupTestAccount(accountId: string | undefined) {
 
     if (accountError) {
       console.error('Error deleting account:', accountError);
+      console.error('Detailed error:', JSON.stringify(accountError, null, 2));
+      throw accountError;
     }
 
     console.log('Successfully cleaned up test data');
   } catch (error) {
     console.error('Error in cleanupTestAccount:', error);
+    console.error('Detailed error:', JSON.stringify(error, null, 2));
     throw error;
   }
 }
