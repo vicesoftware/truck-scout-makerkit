@@ -1,0 +1,6 @@
+{
+  "parentSection": "7. Billing",
+  "title": "Paddle",
+  "url": "https://makerkit.dev/docs/next-supabase-turbo/billing/paddle",
+  "content": "Configuring Paddle BillingPaddle is a payment processor that allows you to charge your users for your SaaS product. It is a Merchant of Record, which means they handle all the billing and compliance for you.\n\nPaddle is not yet availableThe integration will be developed after Paddle releases their Customer Portal.Stay tuned!"
+}

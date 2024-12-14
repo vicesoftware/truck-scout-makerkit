@@ -1,0 +1,653 @@
+{
+  "sections": [
+    {
+      "index": 1,
+      "title": "1. Installation",
+      "directory": "01-installation",
+      "pages": [
+        {
+          "title": "Introduction",
+          "filename": "installation.introduction.json"
+        },
+        {
+          "title": "Technical Details",
+          "filename": "installation.technical-details.json"
+        },
+        {
+          "title": "Conventions",
+          "filename": "installation.conventions.json"
+        },
+        {
+          "title": "Clone the Repository",
+          "filename": "installation.clone-the-repository.json"
+        },
+        {
+          "title": "Running the Project",
+          "filename": "installation.running-the-project.json"
+        },
+        {
+          "title": "Common Commands",
+          "filename": "installation.common-commands.json"
+        },
+        {
+          "title": "Updating the Codebase",
+          "filename": "installation.updating-the-codebase.json"
+        },
+        {
+          "title": "Navigating the Codebase",
+          "filename": "installation.navigating-the-codebase.json"
+        },
+        {
+          "title": "Walkthrough",
+          "filename": "installation.walkthrough.json"
+        },
+        {
+          "title": "Migrating from v1",
+          "filename": "installation.migrating-from-v1.json"
+        },
+        {
+          "title": "Updating to Next.js 15",
+          "filename": "installation.updating-to-next-js-15.json"
+        },
+        {
+          "title": "Code Health and Testing",
+          "filename": "installation.code-health-and-testing.json"
+        },
+        {
+          "title": "Cursor Rules and LLMs",
+          "filename": "installation.cursor-rules-and-llms.json"
+        },
+        {
+          "title": "FAQ",
+          "filename": "installation.faq.json"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "title": "2. Configuration",
+      "directory": "02-configuration",
+      "pages": [
+        {
+          "title": "Environment Variables",
+          "filename": "configuration.environment-variables.json"
+        },
+        {
+          "title": "Application Configuration",
+          "filename": "configuration.application-configuration.json"
+        },
+        {
+          "title": "Authentication Configuration",
+          "filename": "configuration.authentication-configuration.json"
+        },
+        {
+          "title": "Paths Configuration",
+          "filename": "configuration.paths-configuration.json"
+        },
+        {
+          "title": "Feature Flags",
+          "filename": "configuration.feature-flags.json"
+        },
+        {
+          "title": "Account Navigation Configuration",
+          "filename": "configuration.account-navigation-configuration.json"
+        },
+        {
+          "title": "Team Account Navigation Configuration",
+          "filename": "configuration.team-account-navigation-configuration.json"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "title": "3. Customization",
+      "directory": "03-customization",
+      "pages": [
+        {
+          "title": "Tailwind CSS",
+          "filename": "customization.tailwind-css.json"
+        },
+        {
+          "title": "Updating the theme",
+          "filename": "customization.updating-the-theme.json"
+        },
+        {
+          "title": "Updating the Logo",
+          "filename": "customization.updating-the-logo.json"
+        },
+        {
+          "title": "Adding Shadcn UI components",
+          "filename": "customization.adding-shadcn-ui-components.json"
+        },
+        {
+          "title": "Updating Fonts",
+          "filename": "customization.updating-fonts.json"
+        },
+        {
+          "title": "Layout Style",
+          "filename": "customization.layout-style.json"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "title": "4. Development",
+      "directory": "04-development",
+      "pages": [
+        {
+          "title": "Starting developing your App",
+          "filename": "development.starting-developing-your-app.json"
+        },
+        {
+          "title": "Migrations",
+          "filename": "development.migrations.json"
+        },
+        {
+          "title": "Database Schema",
+          "filename": "development.database-schema.json"
+        },
+        {
+          "title": "Database Functions",
+          "filename": "development.database-functions.json"
+        },
+        {
+          "title": "Loading data from the DB",
+          "filename": "development.loading-data-from-the-db.json"
+        },
+        {
+          "title": "Writing data to Database",
+          "filename": "development.writing-data-to-database.json"
+        },
+        {
+          "title": "Database Webhooks",
+          "filename": "development.database-webhooks.json"
+        },
+        {
+          "title": "RBAC: Roles and Permissions",
+          "filename": "development.rbac-roles-and-permissions.json"
+        },
+        {
+          "title": "Marketing Pages",
+          "filename": "development.marketing-pages.json"
+        },
+        {
+          "title": "Legal Pages",
+          "filename": "development.legal-pages.json"
+        },
+        {
+          "title": "External Marketing Website",
+          "filename": "development.external-marketing-website.json"
+        },
+        {
+          "title": "SEO",
+          "filename": "development.seo.json"
+        },
+        {
+          "title": "Adding a Turborepo package",
+          "filename": "development.adding-a-turborepo-package.json"
+        },
+        {
+          "title": "Adding a Turborepo app",
+          "filename": "development.adding-a-turborepo-app.json"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "title": "5. API",
+      "directory": "05-api",
+      "pages": [
+        {
+          "title": "Account API",
+          "filename": "api.account-api.json"
+        },
+        {
+          "title": "Team Account API",
+          "filename": "api.team-account-api.json"
+        },
+        {
+          "title": "Authentication API",
+          "filename": "api.authentication-api.json"
+        },
+        {
+          "title": "User Workspace API",
+          "filename": "api.user-workspace-api.json"
+        },
+        {
+          "title": "Account Workspace API",
+          "filename": "api.account-workspace-api.json"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "title": "6. Data Fetching",
+      "directory": "06-data-fetching",
+      "pages": [
+        {
+          "title": "Supabase Clients",
+          "filename": "data-fetching.supabase-clients.json"
+        },
+        {
+          "title": "Server Actions",
+          "filename": "data-fetching.server-actions.json"
+        },
+        {
+          "title": "Route Handlers",
+          "filename": "data-fetching.route-handlers.json"
+        },
+        {
+          "title": "Server Components",
+          "filename": "data-fetching.server-components.json"
+        },
+        {
+          "title": "React Query",
+          "filename": "data-fetching.react-query.json"
+        },
+        {
+          "title": "CSRF Protection",
+          "filename": "data-fetching.csrf-protection.json"
+        },
+        {
+          "title": "Captcha Protection",
+          "filename": "data-fetching.captcha-protection.json"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "title": "7. Billing",
+      "directory": "07-billing",
+      "pages": [
+        {
+          "title": "How Billing Works",
+          "filename": "billing.how-billing-works.json"
+        },
+        {
+          "title": "Billing Schema",
+          "filename": "billing.billing-schema.json"
+        },
+        {
+          "title": "Stripe",
+          "filename": "billing.stripe.json"
+        },
+        {
+          "title": "Lemon Squeezy",
+          "filename": "billing.lemon-squeezy.json"
+        },
+        {
+          "title": "Paddle",
+          "filename": "billing.paddle.json"
+        },
+        {
+          "title": "Metered Usage",
+          "filename": "billing.metered-usage.json"
+        },
+        {
+          "title": "Per Seat Billing",
+          "filename": "billing.per-seat-billing.json"
+        },
+        {
+          "title": "Credits Based Billing",
+          "filename": "billing.credits-based-billing.json"
+        },
+        {
+          "title": "One Off Payments",
+          "filename": "billing.one-off-payments.json"
+        },
+        {
+          "title": "Handling Webhooks",
+          "filename": "billing.handling-webhooks.json"
+        },
+        {
+          "title": "Billing API",
+          "filename": "billing.billing-api.json"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "title": "8. Content",
+      "directory": "08-content",
+      "pages": [
+        {
+          "title": "CMS",
+          "filename": "content.cms.json"
+        },
+        {
+          "title": "Keystatic",
+          "filename": "content.keystatic.json"
+        },
+        {
+          "title": "Wordpress",
+          "filename": "content.wordpress.json"
+        },
+        {
+          "title": "CMS API",
+          "filename": "content.cms-api.json"
+        },
+        {
+          "title": "Creating your own CMS client",
+          "filename": "content.creating-your-own-cms-client.json"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "title": "9. UI Components",
+      "directory": "09-ui-components",
+      "pages": [
+        {
+          "title": "Shadcn UI",
+          "filename": "ui-components.shadcn-ui.json"
+        },
+        {
+          "title": "Multi Step Forms",
+          "filename": "ui-components.multi-step-forms.json"
+        },
+        {
+          "title": "Stepper",
+          "filename": "ui-components.stepper.json"
+        },
+        {
+          "title": "Data Table",
+          "filename": "ui-components.data-table.json"
+        },
+        {
+          "title": "Loading Overlay",
+          "filename": "ui-components.loading-overlay.json"
+        },
+        {
+          "title": "Conditional Rendering",
+          "filename": "ui-components.conditional-rendering.json"
+        },
+        {
+          "title": "Page",
+          "filename": "ui-components.page.json"
+        },
+        {
+          "title": "App Breadcrumbs",
+          "filename": "ui-components.app-breadcrumbs.json"
+        },
+        {
+          "title": "Card Button",
+          "filename": "ui-components.card-button.json"
+        },
+        {
+          "title": "Cookie Banner",
+          "filename": "ui-components.cookie-banner.json"
+        },
+        {
+          "title": "Empty State",
+          "filename": "ui-components.empty-state.json"
+        },
+        {
+          "title": "Bordered Navigation Menu",
+          "filename": "ui-components.bordered-navigation-menu.json"
+        },
+        {
+          "title": "Marketing Components",
+          "filename": "ui-components.marketing-components.json"
+        },
+        {
+          "title": "Temporary Landing Page",
+          "filename": "ui-components.temporary-landing-page.json"
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "title": "10. Notifications",
+      "directory": "10-notifications",
+      "pages": [
+        {
+          "title": "Notifications Configuration",
+          "filename": "notifications.notifications-configuration.json"
+        },
+        {
+          "title": "Sending Notifications",
+          "filename": "notifications.sending-notifications.json"
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "title": "11. Translations",
+      "directory": "11-translations",
+      "pages": [
+        {
+          "title": "Using translations",
+          "filename": "translations.using-translations.json"
+        },
+        {
+          "title": "Adding new translations",
+          "filename": "translations.adding-new-translations.json"
+        },
+        {
+          "title": "Language Selector",
+          "filename": "translations.language-selector.json"
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "title": "12. Emails",
+      "directory": "12-emails",
+      "pages": [
+        {
+          "title": "Email Configuration",
+          "filename": "emails.email-configuration.json"
+        },
+        {
+          "title": "Sending Emails",
+          "filename": "emails.sending-emails.json"
+        },
+        {
+          "title": "Email Templates",
+          "filename": "emails.email-templates.json"
+        },
+        {
+          "title": "Authentication Emails",
+          "filename": "emails.authentication-emails.json"
+        },
+        {
+          "title": "Local Development",
+          "filename": "emails.local-development.json"
+        },
+        {
+          "title": "Custom Mailer",
+          "filename": "emails.custom-mailer.json"
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "title": "13. Monitoring",
+      "directory": "13-monitoring",
+      "pages": [
+        {
+          "title": "How Monitoring works",
+          "filename": "monitoring.how-monitoring-works.json"
+        },
+        {
+          "title": "Baselime",
+          "filename": "monitoring.baselime.json"
+        },
+        {
+          "title": "Sentry",
+          "filename": "monitoring.sentry.json"
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "title": "14. Super Admin",
+      "directory": "14-super-admin",
+      "pages": [
+        {
+          "title": "Adding a Super Admin",
+          "filename": "super-admin.adding-a-super-admin.json"
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "title": "15. Analytics API",
+      "directory": "15-analytics-api",
+      "pages": [
+        {
+          "title": "Analytics and Events",
+          "filename": "analytics-api.analytics-and-events.json"
+        },
+        {
+          "title": "Google Analytics",
+          "filename": "analytics-api.google-analytics.json"
+        },
+        {
+          "title": "PostHog",
+          "filename": "analytics-api.posthog.json"
+        },
+        {
+          "title": "Umami",
+          "filename": "analytics-api.umami.json"
+        },
+        {
+          "title": "Custom Analytics Provider",
+          "filename": "analytics-api.custom-analytics-provider.json"
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "title": "16. Plugins",
+      "directory": "16-plugins",
+      "pages": [
+        {
+          "title": "Installing Plugins",
+          "filename": "plugins.installing-plugins.json"
+        },
+        {
+          "title": "Waitlist",
+          "filename": "plugins.waitlist.json"
+        },
+        {
+          "title": "Roadmap Plugin",
+          "filename": "plugins.roadmap-plugin.json"
+        },
+        {
+          "title": "Testimonials Plugin",
+          "filename": "plugins.testimonials-plugin.json"
+        },
+        {
+          "title": "AI Chatbot",
+          "filename": "plugins.ai-chatbot.json"
+        },
+        {
+          "title": "Feedback Widget",
+          "filename": "plugins.feedback-widget.json"
+        },
+        {
+          "title": "Text Editor",
+          "filename": "plugins.text-editor.json"
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "title": "17. Going to Production",
+      "directory": "17-going-to-production",
+      "pages": [
+        {
+          "title": "Checklist",
+          "filename": "going-to-production.checklist.json"
+        },
+        {
+          "title": "Environment Variables",
+          "filename": "going-to-production.environment-variables.json"
+        },
+        {
+          "title": "Deploy Supabase",
+          "filename": "going-to-production.deploy-supabase.json"
+        },
+        {
+          "title": "Authentication",
+          "filename": "going-to-production.authentication.json"
+        },
+        {
+          "title": "Authentication Emails",
+          "filename": "going-to-production.authentication-emails.json"
+        },
+        {
+          "title": "Deploy to Vercel",
+          "filename": "going-to-production.deploy-to-vercel.json"
+        },
+        {
+          "title": "Deploy to Cloudflare",
+          "filename": "going-to-production.deploy-to-cloudflare.json"
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "title": "18. Recipes",
+      "directory": "18-recipes",
+      "pages": [
+        {
+          "title": "Disabling Personal Accounts",
+          "filename": "recipes.disabling-personal-accounts.json"
+        },
+        {
+          "title": "Onboarding Checkout",
+          "filename": "recipes.onboarding-checkout.json"
+        },
+        {
+          "title": "Checkout Addons with Stripe Billing",
+          "filename": "recipes.checkout-addons-with-stripe-billing.json"
+        },
+        {
+          "title": "Subscription Entitlements",
+          "filename": "recipes.subscription-entitlements.json"
+        },
+        {
+          "title": "Projects Data Model",
+          "filename": "recipes.projects-data-model.json"
+        },
+        {
+          "title": "Drizzle",
+          "filename": "recipes.drizzle.json"
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "title": "19. Troubleshooting",
+      "directory": "19-troubleshooting",
+      "pages": [
+        {
+          "title": "Installation",
+          "filename": "troubleshooting.installation.json"
+        },
+        {
+          "title": "Authentication",
+          "filename": "troubleshooting.authentication.json"
+        },
+        {
+          "title": "Billing",
+          "filename": "troubleshooting.billing.json"
+        },
+        {
+          "title": "Deployment",
+          "filename": "troubleshooting.deployment.json"
+        },
+        {
+          "title": "Emails",
+          "filename": "troubleshooting.emails.json"
+        },
+        {
+          "title": "Modules not found",
+          "filename": "troubleshooting.modules-not-found.json"
+        }
+      ]
+    }
+  ]
+}

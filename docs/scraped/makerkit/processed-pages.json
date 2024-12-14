@@ -1,0 +1,337 @@
+[
+  {
+    "parentSection": "1. Installation",
+    "title": "Introduction",
+    "path": "01-installation/installation.introduction.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Technical Details",
+    "path": "01-installation/installation.technical-details.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Conventions",
+    "path": "01-installation/installation.conventions.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Clone the Repository",
+    "path": "01-installation/installation.clone-the-repository.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Running the Project",
+    "path": "01-installation/installation.running-the-project.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Common Commands",
+    "path": "01-installation/installation.common-commands.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Updating the Codebase",
+    "path": "01-installation/installation.updating-the-codebase.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Navigating the Codebase",
+    "path": "01-installation/installation.navigating-the-codebase.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Walkthrough",
+    "path": "01-installation/installation.walkthrough.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Migrating from v1",
+    "path": "01-installation/installation.migrating-from-v1.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Updating to Next.js 15",
+    "path": "01-installation/installation.updating-to-next-js-15.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Code Health and Testing",
+    "path": "01-installation/installation.code-health-and-testing.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "Cursor Rules and LLMs",
+    "path": "01-installation/installation.cursor-rules-and-llms.json"
+  },
+  {
+    "parentSection": "1. Installation",
+    "title": "FAQ",
+    "path": "01-installation/installation.faq.json"
+  },
+  {
+    "parentSection": "2. Configuration",
+    "title": "Environment Variables",
+    "path": "02-configuration/configuration.environment-variables.json"
+  },
+  {
+    "parentSection": "2. Configuration",
+    "title": "Application Configuration",
+    "path": "02-configuration/configuration.application-configuration.json"
+  },
+  {
+    "parentSection": "2. Configuration",
+    "title": "Authentication Configuration",
+    "path": "02-configuration/configuration.authentication-configuration.json"
+  },
+  {
+    "parentSection": "2. Configuration",
+    "title": "Paths Configuration",
+    "path": "02-configuration/configuration.paths-configuration.json"
+  },
+  {
+    "parentSection": "2. Configuration",
+    "title": "Feature Flags",
+    "path": "02-configuration/configuration.feature-flags.json"
+  },
+  {
+    "parentSection": "2. Configuration",
+    "title": "Account Navigation Configuration",
+    "path": "02-configuration/configuration.account-navigation-configuration.json"
+  },
+  {
+    "parentSection": "2. Configuration",
+    "title": "Team Account Navigation Configuration",
+    "path": "02-configuration/configuration.team-account-navigation-configuration.json"
+  },
+  {
+    "parentSection": "3. Customization",
+    "title": "Tailwind CSS",
+    "path": "03-customization/customization.tailwind-css.json"
+  },
+  {
+    "parentSection": "3. Customization",
+    "title": "Updating the theme",
+    "path": "03-customization/customization.updating-the-theme.json"
+  },
+  {
+    "parentSection": "3. Customization",
+    "title": "Updating the Logo",
+    "path": "03-customization/customization.updating-the-logo.json"
+  },
+  {
+    "parentSection": "3. Customization",
+    "title": "Adding Shadcn UI components",
+    "path": "03-customization/customization.adding-shadcn-ui-components.json"
+  },
+  {
+    "parentSection": "3. Customization",
+    "title": "Updating Fonts",
+    "path": "03-customization/customization.updating-fonts.json"
+  },
+  {
+    "parentSection": "3. Customization",
+    "title": "Layout Style",
+    "path": "03-customization/customization.layout-style.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Starting developing your App",
+    "path": "04-development/development.starting-developing-your-app.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Migrations",
+    "path": "04-development/development.migrations.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Database Schema",
+    "path": "04-development/development.database-schema.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Database Functions",
+    "path": "04-development/development.database-functions.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Loading data from the DB",
+    "path": "04-development/development.loading-data-from-the-db.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Writing data to Database",
+    "path": "04-development/development.writing-data-to-database.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Database Webhooks",
+    "path": "04-development/development.database-webhooks.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "RBAC: Roles and Permissions",
+    "path": "04-development/development.rbac-roles-and-permissions.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Marketing Pages",
+    "path": "04-development/development.marketing-pages.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Legal Pages",
+    "path": "04-development/development.legal-pages.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "External Marketing Website",
+    "path": "04-development/development.external-marketing-website.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "SEO",
+    "path": "04-development/development.seo.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Adding a Turborepo package",
+    "path": "04-development/development.adding-a-turborepo-package.json"
+  },
+  {
+    "parentSection": "4. Development",
+    "title": "Adding a Turborepo app",
+    "path": "04-development/development.adding-a-turborepo-app.json"
+  },
+  {
+    "parentSection": "5. API",
+    "title": "Account API",
+    "path": "05-api/api.account-api.json"
+  },
+  {
+    "parentSection": "5. API",
+    "title": "Team Account API",
+    "path": "05-api/api.team-account-api.json"
+  },
+  {
+    "parentSection": "5. API",
+    "title": "Authentication API",
+    "path": "05-api/api.authentication-api.json"
+  },
+  {
+    "parentSection": "5. API",
+    "title": "User Workspace API",
+    "path": "05-api/api.user-workspace-api.json"
+  },
+  {
+    "parentSection": "5. API",
+    "title": "Account Workspace API",
+    "path": "05-api/api.account-workspace-api.json"
+  },
+  {
+    "parentSection": "6. Data Fetching",
+    "title": "Supabase Clients",
+    "path": "06-data-fetching/data-fetching.supabase-clients.json"
+  },
+  {
+    "parentSection": "6. Data Fetching",
+    "title": "Server Actions",
+    "path": "06-data-fetching/data-fetching.server-actions.json"
+  },
+  {
+    "parentSection": "6. Data Fetching",
+    "title": "Route Handlers",
+    "path": "06-data-fetching/data-fetching.route-handlers.json"
+  },
+  {
+    "parentSection": "6. Data Fetching",
+    "title": "Server Components",
+    "path": "06-data-fetching/data-fetching.server-components.json"
+  },
+  {
+    "parentSection": "6. Data Fetching",
+    "title": "React Query",
+    "path": "06-data-fetching/data-fetching.react-query.json"
+  },
+  {
+    "parentSection": "6. Data Fetching",
+    "title": "CSRF Protection",
+    "path": "06-data-fetching/data-fetching.csrf-protection.json"
+  },
+  {
+    "parentSection": "6. Data Fetching",
+    "title": "Captcha Protection",
+    "path": "06-data-fetching/data-fetching.captcha-protection.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "How Billing Works",
+    "path": "07-billing/billing.how-billing-works.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "Billing Schema",
+    "path": "07-billing/billing.billing-schema.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "Stripe",
+    "path": "07-billing/billing.stripe.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "Lemon Squeezy",
+    "path": "07-billing/billing.lemon-squeezy.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "Paddle",
+    "path": "07-billing/billing.paddle.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "Metered Usage",
+    "path": "07-billing/billing.metered-usage.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "Per Seat Billing",
+    "path": "07-billing/billing.per-seat-billing.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "Credits Based Billing",
+    "path": "07-billing/billing.credits-based-billing.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "One Off Payments",
+    "path": "07-billing/billing.one-off-payments.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "Handling Webhooks",
+    "path": "07-billing/billing.handling-webhooks.json"
+  },
+  {
+    "parentSection": "7. Billing",
+    "title": "Billing API",
+    "path": "07-billing/billing.billing-api.json"
+  },
+  {
+    "parentSection": "8. Content",
+    "title": "CMS",
+    "path": "08-content/content.cms.json"
+  },
+  {
+    "parentSection": "8. Content",
+    "title": "Keystatic",
+    "path": "08-content/content.keystatic.json"
+  },
+  {
+    "parentSection": "8. Content",
+    "title": "Wordpress",
+    "path": "08-content/content.wordpress.json"
+  }
+]
