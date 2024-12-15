@@ -19,17 +19,20 @@ This document outlines the test plan for the carriers functionality, following o
   - Used row_eq() for proper test assertion
   - Test runs within transaction for cleanup
 
-#### Test 2: Basic Member Access
+#### Test 2: Basic Member Access 🔄
 - **Description**: Verify authenticated member can view carriers in their account
 - **Method**:
-  1. Create member user with tests.create_supabase_user()
-  2. Set identifier with makerkit.set_identifier()
-  3. Create test account
-  4. Add member to account using proper function
-  5. Query carriers
+  1. Use existing member_user from Test 4
+  2. Query carriers table
+  3. Verify count matches expected (1 carrier created by owner)
 - **Expected**: Member can see carriers in their account
 - **Setup Dependencies**: 
-  - Requires Test 3 (Owner Permissions) to be implemented first to create test carriers
+  - Uses member_user created in Test 4
+  - Uses carrier created in Test 3
+- **Status**: NEXT
+- **Implementation Notes**:
+  - Will reuse existing member_user for efficiency
+  - Will use results_eq() to verify exact count
 
 ### 2. Permission Testing
 
@@ -48,7 +51,7 @@ This document outlines the test plan for the carriers functionality, following o
   - Used lives_ok() to verify successful insertion
   - Used makerkit.get_account_id_by_slug() to get account ID
 
-#### Test 4: Member Permission Boundaries 🔄
+#### Test 4: Member Permission Boundaries ✅
 - **Description**: Verify member without carriers.manage cannot create carriers
 - **Method**:
   1. Create member user
@@ -56,12 +59,16 @@ This document outlines the test plan for the carriers functionality, following o
   3. Attempt to create carrier
 - **Expected**: Operation fails with RLS policy violation
 - **Setup Dependencies**: 
-  - Requires Test 3 for account setup
-- **Status**: NEXT
+  - Required Test 3 for account setup
+- **Status**: PASSED
+- **Implementation Notes**:
+  - Needed to set role to postgres to add member
+  - Used throws_ok() with exact error code and message
+  - Member role has no carriers.manage permission by default
 
 ### 3. Business Logic Testing
 
-#### Test 5: Cross-Account Access
+#### Test 5: Cross-Account Access ⏳
 - **Description**: Verify users cannot access carriers from other accounts
 - **Method**:
   1. Create two accounts with owners
@@ -69,7 +76,8 @@ This document outlines the test plan for the carriers functionality, following o
   3. Verify second owner cannot see it
 - **Expected**: No access to carriers from other accounts
 - **Setup Dependencies**: 
-  - Requires Test 3 for carrier creation
+  - Requires Test 3 pattern for carrier creation
+- **Status**: PENDING
 
 ## Implementation Order
 
@@ -83,18 +91,20 @@ This document outlines the test plan for the carriers functionality, following o
    - Tests core functionality
    - No dependencies
 
-3. 🔄 Test 4: Member Permission Boundaries (Next)
+3. ✅ Test 4: Member Permission Boundaries
    - Tests permission restrictions
    - Verifies RLS policies
    - Builds on Test 3
 
-4. Test 2: Basic Member Access
+4. 🔄 Test 2: Basic Member Access (Next)
    - Tests read access
-   - Requires working owner permissions
+   - Reuses existing test users
+   - Builds on Test 3 and 4
 
-5. Test 5: Cross-Account Access
+5. ⏳ Test 5: Cross-Account Access
    - Tests data isolation
    - Most complex setup
+   - Final security verification
 
 ## Success Criteria
 
@@ -123,6 +133,6 @@ For each test:
 
 1. ✅ Test 1: Anon Access
 2. ✅ Test 3: Owner Permissions
-3. 🔄 Test 4: Member Permission Boundaries
-4. ⏳ Test 2: Basic Member Access
+3. ✅ Test 4: Member Permission Boundaries
+4. 🔄 Test 2: Basic Member Access
 5. ⏳ Test 5: Cross-Account Access

@@ -2,8 +2,8 @@ begin;
 
 create extension "basejump-supabase_test_helpers" version '0.0.6';
 
--- Plan for two tests
-select plan(2);
+-- Plan for three tests
+select plan(3);
 
 /*
  * -------------------------------------------------------
@@ -42,6 +42,38 @@ select lives_ok(
     $$ insert into public.carriers (account_id, name)
     values (makerkit.get_account_id_by_slug('test-account'), 'Test Carrier') $$,
     'Owner should be able to create carriers'
+);
+
+/*
+ * -------------------------------------------------------
+ * Test 4: Member Permission Boundaries
+ * Verify member without carriers.manage cannot create carriers
+ * -------------------------------------------------------
+ */
+
+-- Create and set up member user
+select tests.create_supabase_user('member_user', 'member@test.com');
+select makerkit.set_identifier('member_user', 'member@test.com');
+
+-- Add member to account without carriers.manage permission
+-- We need to set role to postgres to bypass RLS when adding the member
+set local role postgres;
+insert into public.accounts_memberships (user_id, account_id, account_role)
+values (
+    tests.get_supabase_uid('member_user'),
+    makerkit.get_account_id_by_slug('test-account'),
+    'member'
+);
+set local role authenticated;
+
+-- Test member cannot create carrier
+select tests.authenticate_as('member_user');
+select throws_ok(
+    $$ insert into public.carriers (account_id, name)
+    values (makerkit.get_account_id_by_slug('test-account'), 'Test Carrier') $$,
+    '42501',
+    'new row violates row-level security policy for table "carriers"',
+    'Member without carriers.manage permission should not be able to create carriers'
 );
 
 select * from finish();
