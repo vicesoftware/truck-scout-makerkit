@@ -33,7 +33,7 @@ This document outlines the test plan for the carriers functionality, following o
 
 ### 2. Permission Testing
 
-#### Test 3: Owner Permissions
+#### Test 3: Owner Permissions ✅
 - **Description**: Verify owner can create carriers
 - **Method**:
   1. Create owner user with tests.create_supabase_user()
@@ -41,11 +41,14 @@ This document outlines the test plan for the carriers functionality, following o
   3. Create test account
   4. Attempt to create carrier
 - **Expected**: Owner can successfully create carrier
-- **Setup Dependencies**: None
+- **Status**: PASSED
 - **Implementation Notes**:
-  - Should be implemented next as other tests depend on it
+  - Need to create user before setting identifier
+  - Account creation must happen after authentication
+  - Used lives_ok() to verify successful insertion
+  - Used makerkit.get_account_id_by_slug() to get account ID
 
-#### Test 4: Member Permission Boundaries
+#### Test 4: Member Permission Boundaries 🔄
 - **Description**: Verify member without carriers.manage cannot create carriers
 - **Method**:
   1. Create member user
@@ -54,6 +57,7 @@ This document outlines the test plan for the carriers functionality, following o
 - **Expected**: Operation fails with RLS policy violation
 - **Setup Dependencies**: 
   - Requires Test 3 for account setup
+- **Status**: NEXT
 
 ### 3. Business Logic Testing
 
@@ -74,18 +78,19 @@ This document outlines the test plan for the carriers functionality, following o
    - No user setup required
    - Provides base security verification
 
-2. 🔄 Test 3: Owner Permissions (Next)
+2. ✅ Test 3: Owner Permissions
    - Required for other tests
    - Tests core functionality
    - No dependencies
 
-3. Test 2: Basic Member Access
-   - Builds on owner test
-   - Tests read access
-
-4. Test 4: Member Permission Boundaries
+3. 🔄 Test 4: Member Permission Boundaries (Next)
    - Tests permission restrictions
    - Verifies RLS policies
+   - Builds on Test 3
+
+4. Test 2: Basic Member Access
+   - Tests read access
+   - Requires working owner permissions
 
 5. Test 5: Cross-Account Access
    - Tests data isolation
@@ -110,3 +115,14 @@ For each test:
 5. Run test(s)
 6. Call finish()
 7. Rollback transaction
+
+## Implementation Progress
+✅ = Completed
+🔄 = In Progress/Next
+⏳ = Pending
+
+1. ✅ Test 1: Anon Access
+2. ✅ Test 3: Owner Permissions
+3. 🔄 Test 4: Member Permission Boundaries
+4. ⏳ Test 2: Basic Member Access
+5. ⏳ Test 5: Cross-Account Access
